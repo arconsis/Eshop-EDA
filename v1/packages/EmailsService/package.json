@@ -1,0 +1,35 @@
+{
+  "name": "emailservice",
+  "version": "1.0.0",
+  "description": "Service that handles emails notifications",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server",
+    "test": "mocha tests --recursive --timeout 15000 --exit"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "kafkajs": "^1.15.0",
+    "mailgun-js": "^0.22.0",
+    "node-fetch": "^2.6.0",
+    "validator": "^13.5.2",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "coveralls": "^3.1.0",
+    "eslint": "^7.22.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^1.7.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^8.3.2",
+    "nodemon": "^2.0.7",
+    "sinon": "^9.2.4",
+    "supertest": "^6.1.3"
+  }
+}
