@@ -16,6 +16,7 @@ const ORDER_STATUSES = Object.freeze([
   CANCELLED_ORDER_STATUS,
   REFUNDED_ORDER_STATUS,
 ]);
+const ORDER_CREATED_TOPIC = 'OrderCreated';
 
 module.exports = {
   PENDING_ORDER_STATUS,
@@ -27,4 +28,5 @@ module.exports = {
   CANCELLED_ORDER_STATUS,
   REFUNDED_ORDER_STATUS,
   ORDER_STATUSES,
+  ORDER_CREATED_TOPIC,
 };

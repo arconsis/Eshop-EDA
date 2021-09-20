@@ -8,7 +8,6 @@ const isHttpError = (error) => {
   return false;
 };
 
-
 module.exports = Object.assign(
   {},
   httpErrors,

@@ -9,7 +9,7 @@ const createResponseError = (err) => ({
 });
 
 function errorHandler(err, req, res, next) { //eslint-disable-line
-  if (errors.isCustomError(err)) {
+  if (errors.isHttpError(err)) {
     return res.status(err.status).send(createResponseError(err));
   }
 

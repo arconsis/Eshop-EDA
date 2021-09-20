@@ -5,6 +5,7 @@ const {
 const {
   USER_REGISTERED_EVENT,
   ORDER_CONFIRMED_EVENT,
+  ORDER_CREATED_TOPIC,
 } = require('../../common/constants');
 const logger = require('../../common/logger');
 const {
@@ -14,13 +15,13 @@ const {
 const eventBusRepository = eventBusRepositoryFactory.init(kafkaConfig);
 
 module.exports.init = (services) => {
-  function handleNewUserRegistration() {
-    
-  }
   const handler = async ({ topic, partition, message }) => {
+    console.log('Topic: ', topic);
     logger.info('Message consumed: ', message);
     switch (topic) {
-      case USER_REGISTERED_EVENT, ORDER_CONFIRMED_EVENT : {
+      case USER_REGISTERED_EVENT:
+      case ORDER_CONFIRMED_EVENT:
+      case ORDER_CREATED_TOPIC: {
         const emailPayload = mapEventPayloadToEmailBody(message);
         await services.emailService.sendEmail({
           eventType: topic,
@@ -40,7 +41,7 @@ module.exports.init = (services) => {
   const startConsume = async () => {
     await eventBusRepository.consumeStream({
       groupId: kafkaConfig.groupId,
-      topics: [USER_REGISTERED_EVENT],
+      topics: [USER_REGISTERED_EVENT, ORDER_CONFIRMED_EVENT, ORDER_CREATED_TOPIC],
     }, handler);
   };
 

@@ -7,6 +7,8 @@ const {
   USER_REGISTERED_EVENT,
   ORDER_CONFIRMED_EVENT,
   ORDER_CONFIRMED_SUBJECT,
+  ORDER_CREATED_TOPIC,
+  ORDER_CREATED_SUBJECT,
 } = require('../../common/constants');
 
 function init(emailDispatcherRepository) {
@@ -28,7 +30,7 @@ function init(emailDispatcherRepository) {
       throw new Error('User email not provided.');
     }
     validateReceiver(receiverEmail);
-    if (!rest.orderNumber) {
+    if (!rest.orderNo) {
       throw new Error('Order number not provided.');
     }
   }
@@ -43,8 +45,12 @@ function init(emailDispatcherRepository) {
     return `Welcome ${lastName} on arconsis EDA experience!`;
   }
 
-  function getOrderConfirmedEmailText(orderNumber) {
-    return `New order with number: ${orderNumber} just confirmed!`;
+  function getOrderConfirmedEmailText(orderNo) {
+    return `New order with number: ${orderNo} just confirmed!`;
+  }
+
+  function getOrderCreatedEmailText(orderNo) {
+    return `New order with number: ${orderNo} just placed!`;
   }
 
   function validateEventPaylod({
@@ -52,9 +58,34 @@ function init(emailDispatcherRepository) {
     receiverEmail,
     ...rest
   }) {
-    if (eventType == USER_REGISTERED_EVENT) return validateUserRegistrationEventPayload(receiverEmail);
-    if (eventType == ORDER_CONFIRMED_EVENT) return validateOrderConfirmedPayload(receiverEmail);
+    if (eventType === USER_REGISTERED_EVENT) return validateUserRegistrationEventPayload(receiverEmail);
+    if (eventType === ORDER_CONFIRMED_EVENT || ORDER_CREATED_TOPIC) return validateOrderConfirmedPayload(receiverEmail, rest);
     throw new Error('Not supported topic event');
+  }
+
+  function getEmailPayload({
+    eventType,
+    ...rest
+  }) {
+    switch (eventType) {
+      case USER_REGISTERED_EVENT:
+        return {
+          subject: REGISTRATION_EMAIL_SUBJECT,
+          text: getRegistrationEmailText(rest.firstName, rest.lastName),
+        };
+      case ORDER_CONFIRMED_EVENT:
+        return {
+          subject: ORDER_CONFIRMED_SUBJECT,
+          text: getOrderConfirmedEmailText(rest.orderNo),
+        };
+      case ORDER_CREATED_TOPIC:
+        return {
+          subject: ORDER_CREATED_SUBJECT,
+          text: getOrderCreatedEmailText(rest.orderNo),
+        };
+      default:
+        throw new Error('Not supported topic event');
+    }
   }
 
   async function sendEmail({
@@ -63,19 +94,19 @@ function init(emailDispatcherRepository) {
     ...rest
   }) {
     switch (eventType) {
-      case USER_REGISTERED_EVENT, ORDER_CONFIRMED_EVENT: {
+      case USER_REGISTERED_EVENT:
+      case ORDER_CONFIRMED_EVENT:
+      case ORDER_CREATED_TOPIC: {
         validateEventPaylod({
           eventType,
           receiverEmail,
-          ...rest
+          ...rest,
         });
         return emailDispatcherRepository.sendEmail({
           senderEmail: SENDER_REGISTRATION_EMAIL,
           receiverEmail,
-          subject: eventType === USER_REGISTERED_EVENT ? REGISTRATION_EMAIL_SUBJECT : ORDER_CONFIRMED_SUBJECT,
-          text: eventType === USER_REGISTERED_EVENT 
-            ? getRegistrationEmailText(rest.firstName, rest.lastName)
-            : getOrderConfirmedEmailText(rest.orderNumber),
+          subject: getEmailPayload({ eventType, ...rest }).subject,
+          text: getEmailPayload({ eventType, ...rest }).text,
         });
       }
       default:
