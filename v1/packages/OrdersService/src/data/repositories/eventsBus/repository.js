@@ -1,4 +1,5 @@
 const { Kafka } = require('kafkajs');
+const logger = require('../../../common/logger');
 
 module.exports.init = (kafkaConfig) => {
   const client = new Kafka({
@@ -38,7 +39,7 @@ module.exports.init = (kafkaConfig) => {
               message: JSON.parse(message.value.toString()),
             });
           } catch (e) {
-            console.error('unable to handle incoming message', e);
+            logger.error('unable to handle incoming message', e);
           }
         },
       });

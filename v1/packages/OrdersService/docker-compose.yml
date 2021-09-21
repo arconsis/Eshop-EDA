@@ -1,21 +1,15 @@
-version: "3.8"
+version: '3.7'
 services:
-  zookeeper:
-    image: wurstmeister/zookeeper:latest
+  postgres:
+    image: postgres:13.2
     ports:
-      - "2181:2181"
-  kafka:
-    image: wurstmeister/kafka:latest
-    ports:
-      - "9092:9092"
-    links:
-      - zookeeper
+      - '5432:5432'
+    restart: always
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      KAFKA_DELETE_TOPIC_ENABLE: 'true'
-      KAFKA_CREATE_TOPICS: "UserRegistered:1:1,OrderConfirmed:1:1,OrderCreated:1:1"
+      POSTGRES_USER: orders
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: orders-db
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./testHelpers/kafka/server-jaas.conf:/opt/kafka/config/server-jaas.conf:ro,z
+      - postgres:/var/lib/postgresql/data
+volumes:
+  postgres: ~

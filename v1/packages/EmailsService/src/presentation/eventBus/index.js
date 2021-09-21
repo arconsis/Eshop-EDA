@@ -16,7 +16,7 @@ const eventBusRepository = eventBusRepositoryFactory.init(kafkaConfig);
 
 module.exports.init = (services) => {
   const handler = async ({ topic, partition, message }) => {
-    console.log('Topic: ', topic);
+    logger.info('Topic: ', topic);
     logger.info('Message consumed: ', message);
     switch (topic) {
       case USER_REGISTERED_EVENT:

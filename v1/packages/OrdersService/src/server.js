@@ -8,6 +8,7 @@ const eventsBusRepositoryContainer = require('./data/repositories/eventsBus/repo
 const ordersRepositoryContainer = require('./data/repositories/orders/repository');
 const ordersServiceContainer = require('./domain/orders/service');
 const appContainer = require('./presentation/http/app');
+const logger = require('./common/logger');
 
 const mainDb = dbContainer.init({
   connectionUri: databaseUri,
@@ -19,10 +20,10 @@ const runBlockInsideTransaction = mainDb.runTransaction.bind(mainDb);
 mainDb.authenticate()
   .then(() => {
     mainDb.sync();
-    console.info('!!!! Connection to main database established !!!!!');
+    logger.info('!!!! Connection to main database established !!!!!');
   })
   .catch((error) => {
-    console.error('Connection to main database error', error);
+    logger.error('Connection to main database error', error);
   });
 
 const ordersService = ordersServiceContainer.init({
@@ -33,6 +34,7 @@ const ordersService = ordersServiceContainer.init({
 const app = appContainer.init({
   ordersService,
 });
+
 const server = app.listen(httpPort, () => {
-  console.info(`Listening on *:${httpPort}`);
+  logger.info(`Listening on *:${httpPort}`);
 });

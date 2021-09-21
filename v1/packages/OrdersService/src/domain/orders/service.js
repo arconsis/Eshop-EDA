@@ -12,7 +12,7 @@ function init({
 }) {
   async function createOrder(userId) {
     const user = {
-      email: 'dimosthenis.botsaris@arconsis.com',
+      email: 'botsaris.d@gmail.com',
       firstName: 'Dimos',
       lastName: 'Botsaris',
       userId: '2f5acab8-8237-4841-a188-62af0bbbaac8',
