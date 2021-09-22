@@ -3,11 +3,10 @@ const {
 } = require('../../common/utils');
 const {
   SENDER_REGISTRATION_EMAIL,
-  REGISTRATION_EMAIL_SUBJECT,
-  USER_REGISTERED_EVENT,
-  ORDER_CONFIRMED_EVENT,
+  ORDERS_TOPIC,
+  ORDER_CONFIRMED_EVENT_TYPE,
   ORDER_CONFIRMED_SUBJECT,
-  ORDER_CREATED_TOPIC,
+  ORDER_CREATED_EVENT_TYPE,
   ORDER_CREATED_SUBJECT,
 } = require('../../common/constants');
 
@@ -18,13 +17,6 @@ function init(emailDispatcherRepository) {
     }
   }
 
-  function validateUserRegistrationEventPayload(receiverEmail) {
-    if (!receiverEmail) {
-      throw new Error('User email not provided.');
-    }
-    validateReceiver(receiverEmail);
-  }
-
   function validateOrderConfirmedPayload(receiverEmail, rest) {
     if (!receiverEmail) {
       throw new Error('User email not provided.');
@@ -33,16 +25,6 @@ function init(emailDispatcherRepository) {
     if (!rest.orderNo) {
       throw new Error('Order number not provided.');
     }
-  }
-
-  function getRegistrationEmailText(firstName, lastName) {
-    if (firstName && lastName) {
-      return `Welcome ${firstName} ${lastName} on arconsis EDA experience!`;
-    }
-    if (firstName) {
-      return `Welcome ${firstName} on arconsis EDA experience!`;
-    }
-    return `Welcome ${lastName} on arconsis EDA experience!`;
   }
 
   function getOrderConfirmedEmailText(orderNo) {
@@ -58,9 +40,8 @@ function init(emailDispatcherRepository) {
     receiverEmail,
     ...rest
   }) {
-    if (eventType === USER_REGISTERED_EVENT) return validateUserRegistrationEventPayload(receiverEmail);
-    if (eventType === ORDER_CONFIRMED_EVENT || ORDER_CREATED_TOPIC) return validateOrderConfirmedPayload(receiverEmail, rest);
-    throw new Error('Not supported topic event');
+    if (eventType === ORDER_CONFIRMED_EVENT_TYPE || ORDER_CREATED_EVENT_TYPE) return validateOrderConfirmedPayload(receiverEmail, rest);
+    throw new Error('Not supported event type.');
   }
 
   function getEmailPayload({
@@ -68,35 +49,30 @@ function init(emailDispatcherRepository) {
     ...rest
   }) {
     switch (eventType) {
-      case USER_REGISTERED_EVENT:
-        return {
-          subject: REGISTRATION_EMAIL_SUBJECT,
-          text: getRegistrationEmailText(rest.firstName, rest.lastName),
-        };
-      case ORDER_CONFIRMED_EVENT:
+      case ORDER_CONFIRMED_EVENT_TYPE:
         return {
           subject: ORDER_CONFIRMED_SUBJECT,
           text: getOrderConfirmedEmailText(rest.orderNo),
         };
-      case ORDER_CREATED_TOPIC:
+      case ORDER_CREATED_EVENT_TYPE:
         return {
           subject: ORDER_CREATED_SUBJECT,
           text: getOrderCreatedEmailText(rest.orderNo),
         };
       default:
-        throw new Error('Not supported topic event');
+        throw new Error('Not supported event type.');
     }
   }
 
   async function sendEmail({
+    topic,
     eventType,
     receiverEmail,
     ...rest
   }) {
     switch (eventType) {
-      case USER_REGISTERED_EVENT:
-      case ORDER_CONFIRMED_EVENT:
-      case ORDER_CREATED_TOPIC: {
+      case ORDER_CONFIRMED_EVENT_TYPE:
+      case ORDER_CREATED_EVENT_TYPE: {
         validateEventPaylod({
           eventType,
           receiverEmail,
@@ -110,7 +86,7 @@ function init(emailDispatcherRepository) {
         });
       }
       default:
-        throw new Error('Not supported topic event');
+        throw new Error('Not supported event type.');
     }
   }
 

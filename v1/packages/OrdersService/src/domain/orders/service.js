@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const {
-  ORDER_CREATED_TOPIC,
+  ORDERS_TOPIC,
+  ORDER_CREATED_EVENT_TYPE,
 } = require('../../common/constants');
 const {
   toEventBusMessage,
@@ -11,6 +12,7 @@ function init({
   ordersRepository,
 }) {
   async function createOrder(userId) {
+    // fetch / find user with userid
     const user = {
       email: 'botsaris.d@gmail.com',
       firstName: 'Dimos',
@@ -20,10 +22,10 @@ function init({
     const order = await ordersRepository.createOrder({
       userId: user.userId,
     });
-    await eventsBusRepository.sendMessages(ORDER_CREATED_TOPIC, toEventBusMessage({
+    await eventsBusRepository.sendMessages(ORDERS_TOPIC, toEventBusMessage({
       id: uuidv4(),
       orderNo: order.orderNo,
-      type: ORDER_CREATED_TOPIC,
+      type: ORDER_CREATED_EVENT_TYPE,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,

@@ -3,9 +3,7 @@ const {
   kafka: kafkaConfig,
 } = require('../../configuration');
 const {
-  USER_REGISTERED_EVENT,
-  ORDER_CONFIRMED_EVENT,
-  ORDER_CREATED_TOPIC,
+  ORDERS_TOPIC,
 } = require('../../common/constants');
 const logger = require('../../common/logger');
 const {
@@ -19,12 +17,11 @@ module.exports.init = (services) => {
     logger.info('Topic: ', topic);
     logger.info('Message consumed: ', message);
     switch (topic) {
-      case USER_REGISTERED_EVENT:
-      case ORDER_CONFIRMED_EVENT:
-      case ORDER_CREATED_TOPIC: {
+      case ORDERS_TOPIC: {
         const emailPayload = mapEventPayloadToEmailBody(message);
         await services.emailService.sendEmail({
-          eventType: topic,
+          topic,
+          eventType: message.type,
           receiverEmail: emailPayload.receiverEmail,
           ...emailPayload,
         })
@@ -41,7 +38,9 @@ module.exports.init = (services) => {
   const startConsume = async () => {
     await eventBusRepository.consumeStream({
       groupId: kafkaConfig.groupId,
-      topics: [USER_REGISTERED_EVENT, ORDER_CONFIRMED_EVENT, ORDER_CREATED_TOPIC],
+      topics: [
+        ORDERS_TOPIC,
+      ],
     }, handler);
   };
 
