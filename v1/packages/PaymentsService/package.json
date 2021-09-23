@@ -18,6 +18,8 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "5.21.10",
     "stripe": "^8.176.0",
+    "throw-http-errors": "^2.0.0",
+    "uuid": "^8.3.2",
     "validator": "^13.5.2",
     "winston": "^3.3.3"
   },

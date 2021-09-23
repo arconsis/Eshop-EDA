@@ -53,5 +53,6 @@ module.exports.init = (kafkaConfig) => {
       });
     },
   };
+
   return Object.create(brokerInterface);
 };

@@ -8,10 +8,9 @@
 //     lastName: "Botsaris"
 //   }
 // }
+// {"id":"ad84efc7-0253-41d8-85a5-aa5051aa4b18","type":"OrderCreated","version":"1.0.0","payload":{"email":"dimosthenis.botsaris@arconsis.com","firstName":"Dimos","lastName":"Botsaris","userId":"2f5acab8-8237-4841-a188-62af0bbbaac8","amount":100,"currency":"EUR"}
 
-// {"id":"ad84efc7-0253-41d8-85a5-aa5051aa4b18","type":"OrderCreated","version":"1.0.0","payload":{"email":"dimosthenis.botsaris@arconsis.com","firstName":"Dimos","lastName":"Botsaris","userId":"2f5acab8-8237-4841-a188-62af0bbbaac8"}
-
-const toEventBusMessage = function toEventBusMessage({
+const toCreateOrderMessage = function toCreateOrderMessage({
   id,
   orderNo,
   type,
@@ -31,6 +30,8 @@ const toEventBusMessage = function toEventBusMessage({
           firstName: rest.firstName,
           lastName: rest.lastName,
           userId: rest.userId,
+          amount: rest.amount,
+          currency: rest.currency,
           orderNo,
         },
       }),
@@ -39,5 +40,5 @@ const toEventBusMessage = function toEventBusMessage({
 };
 
 module.exports = {
-  toEventBusMessage,
+  toCreateOrderMessage,
 };

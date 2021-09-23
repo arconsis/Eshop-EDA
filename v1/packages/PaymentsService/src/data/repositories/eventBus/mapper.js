@@ -9,7 +9,7 @@
 //   }
 // }
 
-const toEventBusMessage = function toEventBusMessage({
+const toPaymentMessage = function toPaymentMessage({
   id,
   orderNo,
   type,
@@ -25,9 +25,9 @@ const toEventBusMessage = function toEventBusMessage({
         type,
         version,
         payload: {
-          email: rest.email,
-          firstName: rest.firstName,
-          lastName: rest.lastName,
+          transactionId: rest.transactionId,
+          amount: rest.amount,
+          currency: rest.currency,
           userId: rest.userId,
           orderNo,
         },
@@ -37,5 +37,5 @@ const toEventBusMessage = function toEventBusMessage({
 };
 
 module.exports = {
-  toEventBusMessage,
+  toPaymentMessage,
 };

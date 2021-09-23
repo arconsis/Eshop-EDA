@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Transaction = sequelize.define('transaction', {
+  const Transaction = sequelize.define('transactions', {
     transactionId: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -7,9 +7,17 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
     },
     orderId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       unique: false,
+    },
+    amount: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    currency: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     metadata: {
       type: DataTypes.JSONB,

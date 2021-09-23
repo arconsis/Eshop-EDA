@@ -4,14 +4,18 @@ const {
   ORDER_CREATED_EVENT_TYPE,
 } = require('../../common/constants');
 const {
-  toEventBusMessage,
+  toCreateOrderMessage,
 } = require('../../data/repositories/eventsBus/mapper');
 
 function init({
   eventsBusRepository,
   ordersRepository,
 }) {
-  async function createOrder(userId) {
+  async function createOrder({
+    userId,
+    amount,
+    currency,
+  }) {
     // fetch / find user with userid
     const user = {
       email: 'botsaris.d@gmail.com',
@@ -22,7 +26,7 @@ function init({
     const order = await ordersRepository.createOrder({
       userId: user.userId,
     });
-    await eventsBusRepository.sendMessages(ORDERS_TOPIC, toEventBusMessage({
+    await eventsBusRepository.sendMessages(ORDERS_TOPIC, toCreateOrderMessage({
       id: uuidv4(),
       orderNo: order.orderNo,
       type: ORDER_CREATED_EVENT_TYPE,
@@ -30,6 +34,8 @@ function init({
       firstName: user.firstName,
       lastName: user.lastName,
       userId: user.userId,
+      amount,
+      currency,
     }));
     return order;
   }
