@@ -21,6 +21,10 @@ const ORDER_STATUSES = Object.freeze([
 
 const ORDER_CREATED_EVENT_TYPE = 'OrderCreated';
 const ORDERS_TOPIC = 'Orders';
+const PAYMENTS_TOPIC = 'Payments';
+const ORDER_PAID_EVENT = 'PaymentProcessed';
+const ORDER_CONFIRMED_EVENT = 'OrderConfirmed';
+const SHIPMENTS_TOPIC = 'Shipments';
 
 module.exports = {
   PENDING_ORDER_STATUS,
@@ -35,4 +39,8 @@ module.exports = {
   ORDER_STATUSES,
   ORDERS_TOPIC,
   ORDER_CREATED_EVENT_TYPE,
+  PAYMENTS_TOPIC,
+  ORDER_PAID_EVENT,
+  SHIPMENTS_TOPIC,
+  ORDER_CONFIRMED_EVENT,
 };

@@ -16,6 +16,14 @@ function init({ ordersService }) {
         data: result,
       });
     }));
+  router.get('/:orderNo',
+    // (...args) => endpointValidator.checkParamsToRefreshToken(...args),
+    asyncWrapper(async (req, res) => {
+      const result = await ordersService.getOrder(req.params.orderNo);
+      return res.status(201).send({
+        data: result,
+      });
+    }));
   return router;
 }
 

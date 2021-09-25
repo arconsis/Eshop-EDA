@@ -45,7 +45,7 @@ module.exports.init = function init({
       const doc = res.get({ plain: true });
       return mapper.toDomainModel(doc);
     },
-    async updateUser({
+    async updateOrder({
       id,
       orderNo,
       status,
