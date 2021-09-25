@@ -20,7 +20,7 @@ function init({ ordersService }) {
     // (...args) => endpointValidator.checkParamsToRefreshToken(...args),
     asyncWrapper(async (req, res) => {
       const result = await ordersService.getOrder(req.params.orderNo);
-      return res.status(201).send({
+      return res.status(200).send({
         data: result,
       });
     }));
