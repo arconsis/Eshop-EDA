@@ -25,6 +25,7 @@ const PAYMENTS_TOPIC = 'Payments';
 const ORDER_PAID_EVENT = 'PaymentProcessed';
 const ORDER_CONFIRMED_EVENT = 'OrderConfirmed';
 const SHIPMENTS_TOPIC = 'Shipments';
+const SHIPMENT_PREPARED_EVENT = 'ShipmentPrepared';
 
 module.exports = {
   PENDING_ORDER_STATUS,
@@ -43,4 +44,5 @@ module.exports = {
   ORDER_PAID_EVENT,
   SHIPMENTS_TOPIC,
   ORDER_CONFIRMED_EVENT,
+  SHIPMENT_PREPARED_EVENT,
 };
