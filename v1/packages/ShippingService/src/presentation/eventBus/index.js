@@ -1,12 +1,10 @@
-const eventBusRepositoryFactory = require('../../data/repositories/eventsBus/repository');
+const eventBusRepositoryFactory = require('../../data/repositories/eventBus/repository');
 const {
   kafka: kafkaConfig,
 } = require('../../configuration');
 const {
-  PAYMENTS_TOPIC,
-  ORDER_PAID_EVENT,
-  SHIPMENTS_TOPIC,
-  SHIPMENT_PREPARED_EVENT,
+  ORDERS_TOPIC,
+  ORDER_CONFIRMED_EVENT,
 } = require('../../common/constants');
 const logger = require('../../common/logger');
 
@@ -17,28 +15,19 @@ module.exports.init = (services) => {
     logger.info('Topic: ', topic);
     logger.info('Message consumed: ', message);
     switch (topic) {
-      case PAYMENTS_TOPIC: {
-        if (message.type === ORDER_PAID_EVENT) {
+      case ORDERS_TOPIC: {
+        if (message.type === ORDER_CONFIRMED_EVENT) {
           const { payload } = message;
-          await services.ordersService.updatePaidOrder({
+          await services.shipmentsService.prepareShipment({
             orderNo: payload.orderNo,
             userId: payload.userId,
             amount: payload.amount,
             currency: payload.currency,
+            topic,
+            eventType: message.type,
           })
             .catch((error) => {
-              logger.error('handle OrderPaid event error', error);
-            });
-          return;
-        }
-        return;
-      }
-      case SHIPMENTS_TOPIC: {
-        if (message.type === SHIPMENT_PREPARED_EVENT) {
-          const { payload } = message;
-          await services.ordersService.updateShipmentPreparedOrder(payload.orderNo)
-            .catch((error) => {
-              logger.error('handle OrderPaid event error', error);
+              logger.error('handle OrderConfirmed event error', error);
             });
           return;
         }
@@ -54,8 +43,7 @@ module.exports.init = (services) => {
     await eventBusRepository.consumeStream({
       groupId: kafkaConfig.groupId,
       topics: [
-        PAYMENTS_TOPIC,
-        SHIPMENTS_TOPIC,
+        ORDERS_TOPIC,
       ],
     }, handler);
   };
