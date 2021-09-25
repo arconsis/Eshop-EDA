@@ -2,6 +2,8 @@ const { v4: uuidv4 } = require('uuid');
 const {
   ORDERS_TOPIC,
   ORDER_CREATED_EVENT_TYPE,
+  PAID_ORDER_STATUS,
+  ORDER_CONFIRMED_EVENT,
 } = require('../../common/constants');
 const {
   toCreateOrderMessage,
@@ -11,6 +13,12 @@ function init({
   eventsBusRepository,
   ordersRepository,
 }) {
+  async function getOrder(orderNo) {
+    return ordersRepository.getOrder({
+      orderNo,
+    });
+  }
+
   async function createOrder({
     userId,
     amount,
@@ -40,9 +48,43 @@ function init({
     return order;
   }
 
+  async function updatePaidOrder({
+    userId,
+    orderNo,
+    amount,
+    currency,
+  }) {
+    // fetch / find user with userid
+    const user = {
+      email: 'botsaris.d@gmail.com',
+      firstName: 'Dimos',
+      lastName: 'Botsaris',
+      userId: '2f5acab8-8237-4841-a188-62af0bbbaac8',
+    };
+    const order = await ordersRepository.updateOrder({
+      orderNo,
+      status: PAID_ORDER_STATUS,
+    });
+    await eventsBusRepository.sendMessages(ORDERS_TOPIC, toCreateOrderMessage({
+      id: uuidv4(),
+      orderNo: order.orderNo,
+      type: ORDER_CONFIRMED_EVENT,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userId: user.userId,
+      amount,
+      currency,
+    }));
+    return order;
+  }
+
   return {
+    getOrder,
     createOrder,
+    updatePaidOrder,
   };
 }
+
 
 module.exports.init = init;
