@@ -5,6 +5,7 @@ const {
   PAID_ORDER_STATUS,
   ORDER_CONFIRMED_EVENT,
   OUT_FOR_SHIPMENT_ORDER_STATUS,
+  COMPLETED_ORDER_STATUS,
 } = require('../../common/constants');
 const {
   toCreateOrderMessage,
@@ -81,11 +82,17 @@ function init({
   }
 
   async function updateShipmentPreparedOrder(orderNo) {
-    const order = await ordersRepository.updateOrder({
+    return ordersRepository.updateOrder({
       orderNo,
       status: OUT_FOR_SHIPMENT_ORDER_STATUS,
     });
-    return order;
+  }
+
+  async function completeOrder(orderNo) {
+    return ordersRepository.updateOrder({
+      orderNo,
+      status: COMPLETED_ORDER_STATUS,
+    });
   }
 
   return {
@@ -93,6 +100,7 @@ function init({
     createOrder,
     updatePaidOrder,
     updateShipmentPreparedOrder,
+    completeOrder,
   };
 }
 

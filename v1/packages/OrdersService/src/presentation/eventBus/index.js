@@ -7,6 +7,7 @@ const {
   ORDER_PAID_EVENT,
   SHIPMENTS_TOPIC,
   SHIPMENT_PREPARED_EVENT,
+  SHIPMENT_SHIPPED_EVENT,
 } = require('../../common/constants');
 const logger = require('../../common/logger');
 
@@ -37,6 +38,14 @@ module.exports.init = (services) => {
         if (message.type === SHIPMENT_PREPARED_EVENT) {
           const { payload } = message;
           await services.ordersService.updateShipmentPreparedOrder(payload.orderNo)
+            .catch((error) => {
+              logger.error('handle OrderPaid event error', error);
+            });
+          return;
+        }
+        if (message.type === SHIPMENT_SHIPPED_EVENT) {
+          const { payload } = message;
+          await services.ordersService.completeOrder(payload.orderNo)
             .catch((error) => {
               logger.error('handle OrderPaid event error', error);
             });
