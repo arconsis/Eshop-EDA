@@ -7,7 +7,7 @@ const ORDER_CREATED_EVENT_TYPE = 'OrderCreated';
 const ORDER_CREATED_SUBJECT = 'New order was placed!';
 const SHIPMENTS_TOPIC = 'Shipments';
 const SHIPMENT_PREPARED_EVENT_TYPE = 'ShipmentPrepared';
-const SHIPMENT_PREPARED_CONFIRMED_SUBJECT = 'The order is our for shipment';
+const SHIPMENT_PREPARED_CONFIRMED_SUBJECT = 'The order is out for shipment';
 
 
 module.exports = {

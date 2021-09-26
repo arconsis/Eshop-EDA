@@ -6,6 +6,32 @@ module.exports.init = function init({
   sequelize,
 }) {
   const shipmentsRepo = {
+    async listShipments({
+      attributes,
+      limit = 50,
+      offset = 0,
+      transaction,
+    }) {
+      const list = await shipmentsModel.findAndCountAll({
+        order: [
+          ['id', 'DESC'],
+        ],
+        attributes: attributes && Array.isArray(attributes) && attributes.length > 0
+          ? attributes
+          : { exclude: [] },
+        limit,
+        offset,
+        ...(transaction != null && { transaction }),
+      });
+      return {
+        data: list.rows?.map((el) => el.get({ plain: true })) || [],
+        pagination: {
+          limit,
+          offset,
+          total: list?.count || 0,
+        },
+      };
+    },
     async createShipment({
       orderNo,
       transaction,
