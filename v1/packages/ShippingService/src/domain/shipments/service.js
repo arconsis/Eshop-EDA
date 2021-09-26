@@ -14,6 +14,10 @@ function init({
   eventsBusRepository,
   shipmentsRepository,
 }) {
+  async function listShipments() {
+    return shipmentsRepository.listShipments({});
+  }
+
   async function prepareShipment({
     orderNo,
     userId,
@@ -57,6 +61,7 @@ function init({
   }
 
   return {
+    listShipments,
     prepareShipment,
     updateDeliveredShipment,
   };
