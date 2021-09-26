@@ -6,8 +6,8 @@ const {
   ORDERS_TOPIC,
   ORDER_CONFIRMED_EVENT_TYPE,
   ORDER_CONFIRMED_SUBJECT,
-  ORDER_CREATED_EVENT_TYPE,
-  ORDER_CREATED_SUBJECT,
+  SHIPMENT_PREPARED_EVENT_TYPE,
+  SHIPMENT_PREPARED_CONFIRMED_SUBJECT,
 } = require('../../common/constants');
 
 function init(emailDispatcherRepository) {
@@ -28,11 +28,11 @@ function init(emailDispatcherRepository) {
   }
 
   function getOrderConfirmedEmailText(orderNo) {
-    return `New order with number: ${orderNo} just confirmed!`;
+    return `New order with number: ${orderNo} just placed! We will inform you with another email about shipment progress.`;
   }
 
-  function getOrderCreatedEmailText(orderNo) {
-    return `New order with number: ${orderNo} just placed!`;
+  function getOrderOutForShipmentEmailText(orderNo) {
+    return `The order with number: ${orderNo} is on the way for delivery!`;
   }
 
   function validateEventPaylod({
@@ -40,7 +40,7 @@ function init(emailDispatcherRepository) {
     receiverEmail,
     ...rest
   }) {
-    if (eventType === ORDER_CONFIRMED_EVENT_TYPE || ORDER_CREATED_EVENT_TYPE) return validateOrderConfirmedPayload(receiverEmail, rest);
+    if (eventType === ORDER_CONFIRMED_EVENT_TYPE || eventType === SHIPMENT_PREPARED_EVENT_TYPE) return validateOrderConfirmedPayload(receiverEmail, rest);
     throw new Error('Not supported event type.');
   }
 
@@ -54,11 +54,12 @@ function init(emailDispatcherRepository) {
           subject: ORDER_CONFIRMED_SUBJECT,
           text: getOrderConfirmedEmailText(rest.orderNo),
         };
-      case ORDER_CREATED_EVENT_TYPE:
+      case SHIPMENT_PREPARED_EVENT_TYPE: {
         return {
-          subject: ORDER_CREATED_SUBJECT,
-          text: getOrderCreatedEmailText(rest.orderNo),
+          subject: SHIPMENT_PREPARED_CONFIRMED_SUBJECT,
+          text: getOrderOutForShipmentEmailText(rest.orderNo),
         };
+      }
       default:
         throw new Error('Not supported event type.');
     }
@@ -72,7 +73,7 @@ function init(emailDispatcherRepository) {
   }) {
     switch (eventType) {
       case ORDER_CONFIRMED_EVENT_TYPE:
-      case ORDER_CREATED_EVENT_TYPE: {
+      case SHIPMENT_PREPARED_EVENT_TYPE: {
         validateEventPaylod({
           eventType,
           receiverEmail,

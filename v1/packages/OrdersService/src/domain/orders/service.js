@@ -4,7 +4,7 @@ const {
   ORDER_CREATED_EVENT_TYPE,
   PAID_ORDER_STATUS,
   ORDER_CONFIRMED_EVENT,
-  SHIPMENT_PREPARED_ORDER_STATUS,
+  OUT_FOR_SHIPMENT_ORDER_STATUS,
 } = require('../../common/constants');
 const {
   toCreateOrderMessage,
@@ -83,7 +83,7 @@ function init({
   async function updateShipmentPreparedOrder(orderNo) {
     const order = await ordersRepository.updateOrder({
       orderNo,
-      status: SHIPMENT_PREPARED_ORDER_STATUS,
+      status: OUT_FOR_SHIPMENT_ORDER_STATUS,
     });
     return order;
   }

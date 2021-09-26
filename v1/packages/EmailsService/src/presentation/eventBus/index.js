@@ -4,6 +4,7 @@ const {
 } = require('../../configuration');
 const {
   ORDERS_TOPIC,
+  SHIPMENTS_TOPIC,
 } = require('../../common/constants');
 const logger = require('../../common/logger');
 const {
@@ -12,12 +13,14 @@ const {
 
 const eventBusRepository = eventBusRepositoryFactory.init(kafkaConfig);
 
+
 module.exports.init = (services) => {
   const handler = async ({ topic, partition, message }) => {
     logger.info('Topic: ', topic);
     logger.info('Message consumed: ', message);
     switch (topic) {
-      case ORDERS_TOPIC: {
+      case ORDERS_TOPIC:
+      case SHIPMENTS_TOPIC: {
         const emailPayload = mapEventPayloadToEmailBody(message);
         await services.emailService.sendEmail({
           topic,
@@ -40,6 +43,7 @@ module.exports.init = (services) => {
       groupId: kafkaConfig.groupId,
       topics: [
         ORDERS_TOPIC,
+        SHIPMENTS_TOPIC,
       ],
     }, handler);
   };

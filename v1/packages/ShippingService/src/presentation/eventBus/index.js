@@ -23,6 +23,9 @@ module.exports.init = (services) => {
             userId: payload.userId,
             amount: payload.amount,
             currency: payload.currency,
+            email: payload.email,
+            firstName: payload.firstName,
+            lastName: payload.lastName,
             topic,
             eventType: message.type,
           })

@@ -15,7 +15,11 @@ function init({
     userId,
     amount,
     currency,
+    email,
+    firstName,
+    lastName,
   }) {
+    await new Promise((resolve) => setTimeout(resolve, 11000));
     return eventsBusRepository.sendMessages(SHIPMENTS_TOPIC, toShipmentMessage({
       id: uuidv4(),
       orderNo,
@@ -23,6 +27,9 @@ function init({
       amount,
       currency,
       userId,
+      email,
+      firstName,
+      lastName,
     }));
   }
 
@@ -30,5 +37,6 @@ function init({
     prepareShipment,
   };
 }
+
 
 module.exports.init = init;
