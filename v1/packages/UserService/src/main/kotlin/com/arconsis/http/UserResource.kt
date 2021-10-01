@@ -35,7 +35,7 @@ class UserResource(private val usersService: UsersService) {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     fun getSpecificUser(@PathParam("userId") userId: UUID): User {
-       return usersService.getSpecificUser(userId)
+        return usersService.getSpecificUser(userId)
     }
 
 }

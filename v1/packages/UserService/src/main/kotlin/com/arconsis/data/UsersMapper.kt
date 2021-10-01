@@ -10,9 +10,5 @@ fun UserEntity.toUser(): User {
         email = this.email,
         password = this.password,
         username = this.username,
-        createdAt = this.createdAt!!,
-        updatedAt = this.updatedAt!!,
-
-
     )
 }

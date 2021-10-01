@@ -7,7 +7,7 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 
-@Entity(name = "Users")
+@Entity(name = "users")
 class UserEntity(
     @Id
     @GeneratedValue
@@ -18,7 +18,7 @@ class UserEntity(
     @Column(name = "last_name")
     var lastName: String,
 
-    @Column(name = "e_mail")
+    @Column
     var email: String,
 
     @Column

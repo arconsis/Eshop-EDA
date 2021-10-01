@@ -1,7 +1,6 @@
 package com.arconsis.http.dto
 
-import java.time.Instant
-import java.util.*
+
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 
@@ -17,4 +16,4 @@ data class UserCreate(
     val password: String,
     @NotBlank
     val username: String,
-    )
+)
