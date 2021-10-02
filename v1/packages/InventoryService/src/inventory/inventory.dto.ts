@@ -1,4 +1,4 @@
-export class Inventory {
+export class InventoryDto {
   constructor(
     readonly id: string,
     readonly productId: string,
