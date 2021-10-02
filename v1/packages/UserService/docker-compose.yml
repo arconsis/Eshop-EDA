@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 services:
   postgres:
     image: postgres:12.5
@@ -6,7 +6,7 @@ services:
       - "5432:5432"
     restart: always
     environment:
-      POSTGRES_DB: EDA-UserService-Local
+      POSTGRES_DB: user-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: secret
     volumes:

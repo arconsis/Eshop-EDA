@@ -26,7 +26,7 @@ class UserResource(private val usersService: UsersService) {
         val user = usersService.createUser(userCreate)
         val path = uriInfo.path
         val location = path + user.id.toString()
-        return Response.created(URI.create(location)).entity(location).build()
+        return Response.created(URI.create(location)).entity(user).build()
     }
 
     @Blocking
