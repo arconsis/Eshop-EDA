@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Inventory as InventoryEntity } from '@prisma/client';
 import { PrismaService } from 'src/common/prisma.service';
-import { Inventory } from './inventory';
+import { Inventory } from '../inventory';
 
 @Injectable()
 export class InventoryService {
@@ -32,6 +32,23 @@ export class InventoryService {
       data: { stock, productId },
     });
     return InventoryService.mapToInventory(inventoryEntity);
+  }
+
+  async checkIfProductIsOrderable(
+    productId: string,
+    count: number,
+  ): Promise<boolean> {
+    try {
+      await this.prismaService.inventory.update({
+        where: { productId },
+        data: {
+          stock: { decrement: count },
+        },
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   private static mapToInventory(inventoryEntity: InventoryEntity): Inventory {

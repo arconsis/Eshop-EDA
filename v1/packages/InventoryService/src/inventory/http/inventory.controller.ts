@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { Inventory } from './inventory';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { InventoryDto } from './inventory.dto';
-import { InventoryService } from './inventory.service';
+import { InventoryService } from '../domain/inventory.service';
+import { Inventory } from '../inventory';
 
 @Controller('inventory')
 export class InventoryController {
@@ -10,10 +10,10 @@ export class InventoryController {
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<InventoryDto> {
     const inventory = await this.inventoryService.getInventory(id);
-    return this.mapToInventoryDto(inventory);
+    return InventoryController.mapToInventoryDto(inventory);
   }
 
-  @Post('id')
+  @Put(':id')
   async updateInventory(
     @Body() inventoryDto: InventoryDto,
   ): Promise<InventoryDto> {
@@ -21,7 +21,7 @@ export class InventoryController {
       inventoryDto.productId,
       inventoryDto.stock,
     );
-    return this.mapToInventoryDto(updatedInventory);
+    return InventoryController.mapToInventoryDto(updatedInventory);
   }
 
   @Post()
@@ -32,10 +32,10 @@ export class InventoryController {
       inventoryDto.productId,
       inventoryDto.stock,
     );
-    return this.mapToInventoryDto(updatedInventory);
+    return InventoryController.mapToInventoryDto(updatedInventory);
   }
 
-  private mapToInventoryDto(inventory: Inventory): InventoryDto {
+  private static mapToInventoryDto(inventory: Inventory): InventoryDto {
     return new InventoryDto(inventory.id, inventory.productId, inventory.stock);
   }
 }
