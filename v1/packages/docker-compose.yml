@@ -1,21 +1,14 @@
 version: "3.8"
 services:
-  zookeeper:
-    image: wurstmeister/zookeeper:latest
-    ports:
-      - "2181:2181"
   kafka:
-    image: wurstmeister/kafka:latest
+    image: lensesio/box
+    restart: on-failure
     ports:
+      - "3030:3030"
       - "9092:9092"
-    links:
-      - zookeeper
+      - "8081:8081"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      KAFKA_DELETE_TOPIC_ENABLE: 'true'
-      KAFKA_CREATE_TOPICS: "Orders:1:1,Payments:1:1,Shipments:1:1,Warehouse:1:1"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./testHelpers/kafka/server-jaas.conf:/opt/kafka/config/server-jaas.conf:ro,z
+      SAMPLEDATA: 0
+      ADV_HOST: host.docker.internal
+#  Add the following value to a .env file with your license key: "https://dl.lenses.io/d/?id=<YOUR_TRIAL_LICENSE_ID>"
+      EULA:
