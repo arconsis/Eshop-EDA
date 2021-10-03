@@ -3,6 +3,9 @@ import { Inventory as InventoryEntity } from '@prisma/client';
 import { PrismaService } from 'src/common/prisma.service';
 import { Inventory } from '../inventory';
 
+// We should not call the database handling code directly in the Domain hide with the repository pattern
+// Done only for simplicity here
+
 @Injectable()
 export class InventoryService {
   constructor(private readonly prismaService: PrismaService) {}
