@@ -10,5 +10,4 @@ services:
     environment:
       SAMPLEDATA: 0
       ADV_HOST: host.docker.internal
-#  Add the following value to a .env file with your license key: "https://dl.lenses.io/d/?id=<YOUR_TRIAL_LICENSE_ID>"
       EULA:
