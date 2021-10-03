@@ -37,7 +37,7 @@ export class InventoryService {
     return InventoryService.mapToInventory(inventoryEntity);
   }
 
-  async checkIfProductIsOrderable(
+  async tryUpdateStockForOrder(
     productId: string,
     count: number,
   ): Promise<boolean> {

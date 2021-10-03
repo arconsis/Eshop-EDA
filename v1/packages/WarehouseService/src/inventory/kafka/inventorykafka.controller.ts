@@ -32,12 +32,12 @@ export class InventoryKafkaController implements OnModuleInit {
     const { id } = ordersEvent.value;
     const { productId, count } = ordersEvent.value.payload;
 
-    const isOrderable = await this.inventoryService.checkIfProductIsOrderable(
+    const stockUpdated = await this.inventoryService.tryUpdateStockForOrder(
       productId,
       count,
     );
 
-    if (isOrderable) {
+    if (stockUpdated) {
       return this.client.emit(
         Topic.Warehouse,
         InventoryKafkaController.createEvent(
