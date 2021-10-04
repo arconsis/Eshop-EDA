@@ -12,5 +12,6 @@ export interface InventoryEvent {
 
 export interface InventoryPayload {
   productId: string;
-  count: number;
+  quantity: number;
+  orderNo: string;
 }

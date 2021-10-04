@@ -8,6 +8,8 @@ const {
   SHIPMENTS_TOPIC,
   SHIPMENT_PREPARED_EVENT,
   SHIPMENT_SHIPPED_EVENT,
+  WAREHOUSE_TOPIC,
+  WAREHOUSE_ORDER_VALIDATED_EVENT,
 } = require('../../common/constants');
 const logger = require('../../common/logger');
 
@@ -53,6 +55,17 @@ module.exports.init = (services) => {
         }
         return;
       }
+      case WAREHOUSE_TOPIC: {
+        if (message.type === WAREHOUSE_ORDER_VALIDATED_EVENT) {
+          const { payload } = message;
+          await services.ordersService.updateValidOrder(payload.orderNo)
+            .catch((error) => {
+              logger.error('handle OrderPaid event error', error);
+            });
+          return;
+        }
+        return;
+      }
       default:
         throw new Error('Not supported topic event');
     }
@@ -65,6 +78,7 @@ module.exports.init = (services) => {
       topics: [
         PAYMENTS_TOPIC,
         SHIPMENTS_TOPIC,
+        WAREHOUSE_TOPIC,
       ],
     }, handler);
   };

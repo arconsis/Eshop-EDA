@@ -7,10 +7,12 @@ function init({ ordersService }) {
   router.post('/',
     // (...args) => endpointValidator.checkParamsToRefreshToken(...args),
     asyncWrapper(async (req, res) => {
-      const result = await ordersService.createOrder({
+      const result = await ordersService.requestOrder({
         userId: req.body.userId,
         amount: req.body.amount,
         currency: req.body.currency,
+        productId: req.body.productId,
+        quantity: req.body.quantity,
       });
       return res.status(201).send({
         data: result,

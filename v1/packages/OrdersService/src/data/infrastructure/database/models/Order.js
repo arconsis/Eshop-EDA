@@ -21,6 +21,22 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: PENDING_ORDER_STATUS,
       values: ORDER_STATUSES,
     },
+    amount: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    currency: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    productId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   }, {
     freezeTableName: true,
   });

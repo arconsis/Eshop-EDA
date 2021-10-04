@@ -2,6 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 const {
   ORDERS_TOPIC,
   ORDER_CREATED_EVENT_TYPE,
+  ORDER_REQUESTED_EVENT_TYPE,
   PAID_ORDER_STATUS,
   ORDER_CONFIRMED_EVENT,
   OUT_FOR_SHIPMENT_ORDER_STATUS,
@@ -9,6 +10,7 @@ const {
 } = require('../../common/constants');
 const {
   toCreateOrderMessage,
+  toOrderRequestedMessage,
 } = require('../../data/repositories/eventsBus/mapper');
 
 function init({
@@ -21,8 +23,10 @@ function init({
     });
   }
 
-  async function createOrder({
+  async function requestOrder({
     userId,
+    productId,
+    quantity,
     amount,
     currency,
   }) {
@@ -35,7 +39,36 @@ function init({
     };
     const order = await ordersRepository.createOrder({
       userId: user.userId,
+      productId,
+      quantity,
+      amount,
+      currency,
     });
+    await eventsBusRepository.sendMessages(ORDERS_TOPIC, toOrderRequestedMessage({
+      id: uuidv4(),
+      orderNo: order.orderNo,
+      type: ORDER_REQUESTED_EVENT_TYPE,
+      userId: user.userId,
+      amount,
+      currency,
+      productId,
+      quantity,
+    }));
+    return order;
+  }
+
+  async function updateValidOrder(orderNo) {
+    const order = await ordersRepository.updateOrder({
+      orderNo,
+      status: PAID_ORDER_STATUS,
+    });
+    // fetch / find user from order.userid
+    const user = {
+      email: 'botsaris.d@gmail.com',
+      firstName: 'Dimos',
+      lastName: 'Botsaris',
+      userId: '2f5acab8-8237-4841-a188-62af0bbbaac8',
+    };
     await eventsBusRepository.sendMessages(ORDERS_TOPIC, toCreateOrderMessage({
       id: uuidv4(),
       orderNo: order.orderNo,
@@ -44,8 +77,8 @@ function init({
       firstName: user.firstName,
       lastName: user.lastName,
       userId: user.userId,
-      amount,
-      currency,
+      amount: order.amount,
+      currency: order.currency,
     }));
     return order;
   }
@@ -97,7 +130,8 @@ function init({
 
   return {
     getOrder,
-    createOrder,
+    requestOrder,
+    updateValidOrder,
     updatePaidOrder,
     updateShipmentPreparedOrder,
     completeOrder,
