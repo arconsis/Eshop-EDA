@@ -28,25 +28,25 @@ export class InventoryKafkaController implements OnModuleInit {
     }
 
     console.log(ordersEvent.value);
-    const orderId = ordersEvent.key;
     const { id } = ordersEvent.value;
-    const { productId, count } = ordersEvent.value.payload;
+    const { productId, quantity, orderNo } = ordersEvent.value.payload;
 
     const stockUpdated = await this.inventoryService.tryUpdateStockForOrder(
       productId,
-      count,
+      quantity,
     );
 
     if (stockUpdated) {
       return this.client.emit(
         Topic.Warehouse,
         InventoryKafkaController.createEvent(
-          orderId,
+          orderNo,
           id,
           WarehouseEventType.OrderValidated,
           {
             productId,
-            count,
+            quantity,
+            orderNo,
           },
         ),
       );
@@ -54,12 +54,13 @@ export class InventoryKafkaController implements OnModuleInit {
       return this.client.emit(
         Topic.Warehouse,
         InventoryKafkaController.createEvent(
-          orderId,
+          orderNo,
           id,
           WarehouseEventType.OrderInvalid,
           {
             productId,
-            count,
+            quantity,
+            orderNo,
           },
         ),
       );
@@ -67,13 +68,13 @@ export class InventoryKafkaController implements OnModuleInit {
   }
 
   private static createEvent(
-    orderId: string,
+    orderNo: string,
     id: string,
     type: WarehouseEventType,
     payload: InventoryPayload,
   ): InventoryEvent {
     return {
-      key: orderId,
+      key: orderNo,
       value: {
         id,
         type,

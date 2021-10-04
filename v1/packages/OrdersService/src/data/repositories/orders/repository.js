@@ -35,10 +35,18 @@ module.exports.init = function init({
     },
     async createOrder({
       userId,
+      amount,
+      currency,
+      productId,
+      quantity,
       transaction,
     }) {
       const res = await ordersModel.create({
         userId,
+        amount,
+        currency,
+        productId,
+        quantity,
       }, {
         ...(transaction != null && { transaction }),
       });
