@@ -4,9 +4,11 @@ const {
   ORDER_CREATED_EVENT_TYPE,
   ORDER_REQUESTED_EVENT_TYPE,
   PAID_ORDER_STATUS,
+  PAYMENT_FAILED_ORDER_STATUS,
   ORDER_CONFIRMED_EVENT,
   OUT_FOR_SHIPMENT_ORDER_STATUS,
   COMPLETED_ORDER_STATUS,
+  OUT_OF_STOCK_STATUS,
 } = require('../../common/constants');
 const {
   toCreateOrderMessage,
@@ -83,6 +85,13 @@ function init({
     return order;
   }
 
+  async function updateOutOfStockOrder(orderNo) {
+    return ordersRepository.updateOrder({
+      orderNo,
+      status: OUT_OF_STOCK_STATUS,
+    });
+  }
+
   async function updatePaidOrder({
     userId,
     orderNo,
@@ -114,6 +123,13 @@ function init({
     return order;
   }
 
+  async function updateFailedPaymentOrder(orderNo) {
+    return ordersRepository.updateOrder({
+      orderNo,
+      status: PAYMENT_FAILED_ORDER_STATUS,
+    });
+  }
+
   async function updateShipmentPreparedOrder(orderNo) {
     return ordersRepository.updateOrder({
       orderNo,
@@ -132,11 +148,11 @@ function init({
     getOrder,
     requestOrder,
     updateValidOrder,
+    updateOutOfStockOrder,
     updatePaidOrder,
     updateShipmentPreparedOrder,
     completeOrder,
   };
 }
-
 
 module.exports.init = init;
