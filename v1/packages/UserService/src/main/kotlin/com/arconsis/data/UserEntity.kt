@@ -1,5 +1,6 @@
 package com.arconsis.data
 
+import io.quarkus.security.jpa.Password
 import java.time.Instant
 import java.util.*
 import javax.persistence.Column
@@ -21,6 +22,7 @@ class UserEntity(
     @Column
     var email: String,
 
+    @Password
     @Column
     var password: String,
 
@@ -28,7 +30,7 @@ class UserEntity(
     var username: String,
 
     @Column(name = "created_at")
-    var createdAt: Instant? = null ,
+    var createdAt: Instant? = null,
 
     @Column(name = "updated_at")
     var updatedAt: Instant? = null,
