@@ -10,7 +10,7 @@ import javax.transaction.Transactional
 class UsersService(private val usersRepository: UsersRepository) {
 
     @Transactional
-    fun createUser(userCreate: UserCreate): User {
+    fun createUser(userCreate: UserCreate): UserData {
         return usersRepository.createUser(userCreate)
     }
 

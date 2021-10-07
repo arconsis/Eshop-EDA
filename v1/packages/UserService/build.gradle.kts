@@ -28,6 +28,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.quarkus:quarkus-kotlin")
+    implementation("io.quarkus:quarkus-security-jpa")
 
     implementation("io.quarkus:quarkus-resteasy-reactive")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
