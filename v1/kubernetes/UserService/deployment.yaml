@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-backend
+  labels:
+    app: user-backend
+  namespace: eshop-eda
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: user-backend
+  template:
+    metadata:
+      labels:
+        name: user-backend
+    spec:
+      containers:
+      - name: user-backend-service
+        imagePullPolicy: Always
+        image: eldimious/user-eda-v1:latest
+        ports:
+          - containerPort: 8080
+            protocol: TCP
+            

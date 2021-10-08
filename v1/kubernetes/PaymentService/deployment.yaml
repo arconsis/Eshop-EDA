@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-backend
+  labels:
+    app: payment-backend
+  namespace: eshop-eda
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: payment-backend
+  template:
+    metadata:
+      labels:
+        name: payment-backend
+    spec:
+      containers:
+      - name: payment-backend-service
+        imagePullPolicy: Always
+        image: eldimious/payment-eda-v1:latest
+        ports:
+          - containerPort: 3333
+            protocol: TCP
+            

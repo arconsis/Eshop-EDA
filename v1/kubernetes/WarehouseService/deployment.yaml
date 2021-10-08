@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: warehouse-backend
+  labels:
+    app: warehouse-backend
+  namespace: eshop-eda
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: warehouse-backend
+  template:
+    metadata:
+      labels:
+        name: warehouse-backend
+    spec:
+      containers:
+      - name: warehouse-backend-service
+        imagePullPolicy: Always
+        image: eldimious/warehouse-eda-v1:latest
+        ports:
+          - containerPort: 3000
+            protocol: TCP
+            

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-backend
+  labels:
+    app: order-backend
+  namespace: eshop-eda
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: order-backend
+  template:
+    metadata:
+      labels:
+        name: order-backend
+    spec:
+      containers:
+      - name: order-backend-service
+        imagePullPolicy: Always
+        image: eldimious/order-eda-v1:latest
+        ports:
+          - containerPort: 5050
+            protocol: TCP
+            
