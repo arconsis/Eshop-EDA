@@ -4,6 +4,7 @@
   "description": "Service that handles emails notifications",
   "main": "index.js",
   "scripts": {
+    "start:dev": "cp .local.env .env && node src/server.js",
     "start": "node src/server",
     "test": "mocha tests --recursive --timeout 15000 --exit"
   },

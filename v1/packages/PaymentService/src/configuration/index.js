@@ -1,8 +1,10 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 const config = {
-  appEnv: process.env.APP_ENV || 'development',
-  httpPort: process.env.HTTP_PORT || 3333,
+  appEnv: process.env.APP_ENV,
+  httpPort: process.env.HTTP_PORT,
   kafka: {
     clientId: 'paymentsservice',
     groupId: 'paymentsservice',

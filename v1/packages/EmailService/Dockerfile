@@ -1,5 +1,4 @@
 FROM node:14-alpine as builder
-ARG NPM_TOKEN
 RUN mkdir -p /build
 
 COPY ./package.json ./package-lock.json /build/
@@ -14,13 +13,13 @@ ENV user node
 USER $user
 
 # Create app directory
-RUN mkdir -p /home/$user/server/src
-WORKDIR /home/$user/server/src
+RUN mkdir -p /home/$user/emailservice/src
+WORKDIR /home/$user/emailservice/src
 
 COPY --from=builder /build ./
 
-EXPOSE 7777
+EXPOSE 3000
 
-ENV NODE_ENV development
+ENV NODE_ENV production
 
 CMD ["npm", "start"]

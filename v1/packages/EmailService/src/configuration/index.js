@@ -1,8 +1,10 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 const config = {
-  appEnv: process.env.APP_ENV || 'development',
-  httpPort: process.env.HTTP_PORT || 7777,
+  appEnv: process.env.APP_ENV,
+  httpPort: process.env.HTTP_PORT,
   mailgun: {
     apiKey: process.env.MAILGUN_API_KEY,
     domain: process.env.MAILGUN_DOMAIN,

@@ -4,6 +4,8 @@
   "description": "Handles eshop shippments",
   "main": "src/server.js",
   "scripts": {
+    "start": "node src/server",
+    "start:dev": "cp .local.env .env && node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Dimos Botsaris <botsaris.d@gmail.com>",

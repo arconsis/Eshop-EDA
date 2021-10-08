@@ -13,8 +13,8 @@ ENV user node
 USER $user
 
 # Create app directory
-RUN mkdir -p /home/$user/orderservice/src
-WORKDIR /home/$user/orderservice/src
+RUN mkdir -p /home/$user/shippingservice/src
+WORKDIR /home/$user/shippingservice/src
 
 COPY --from=builder /build ./
 

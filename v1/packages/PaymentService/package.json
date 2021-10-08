@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server",
+    "start:dev": "cp .local.env .env && node src/server.js",
     "test": "mocha tests --recursive --timeout 15000 --exit"
   },
   "author": "Dimos Botsaris <botsaris.d@gmail.com>",
