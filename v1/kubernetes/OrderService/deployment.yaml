@@ -20,6 +20,6 @@ spec:
         imagePullPolicy: Always
         image: eldimious/order-eda-v1:latest
         ports:
-          - containerPort: 5050
+          - containerPort: 3000
             protocol: TCP
             

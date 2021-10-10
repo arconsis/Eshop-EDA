@@ -20,6 +20,6 @@ spec:
         imagePullPolicy: Always
         image: eldimious/payment-eda-v1:latest
         ports:
-          - containerPort: 3333
+          - containerPort: 3000
             protocol: TCP
             

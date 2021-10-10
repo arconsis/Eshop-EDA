@@ -18,14 +18,14 @@ spec:
               service:
                 name: order-service
                 port:
-                  number: 5050
+                  number: 3000
           - path: /shipments
             pathType: Prefix
             backend:
               service:
                 name: shipment-service
                 port:
-                  number: 9999
+                  number: 3000
           - path: /inventory
             pathType: Prefix
             backend:
@@ -39,4 +39,4 @@ spec:
               service:
                 name: user-service
                 port:
-                  number: 8080
+                  number: 3000

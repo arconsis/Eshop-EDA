@@ -20,6 +20,6 @@ spec:
         imagePullPolicy: Always
         image: eldimious/email-eda-v1:latest
         ports:
-          - containerPort: 7777
+          - containerPort: 3000
             protocol: TCP
             

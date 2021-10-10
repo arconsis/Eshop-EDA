@@ -20,6 +20,6 @@ spec:
         imagePullPolicy: Always
         image: eldimious/shipment-eda-v1:latest
         ports:
-          - containerPort: 9999
+          - containerPort: 3000
             protocol: TCP
             
