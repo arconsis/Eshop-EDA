@@ -19,6 +19,28 @@ provider "kubernetes" {
 }
 
 ################################################################################
+# SG Configuration
+################################################################################
+module "private_vpc_sg" {
+  source                   = "../modules/security"
+  create_vpc               = var.create_vpc
+  create_sg                = true
+  sg_name                  = "private-database-security-group"
+  description              = "Controls access to the private databases (not internet facing)"
+  rule_ingress_description = "allow inbound access only from resources in VPC"
+  rule_egress_description  = "allow all outbound"
+  vpc_id                   = module.networking.vpc_id
+  ingress_cidr_blocks      = [var.cidr_block]
+  ingress_from_port        = 0
+  ingress_to_port          = 0
+  ingress_protocol         = "-1"
+  egress_cidr_blocks       = ["0.0.0.0/0"]
+  egress_from_port         = 0
+  egress_to_port           = 0
+  egress_protocol          = "-1"
+}
+
+################################################################################
 # VPC Configuration
 ################################################################################
 module "networking" {
