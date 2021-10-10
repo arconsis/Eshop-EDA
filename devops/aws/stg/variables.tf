@@ -81,7 +81,7 @@ variable "cluster_name" {
 ################################################################################
 variable "environment" {
   description = "Indicate the environment"
-  default     = "dev"
+  default     = "stg"
 }
 
 ################################################################################

@@ -22,4 +22,7 @@ spec:
         ports:
           - containerPort: 3000
             protocol: TCP
+        envFrom:
+          - secretRef:
+            name: orders-service-secrets
             
