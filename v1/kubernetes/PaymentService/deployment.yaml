@@ -16,7 +16,7 @@ spec:
         name: payment-backend
     spec:
       containers:
-      - name: payment-backend-service
+      - name: payment-api
         imagePullPolicy: Always
         image: eldimious/payment-eda-v1:latest
         ports:

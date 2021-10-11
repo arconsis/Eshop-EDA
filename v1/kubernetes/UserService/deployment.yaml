@@ -16,11 +16,11 @@ spec:
         name: user-backend
     spec:
       containers:
-      - name: user-backend-service
+      - name: user-api
         imagePullPolicy: Always
         image: eldimious/user-eda-v1:latest
         ports:
-          - containerPort: 3000
+          - containerPort: 8080
             protocol: TCP
         envFrom:
           - secretRef:

@@ -16,7 +16,7 @@ spec:
         name: warehouse-backend
     spec:
       containers:
-      - name: warehouse-backend-service
+      - name: warehouse-api
         imagePullPolicy: Always
         image: eldimious/warehouse-eda-v1:latest
         ports:

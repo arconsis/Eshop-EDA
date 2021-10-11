@@ -16,7 +16,7 @@ spec:
         name: order-backend
     spec:
       containers:
-      - name: order-backend-service
+      - name: order-api
         imagePullPolicy: Always
         image: eldimious/order-eda-v1:latest
         ports:

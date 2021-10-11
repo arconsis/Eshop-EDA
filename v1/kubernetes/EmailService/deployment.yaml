@@ -16,7 +16,7 @@ spec:
         name: email-backend
     spec:
       containers:
-      - name: email-backend-service
+      - name: email-api
         imagePullPolicy: Always
         image: eldimious/email-eda-v1:latest
         ports:
