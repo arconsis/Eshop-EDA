@@ -1,5 +1,8 @@
 module.exports = {
   "extends": "airbnb",
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
   "rules": {
   	"camelcase": [2, {"properties": "never", "ignoreDestructuring": true}],
     "no-underscore-dangle": [2, { "allowAfterThis": true }],

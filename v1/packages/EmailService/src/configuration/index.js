@@ -13,7 +13,7 @@ const config = {
   kafka: {
     clientId: 'emailservice',
     groupId: 'emailservice',
-    brokers: [process.env.KAFKA_BROKER],
+    brokers: process.env.KAFKA_BROKER?.split(',') ?? [],
     connectionTimeout: 3000,
     requestTimeout: 30000,
   },

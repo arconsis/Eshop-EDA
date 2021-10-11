@@ -168,6 +168,7 @@ module "payments_database" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 7
   create_monitoring_role                = true
+  monitoring_role_name                  = "PaymentsDatabaseMonitoringRole"
   monitoring_interval                   = 60
 
   parameters = [
@@ -228,6 +229,7 @@ module "shipments_database" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 7
   create_monitoring_role                = true
+  monitoring_role_name                  = "ShipmentsDatabaseMonitoringRole"
   monitoring_interval                   = 60
 
   parameters = [
@@ -288,6 +290,7 @@ module "warehouse_database" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 7
   create_monitoring_role                = true
+  monitoring_role_name                  = "WarehouseDatabaseMonitoringRole"
   monitoring_interval                   = 60
 
   parameters = [
@@ -348,6 +351,7 @@ module "users_database" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 7
   create_monitoring_role                = true
+  monitoring_role_name                  = "UsersDatabaseMonitoringRole"
   monitoring_interval                   = 60
 
   parameters = [
@@ -449,8 +453,8 @@ resource "aws_cloudwatch_log_group" "msk_broker_logs" {
 
 resource "aws_msk_cluster" "kafka" {
   cluster_name           = "kafka-eshop"
-  kafka_version          = "2.4.1"
-  number_of_broker_nodes = 3
+  kafka_version          = "2.8.1"
+  number_of_broker_nodes = 2
 
   broker_node_group_info {
     instance_type   = "kafka.t3.small"

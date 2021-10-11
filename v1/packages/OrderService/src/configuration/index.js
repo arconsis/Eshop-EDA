@@ -9,7 +9,7 @@ const config = {
   kafka: {
     clientId: 'ordersservice',
     groupId: 'ordersservice',
-    brokers: [process.env.KAFKA_BROKER],
+    brokers: process.env.KAFKA_BROKER?.split(',') ?? [],
     connectionTimeout: 3000,
     requestTimeout: 30000,
   },

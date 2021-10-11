@@ -1,4 +1,4 @@
-FROM node:14-alpine as builder
+FROM node:16-alpine as builder
 RUN mkdir -p /build
 
 COPY ./package.json ./package-lock.json /build/
@@ -8,7 +8,7 @@ RUN npm install && \
 
 COPY . /build
 
-FROM node:14-alpine
+FROM node:16-alpine
 ENV user node
 USER $user
 
