@@ -18,11 +18,11 @@ spec:
       containers:
       - name: shipment-api
         imagePullPolicy: Always
-        image: eldimious/shipment-eda-v1:latest
+        image: eldimious/shipping-eda-v1:latest
         ports:
           - containerPort: 3000
             protocol: TCP
         envFrom:
-          - secretRef:
+        - secretRef:
             name: shipping-service-secrets
             

@@ -23,6 +23,6 @@ spec:
           - containerPort: 8080
             protocol: TCP
         envFrom:
-          - secretRef:
+        - secretRef:
             name: users-service-secrets
             

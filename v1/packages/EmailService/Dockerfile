@@ -1,5 +1,6 @@
 FROM node:16-alpine as builder
 RUN mkdir -p /build
+ARG HTTP_PORT=3000
 
 COPY ./package.json ./package-lock.json /build/
 WORKDIR /build

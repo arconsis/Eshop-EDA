@@ -23,6 +23,6 @@ spec:
           - containerPort: 3000
             protocol: TCP
         envFrom:
-          - secretRef:
+        - secretRef:
             name: warehouse-service-secrets
             

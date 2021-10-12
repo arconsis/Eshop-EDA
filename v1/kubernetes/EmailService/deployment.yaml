@@ -19,10 +19,9 @@ spec:
       - name: email-api
         imagePullPolicy: Always
         image: eldimious/email-eda-v1:latest
+        envFrom:
+        - secretRef:
+            name: email-service-secrets
         ports:
           - containerPort: 3000
-            protocol: TCP
-        envFrom:
-          - secretRef:
-            name: email-service-secrets
-            
+            protocol: TCP       
