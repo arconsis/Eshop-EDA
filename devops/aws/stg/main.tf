@@ -22,18 +22,18 @@ provider "kubernetes" {
 # VPC Configuration
 ################################################################################
 module "networking" {
-  source               = "../modules/network"
-  create_vpc           = var.create_vpc
-  create_igw           = var.create_igw
-  single_nat_gateway   = var.single_nat_gateway
-  enable_nat_gateway   = var.enable_nat_gateway
-  region               = var.aws_region
-  vpc_name             = var.vpc_name
-  cidr_block           = var.cidr_block
-  availability_zones   = var.availability_zones
-  public_subnet_cidrs  = var.public_subnet_cidrs
-  private_subnet_cidrs = var.private_subnet_cidrs
-  public_subnet_additional_tags = {
+  source                         = "../modules/network"
+  create_vpc                     = var.create_vpc
+  create_igw                     = var.create_igw
+  single_nat_gateway             = var.single_nat_gateway
+  enable_nat_gateway             = var.enable_nat_gateway
+  region                         = var.aws_region
+  vpc_name                       = var.vpc_name
+  cidr_block                     = var.cidr_block
+  availability_zones             = var.availability_zones
+  public_subnet_cidrs            = var.public_subnet_cidrs
+  private_subnet_cidrs           = var.private_subnet_cidrs
+  public_subnet_additional_tags  = {
     "kubernetes.io/role/elb"                    = "1"
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
   }
@@ -74,12 +74,12 @@ module "orders_database" {
 
   identifier = "orders-database"
 
-  engine                      = "postgres"
-  engine_version              = "11.12"
-  auto_minor_version_upgrade  = false
-  family                      = "postgres11" # DB parameter group
-  major_engine_version        = "11"         # DB option group
-  instance_class              = "db.t3.small"
+  engine                     = "postgres"
+  engine_version             = "11.12"
+  auto_minor_version_upgrade = false
+  family                     = "postgres11" # DB parameter group
+  major_engine_version       = "11"         # DB option group
+  instance_class             = "db.t3.small"
 
   allocated_storage     = 20
   max_allocated_storage = 100
@@ -121,13 +121,13 @@ module "orders_database" {
     }
   ]
 
-  db_option_group_tags = {
+  db_option_group_tags    = {
     "Sensitive" = "low"
   }
   db_parameter_group_tags = {
     "Sensitive" = "low"
   }
-  db_subnet_group_tags = {
+  db_subnet_group_tags    = {
     "Sensitive" = "high"
   }
 }
@@ -137,12 +137,12 @@ module "payments_database" {
 
   identifier = "payments-database"
 
-  engine                      = "postgres"
-  engine_version              = "11.12"
-  auto_minor_version_upgrade  = false
-  family                      = "postgres11" # DB parameter group
-  major_engine_version        = "11"         # DB option group
-  instance_class              = "db.t3.small"
+  engine                     = "postgres"
+  engine_version             = "11.12"
+  auto_minor_version_upgrade = false
+  family                     = "postgres11" # DB parameter group
+  major_engine_version       = "11"         # DB option group
+  instance_class             = "db.t3.small"
 
   allocated_storage     = 20
   max_allocated_storage = 100
@@ -182,13 +182,13 @@ module "payments_database" {
     }
   ]
 
-  db_option_group_tags = {
+  db_option_group_tags    = {
     "Sensitive" = "low"
   }
   db_parameter_group_tags = {
     "Sensitive" = "low"
   }
-  db_subnet_group_tags = {
+  db_subnet_group_tags    = {
     "Sensitive" = "high"
   }
 }
@@ -198,12 +198,12 @@ module "shipments_database" {
 
   identifier = "shipments-database"
 
-  engine                      = "postgres"
-  engine_version              = "11.12"
-  auto_minor_version_upgrade  = false
-  family                      = "postgres11" # DB parameter group
-  major_engine_version        = "11"         # DB option group
-  instance_class              = "db.t3.small"
+  engine                     = "postgres"
+  engine_version             = "11.12"
+  auto_minor_version_upgrade = false
+  family                     = "postgres11" # DB parameter group
+  major_engine_version       = "11"         # DB option group
+  instance_class             = "db.t3.small"
 
   allocated_storage     = 20
   max_allocated_storage = 100
@@ -243,13 +243,13 @@ module "shipments_database" {
     }
   ]
 
-  db_option_group_tags = {
+  db_option_group_tags    = {
     "Sensitive" = "low"
   }
   db_parameter_group_tags = {
     "Sensitive" = "low"
   }
-  db_subnet_group_tags = {
+  db_subnet_group_tags    = {
     "Sensitive" = "high"
   }
 }
@@ -259,12 +259,12 @@ module "warehouse_database" {
 
   identifier = "warehouse-database"
 
-  engine                      = "postgres"
-  engine_version              = "11.12"
-  auto_minor_version_upgrade  = false
-  family                      = "postgres11" # DB parameter group
-  major_engine_version        = "11"         # DB option group
-  instance_class              = "db.t3.small"
+  engine                     = "postgres"
+  engine_version             = "11.12"
+  auto_minor_version_upgrade = false
+  family                     = "postgres11" # DB parameter group
+  major_engine_version       = "11"         # DB option group
+  instance_class             = "db.t3.small"
 
   allocated_storage     = 20
   max_allocated_storage = 100
@@ -304,13 +304,13 @@ module "warehouse_database" {
     }
   ]
 
-  db_option_group_tags = {
+  db_option_group_tags    = {
     "Sensitive" = "low"
   }
   db_parameter_group_tags = {
     "Sensitive" = "low"
   }
-  db_subnet_group_tags = {
+  db_subnet_group_tags    = {
     "Sensitive" = "high"
   }
 }
@@ -320,12 +320,12 @@ module "users_database" {
 
   identifier = "users-database"
 
-  engine                      = "postgres"
-  engine_version              = "11.12"
-  auto_minor_version_upgrade  = false
-  family                      = "postgres11" # DB parameter group
-  major_engine_version        = "11"         # DB option group
-  instance_class              = "db.t3.small"
+  engine                     = "postgres"
+  engine_version             = "11.12"
+  auto_minor_version_upgrade = false
+  family                     = "postgres11" # DB parameter group
+  major_engine_version       = "11"         # DB option group
+  instance_class             = "db.t3.small"
 
   allocated_storage     = 20
   max_allocated_storage = 100
@@ -365,13 +365,13 @@ module "users_database" {
     }
   ]
 
-  db_option_group_tags = {
+  db_option_group_tags    = {
     "Sensitive" = "low"
   }
   db_parameter_group_tags = {
     "Sensitive" = "low"
   }
-  db_subnet_group_tags = {
+  db_subnet_group_tags    = {
     "Sensitive" = "high"
   }
 }
@@ -399,7 +399,7 @@ module "eks" {
   kubeconfig_output_path = "./"
 
   workers_additional_policies = [aws_iam_policy.worker_policy.arn]
-  cluster_enabled_log_types = [
+  cluster_enabled_log_types   = [
     "api",
     "audit",
     "authenticator",
@@ -459,7 +459,7 @@ resource "aws_msk_cluster" "kafka" {
   broker_node_group_info {
     instance_type   = "kafka.t3.small"
     ebs_volume_size = 1000
-    client_subnets = module.networking.private_subnet_ids
+    client_subnets  = module.networking.private_subnet_ids
     security_groups = [module.private_vpc_sg.security_group_id]
   }
 

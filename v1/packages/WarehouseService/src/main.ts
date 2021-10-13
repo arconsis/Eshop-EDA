@@ -6,14 +6,14 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const configService = app.get(ConfigService)
+  const configService = app.get(ConfigService);
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
       client: {
         clientId: 'inventory-service',
         brokers: configService.get<string>('KAFKA_BROKER')?.split(',') ?? [],
-        ssl: true
+        ssl: true,
       },
       subscribe: {
         fromBeginning: true,
@@ -30,7 +30,7 @@ async function bootstrap() {
   prismaService.enableShutdownHooks(app);
 
   await app.startAllMicroservices();
-  
+
   await app.listen(3000);
 }
 

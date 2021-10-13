@@ -17,17 +17,17 @@ ENV NODE_ENV=production
 
 WORKDIR /usr/src/app
 
+COPY --chown=node:node startup.sh ./
 COPY package*.json ./
 COPY ./prisma ./prisma
 
 RUN npm ci --only=production
 RUN npm i -g prisma@3.1.1
 RUN prisma generate
-RUN rm -rf node_modules/@prisma/engines
 
 COPY --from=builder /usr/src/app/dist dist
 
 USER node
 EXPOSE 3000
 
-CMD ["node", "dist/main"]
+CMD ["npm", "run", "start:prod"]

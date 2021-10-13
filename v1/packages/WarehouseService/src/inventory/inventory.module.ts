@@ -18,8 +18,9 @@ import { ConfigService } from '@nestjs/config';
           options: {
             client: {
               clientId: 'inventory-service',
-              brokers: configService.get<string>('KAFKA_BROKER')?.split(',') ?? [],
-              ssl: true
+              brokers:
+                configService.get<string>('KAFKA_BROKER')?.split(',') ?? [],
+              ssl: true,
             },
             consumer: {
               groupId: 'inventory-consumer',

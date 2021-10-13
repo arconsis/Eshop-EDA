@@ -29,7 +29,9 @@ resource "aws_alb_listener" "http_tcp" {
       type = lookup(default_action.value, "action_type", "fixed-response")
 
       dynamic "fixed_response" {
-        for_each = length(keys(lookup(default_action.value, "fixed_response", {}))) == 0 ? [] : [lookup(default_action.value, "fixed_response", {})]
+        for_each = length(keys(lookup(default_action.value, "fixed_response", {}))) == 0 ? [] : [
+          lookup(default_action.value, "fixed_response", {})
+        ]
 
         content {
           content_type = fixed_response.value["content_type"]

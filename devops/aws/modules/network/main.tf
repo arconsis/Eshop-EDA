@@ -1,4 +1,3 @@
-
 locals {
   nat_gateway_count = var.single_nat_gateway ? 1 : length(var.availability_zones)
 
@@ -13,7 +12,7 @@ resource "aws_vpc" "this" {
   cidr_block           = var.cidr_block
   enable_dns_support   = var.enable_dns_support
   enable_dns_hostnames = var.enable_dns_hostnames
-  tags = {
+  tags                 = {
     Name        = "${var.project}_${var.environment}_vpc"
     Environment = var.environment
   }
@@ -25,7 +24,7 @@ resource "aws_vpc" "this" {
 resource "aws_internet_gateway" "this" {
   count  = var.create_vpc && var.create_igw && length(var.public_subnet_cidrs) > 0 ? 1 : 0
   vpc_id = local.vpc_id
-  tags = {
+  tags   = {
     Name        = "${var.project}_${var.environment}_ig"
     Environment = var.environment
   }
@@ -40,12 +39,12 @@ resource "aws_subnet" "private" {
   cidr_block        = element(var.private_subnet_cidrs, count.index)
   availability_zone = element(var.availability_zones, count.index)
   vpc_id            = local.vpc_id
-  tags = merge(
-    var.public_subnet_additional_tags,
-    {
-      Name        = "${var.project}_${var.environment}_private_subnet"
-      Environment = var.environment
-    }
+  tags              = merge(
+  var.public_subnet_additional_tags,
+  {
+    Name        = "${var.project}_${var.environment}_private_subnet"
+    Environment = var.environment
+  }
   )
 }
 
@@ -59,13 +58,13 @@ resource "aws_subnet" "public" {
   availability_zone       = element(var.availability_zones, count.index)
   vpc_id                  = local.vpc_id
   map_public_ip_on_launch = true
-  tags = merge(
-    var.public_subnet_additional_tags,
-    {
-      Name        = "${var.project}_${var.environment}_public_subnet"
-      Environment = var.environment
+  tags                    = merge(
+  var.public_subnet_additional_tags,
+  {
+    Name        = "${var.project}_${var.environment}_public_subnet"
+    Environment = var.environment
 
-    }
+  }
   )
 }
 
@@ -90,16 +89,16 @@ resource "aws_eip" "nat" {
 }
 
 resource "aws_nat_gateway" "this" {
-  count = var.create_vpc && var.enable_nat_gateway ? local.nat_gateway_count : 0
-  subnet_id = element(
-    aws_subnet.public.*.id,
-    var.single_nat_gateway ? 0 : count.index,
+  count         = var.create_vpc && var.enable_nat_gateway ? local.nat_gateway_count : 0
+  subnet_id     = element(
+  aws_subnet.public.*.id,
+  var.single_nat_gateway ? 0 : count.index,
   )
   allocation_id = element(
-    aws_eip.nat.*.id,
-    var.single_nat_gateway ? 0 : count.index,
+  aws_eip.nat.*.id,
+  var.single_nat_gateway ? 0 : count.index,
   )
-  depends_on = [aws_internet_gateway.this]
+  depends_on    = [aws_internet_gateway.this]
 }
 
 ################################################################################
