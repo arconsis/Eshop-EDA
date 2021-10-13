@@ -7,7 +7,22 @@ module.exports.init = (kafkaConfig) => {
     brokers: kafkaConfig.brokers,
     connectionTimeout: kafkaConfig.connectionTimeout,
     requestTimeout: kafkaConfig.requestTimeout,
+    ssl: true,
   });
+
+  // const admin = client.admin();
+  // (async () => {
+  //   await admin.createTopics({
+  //     topics: [
+  //       { topic: 'Orders' },
+  //       { topic: 'Payments' },
+  //       { topic: 'Shipments' },
+  //       { topic: 'Warehouse' },
+  //     ],
+  //   });
+  //   const topics = await admin.listTopics();
+  //   console.log('topics', topics)
+  // })();
 
   const brokerInterface = {
     async connectAsConsumer(groupId) {

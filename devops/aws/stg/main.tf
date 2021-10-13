@@ -493,6 +493,16 @@ resource "aws_msk_cluster" "kafka" {
   }
 }
 
+# resource "aws_msk_configuration" "example" {
+#   kafka_versions = ["2.1.0"]
+#   name           = "example"
+
+#   server_properties = <<PROPERTIES
+# auto.create.topics.enable = true
+# delete.topic.enable = true
+# PROPERTIES
+# }
+
 output "zookeeper_connect_string" {
   value = aws_msk_cluster.kafka.zookeeper_connect_string
 }

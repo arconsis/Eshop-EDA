@@ -13,6 +13,7 @@ async function bootstrap() {
       client: {
         clientId: 'inventory-service',
         brokers: configService.get<string>('KAFKA_BROKER')?.split(',') ?? [],
+        ssl: true
       },
       subscribe: {
         fromBeginning: true,

@@ -7,6 +7,7 @@ module.exports.init = (kafkaConfig) => {
     brokers: kafkaConfig.brokers,
     connectionTimeout: kafkaConfig.connectionTimeout,
     requestTimeout: kafkaConfig.requestTimeout,
+    ssl: true,
   });
 
   const brokerInterface = {

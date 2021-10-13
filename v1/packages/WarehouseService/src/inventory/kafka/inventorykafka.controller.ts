@@ -17,7 +17,7 @@ export class InventoryKafkaController implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    this.client.subscribeToResponseOf(Topic.Orders);
+    // this.client.subscribeToResponseOf(Topic.Orders);
     await this.client.connect();
   }
 
