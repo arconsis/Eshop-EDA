@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 module.exports.init = (services) => {
   app.use(express.static(path.join(__dirname, 'public')));
   app.get('/healthCheck', ((req, res) => res.status(200).send('OK')));
-  app.use('/api/v1/shipments', shipmentsRouter.init(services));
+  app.use('/shipments', shipmentsRouter.init(services));
   app.use(errorRoute);
   const httpServer = http.createServer(app);
   return httpServer;
