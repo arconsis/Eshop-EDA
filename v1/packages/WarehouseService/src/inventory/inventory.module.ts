@@ -4,23 +4,30 @@ import { InventoryService } from './domain/inventory.service';
 import { InventoryController } from './http/inventory.controller';
 import { InventoryKafkaController } from './kafka/inventorykafka.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     CommonModule,
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'KAFKA_CLIENT',
-        transport: Transport.KAFKA,
-        options: {
-          client: {
-            clientId: 'inventory-service',
-            brokers: ['localhost:9092'],
+        imports: [CommonModule],
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.KAFKA,
+          options: {
+            client: {
+              clientId: 'inventory-service',
+              brokers:
+                configService.get<string>('KAFKA_BROKER')?.split(',') ?? [],
+              ssl: true,
+            },
+            consumer: {
+              groupId: 'inventory-consumer',
+            },
           },
-          consumer: {
-            groupId: 'inventory-consumer',
-          },
-        },
+        }),
+        inject: [ConfigService],
       },
     ]),
   ],
