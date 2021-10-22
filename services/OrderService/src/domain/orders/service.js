@@ -31,14 +31,13 @@ function init({
       lastName: 'Botsaris',
       userId: '2f5acab8-8237-4841-a188-62af0bbbaac8',
     };
-    const order = await ordersRepository.createOrder({
+    return ordersRepository.createOrder({
       userId: user.userId,
       productId,
       quantity,
       amount,
       currency,
     });
-    return order;
   }
 
   async function updateValidOrder(orderNo) {
@@ -76,11 +75,10 @@ function init({
       lastName: 'Botsaris',
       userId: '2f5acab8-8237-4841-a188-62af0bbbaac8',
     };
-    const order = await ordersRepository.updateOrder({
+    return ordersRepository.updateOrder({
       orderNo,
       status: PAID_ORDER_STATUS,
     });
-    return order;
   }
 
   async function updateFailedPaymentOrder(orderNo) {

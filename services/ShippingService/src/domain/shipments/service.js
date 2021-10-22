@@ -1,10 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const {
-  SHIPMENTS_TOPIC,
-  SHIPMENT_PREPARED_EVENT,
   OUT_FOR_SHIPMENT_STATUS,
   SHIPPED_SHIPMENT_STATUS,
-  SHIPMENT_SHIPPED_EVENT,
 } = require('../../common/constants');
 
 function init({
