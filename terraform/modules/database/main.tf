@@ -40,7 +40,16 @@ module "database" {
   monitoring_role_name                  = var.monitoring_role_name
   monitoring_interval                   = 60
 
-  parameters = var.database_parameters
+  parameters = concat([
+    {
+      name  = "autovacuum"
+      value = 1
+    },
+    {
+      name  = "client_encoding"
+      value = "utf8"
+    }
+  ], var.database_parameters)
 
   db_option_group_tags    = {
     "Sensitive" = "low"

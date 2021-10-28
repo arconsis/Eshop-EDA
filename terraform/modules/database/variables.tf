@@ -99,14 +99,5 @@ variable "database_enabled_cloudwatch_logs_exports" {
 variable "database_parameters" {
   description = "DB parameters"
   type        = list(map(string))
-  default     = [
-    {
-      name  = "autovacuum"
-      value = 1
-    },
-    {
-      name  = "client_encoding"
-      value = "utf8"
-    }
-  ]
+  default     = []
 }
