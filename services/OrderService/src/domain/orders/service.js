@@ -3,6 +3,7 @@ const {
   ORDERS_TOPIC,
   ORDER_CREATED_EVENT_TYPE,
   ORDER_REQUESTED_EVENT_TYPE,
+  VALIDATED_ORDER_STATUS,
   PAID_ORDER_STATUS,
   PAYMENT_FAILED_ORDER_STATUS,
   ORDER_CONFIRMED_EVENT,
@@ -62,7 +63,7 @@ function init({
   async function updateValidOrder(orderNo) {
     const order = await ordersRepository.updateOrder({
       orderNo,
-      status: PAID_ORDER_STATUS,
+      status: VALIDATED_ORDER_STATUS,
     });
     // fetch / find user from order.userid
     const user = {
@@ -154,5 +155,6 @@ function init({
     completeOrder,
   };
 }
+
 
 module.exports.init = init;

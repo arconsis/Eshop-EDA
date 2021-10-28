@@ -1,8 +1,4 @@
 /* eslint-disable no-useless-return */
-const eventBusRepositoryFactory = require('../../data/repositories/eventsBus/repository');
-const {
-  kafka: kafkaConfig,
-} = require('../../configuration');
 const {
   PAYMENTS_TOPIC,
   ORDER_PAID_EVENT,
@@ -15,8 +11,7 @@ const {
   WAREHOUSE_ORDER_INVALID_EVENT,
 } = require('../../common/constants');
 const logger = require('../../common/logger');
-
-const eventBusRepository = eventBusRepositoryFactory.init(kafkaConfig);
+const eventsBusRepository = require('../../data/repositories/eventsBus/repository');
 
 module.exports.init = (services) => {
   async function handlePaymentsTopic(message) {
@@ -118,8 +113,8 @@ module.exports.init = (services) => {
 
   const startConsume = async () => {
     logger.info('Start consume topics');
-    await eventBusRepository.consumeStream({
-      groupId: kafkaConfig.groupId,
+    await eventsBusRepository.startConsume({
+      fromBeginning: true,
       topics: [
         PAYMENTS_TOPIC,
         SHIPMENTS_TOPIC,
@@ -128,7 +123,20 @@ module.exports.init = (services) => {
     }, handler);
   };
 
+  const connectAsConsumer = async ({ groupId }) => {
+    await eventsBusRepository.connectAsConsumer({
+      groupId,
+    }).then(() => logger.info('Connected as consumer'));
+  };
+
+  const connectAsProducer = async () => {
+    await eventsBusRepository.connectAsProducer()
+      .then(() => logger.info('Connected as producer'));
+  };
+
   return {
     startConsume,
+    connectAsConsumer,
+    connectAsProducer,
   };
 };

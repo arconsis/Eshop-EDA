@@ -223,7 +223,6 @@ resource "aws_msk_configuration" "msk_config" {
   server_properties = <<PROPERTIES
 auto.create.topics.enable = true
 delete.topic.enable = true
-enable.idempotence = true
 PROPERTIES
 }
 

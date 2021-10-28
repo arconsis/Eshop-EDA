@@ -1,11 +1,5 @@
 version: '3.8'
 services:
-  warehouse-service:
-    build: .
-    ports:
-      - '3000:3000'
-    environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public
   postgres:
     image: postgres:13.2
     ports:

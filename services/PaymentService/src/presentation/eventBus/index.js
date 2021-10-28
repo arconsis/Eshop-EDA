@@ -1,14 +1,9 @@
-const eventBusRepositoryFactory = require('../../data/repositories/eventBus/repository');
-const {
-  kafka: kafkaConfig,
-} = require('../../configuration');
+const eventBusRepository = require('../../data/repositories/eventBus/repository');
 const {
   ORDERS_TOPIC,
   ORDER_CREATED_EVENT_TYPE,
 } = require('../../common/constants');
 const logger = require('../../common/logger');
-
-const eventBusRepository = eventBusRepositoryFactory.init(kafkaConfig);
 
 module.exports.init = (services) => {
   const handler = async ({ topic, partition, message }) => {
@@ -40,15 +35,28 @@ module.exports.init = (services) => {
 
   const startConsume = async () => {
     logger.info('Start consume topics');
-    await eventBusRepository.consumeStream({
-      groupId: kafkaConfig.groupId,
+    await eventBusRepository.startConsume({
+      fromBeginning: true,
       topics: [
         ORDERS_TOPIC,
       ],
     }, handler);
   };
 
+  const connectAsConsumer = async ({ groupId }) => {
+    await eventBusRepository.connectAsConsumer({
+      groupId,
+    }).then(() => logger.info('Connected as consumer'));
+  };
+
+  const connectAsProducer = async () => {
+    await eventBusRepository.connectAsProducer()
+      .then(() => logger.info('Connected as producer'));
+  };
+
   return {
     startConsume,
+    connectAsConsumer,
+    connectAsProducer,
   };
 };
