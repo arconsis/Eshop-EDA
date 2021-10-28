@@ -36,21 +36,7 @@ export class InventoryKafkaController implements OnModuleInit {
       quantity,
     );
 
-    if (stockUpdated) {
-      return this.client.emit(
-        Topic.Warehouse,
-        InventoryKafkaController.createEvent(
-          orderNo,
-          id,
-          WarehouseEventType.OrderValidated,
-          {
-            productId,
-            quantity,
-            orderNo,
-          },
-        ),
-      );
-    } else {
+    if (!stockUpdated) {
       return this.client.emit(
         Topic.Warehouse,
         InventoryKafkaController.createEvent(
