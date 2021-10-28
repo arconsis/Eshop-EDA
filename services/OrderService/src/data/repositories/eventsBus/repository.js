@@ -17,6 +17,7 @@ const {
     https://www.confluent.io/blog/exactly-once-semantics-are-possible-heres-how-apache-kafka-does-it/
     https://www.baeldung.com/kafka-exactly-once
 */
+
 const DEFAULT_PRODUCER_MESSAGES_CONFIG = {
   acks: -1, // The producer must wait for acknowledgement from all replicas (acks=-1)
 };
@@ -97,13 +98,18 @@ class EventBusRepository {
     const transaction = await this.producer.transaction();
     const eventsToPublish = Array.isArray(events) ? events : [events];
     try {
-      await Promise.all(eventsToPublish.map(async (event) => {
-        await transaction.send({
+      await eventsToPublish.reduce(async (promise, event) => {
+        // This line will wait for the last async function to finish.
+        // The first iteration uses an already resolved Promise
+        // so, it will immediately continue.
+        const accumulator = await promise;
+        const result = await await transaction.send({
           topic: event.topic,
           messages: event.messages,
           ...DEFAULT_PRODUCER_MESSAGES_CONFIG,
         });
-      }));
+        return [...accumulator, result];
+      }, Promise.resolve([]));
       await transaction.commit();
     } catch (e) {
       await transaction.abort();
