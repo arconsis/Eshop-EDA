@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bastion-deployment
+  labels:
+    app: bastion
+  namespace: eshop-eda
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bastion
+  template:
+    metadata:
+      labels:
+        app: bastion
+    spec:
+      containers:
+        - name: bastion-eda
+          imagePullPolicy: IfNotPresent
+          image: eldimious/bastion-eda:latest
+          resources:
+            limits:
+              cpu: '600m'
+              memory: '512Mi'
+            requests:
+              cpu: '300m'
+              memory: '512Mi'
+          envFrom:
+            - configMapRef:
+                name: bastion-configmap
