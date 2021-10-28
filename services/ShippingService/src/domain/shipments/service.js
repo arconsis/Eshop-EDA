@@ -35,17 +35,22 @@ function init({
       id: shipment.id,
       status: OUT_FOR_SHIPMENT_STATUS,
     });
-    return eventsBusRepository.sendMessages(SHIPMENTS_TOPIC, toShipmentMessage({
-      id: uuidv4(),
-      orderNo,
-      type: SHIPMENT_PREPARED_EVENT,
-      amount,
-      currency,
-      userId,
-      email,
-      firstName,
-      lastName,
-    }));
+    await eventsBusRepository.sendInTransaction([
+      {
+        topic: SHIPMENTS_TOPIC,
+        messages: toShipmentMessage({
+          id: uuidv4(),
+          orderNo,
+          type: SHIPMENT_PREPARED_EVENT,
+          amount,
+          currency,
+          userId,
+          email,
+          firstName,
+          lastName,
+        }),
+      },
+    ]);
   }
 
   async function updateDeliveredShipment(shipmentId) {
@@ -53,11 +58,16 @@ function init({
       shipmentId,
       status: SHIPPED_SHIPMENT_STATUS,
     });
-    return eventsBusRepository.sendMessages(SHIPMENTS_TOPIC, toShipmentMessage({
-      id: uuidv4(),
-      orderNo: shipment.orderNo,
-      type: SHIPMENT_SHIPPED_EVENT,
-    }));
+    await eventsBusRepository.sendInTransaction([
+      {
+        topic: SHIPMENTS_TOPIC,
+        messages: toShipmentMessage({
+          id: uuidv4(),
+          orderNo: shipment.orderNo,
+          type: SHIPMENT_SHIPPED_EVENT,
+        }),
+      },
+    ]);
   }
 
   return {

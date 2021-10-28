@@ -51,7 +51,7 @@ class EventBusRepository {
   }
 
   async connectAsProducer() {
-    this.producer = this.client.producer({ ...DEFAULT_PRODUCER_CONFIG });
+    this.producer = this.client.producer(DEFAULT_PRODUCER_CONFIG);
     await this.producer.connect();
   }
 
