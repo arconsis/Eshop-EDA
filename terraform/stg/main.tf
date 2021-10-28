@@ -78,6 +78,13 @@ module "orders_database" {
   subnet_ids           = module.networking.private_subnet_ids
   security_group_ids   = [module.private_vpc_sg.security_group_id]
   monitoring_role_name = "OrdersDatabaseMonitoringRole"
+  database_parameters = [
+    {
+      name = "rds.logical_replication"
+      value = "1"
+      apply_method = "pending-reboot"
+    }
+  ]
 }
 
 # Payments Database
@@ -90,6 +97,13 @@ module "payments_database" {
   subnet_ids           = module.networking.private_subnet_ids
   security_group_ids   = [module.private_vpc_sg.security_group_id]
   monitoring_role_name = "PaymentsDatabaseMonitoringRole"
+  database_parameters = [
+    {
+      name = "rds.logical_replication"
+      value = "1"
+      apply_method = "pending-reboot"
+    }
+  ]
 }
 
 # Shipments Database
@@ -101,6 +115,13 @@ module "shipments_database" {
   subnet_ids           = module.networking.private_subnet_ids
   security_group_ids   = [module.private_vpc_sg.security_group_id]
   monitoring_role_name = "ShipmentsDatabaseMonitoringRole"
+  database_parameters = [
+    {
+      name = "rds.logical_replication"
+      value = "1"
+      apply_method = "pending-reboot"
+    }
+  ]
 }
 
 # Warehouse Database
@@ -112,6 +133,13 @@ module "warehouse_database" {
   subnet_ids           = module.networking.private_subnet_ids
   security_group_ids   = [module.private_vpc_sg.security_group_id]
   monitoring_role_name = "WarehouseDatabaseMonitoringRole"
+  database_parameters = [
+    {
+      name = "rds.logical_replication"
+      value = "1"
+      apply_method = "pending-reboot"
+    }
+  ]
 }
 
 # Users Database
@@ -123,6 +151,13 @@ module "users_database" {
   subnet_ids           = module.networking.private_subnet_ids
   security_group_ids   = [module.private_vpc_sg.security_group_id]
   monitoring_role_name = "UsersDatabaseMonitoringRole"
+  database_parameters = [
+    {
+      name = "rds.logical_replication"
+      value = "1"
+      apply_method = "pending-reboot"
+    }
+  ]
 }
 
 module "eks" {
