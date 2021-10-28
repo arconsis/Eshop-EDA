@@ -70,310 +70,53 @@ module "private_vpc_sg" {
 ################################################################################
 # Orders Database
 module "orders_database" {
-  source = "terraform-aws-modules/rds/aws"
-
-  identifier = "orders-database"
-
-  engine                     = "postgres"
-  engine_version             = "11.12"
-  auto_minor_version_upgrade = false
-  family                     = "postgres11" # DB parameter group
-  major_engine_version       = "11"         # DB option group
-  instance_class             = "db.t3.small"
-
-  allocated_storage     = 20
-  max_allocated_storage = 100
-  storage_encrypted     = false
-
-  # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
-  # "Error creating DB Instance: InvalidParameterValue: MasterUsername
-  # user cannot be used as it is a reserved word used by the engine"
-  name     = "postgres"
-  username = var.orders_database_username
-  password = var.orders_database_password
-  port     = 5432
-
-  multi_az               = true
-  subnet_ids             = module.networking.private_subnet_ids
-  vpc_security_group_ids = [module.private_vpc_sg.security_group_id]
-
-  maintenance_window              = "Mon:00:00-Mon:03:00"
-  backup_window                   = "03:00-06:00"
-  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
-
-  backup_retention_period = 0
-  skip_final_snapshot     = true
-  deletion_protection     = false
-
-  performance_insights_enabled          = true
-  performance_insights_retention_period = 7
-  create_monitoring_role                = true
-  monitoring_interval                   = 60
-
-  parameters = [
-    {
-      name  = "autovacuum"
-      value = 1
-    },
-    {
-      name  = "client_encoding"
-      value = "utf8"
-    }
-  ]
-
-  db_option_group_tags    = {
-    "Sensitive" = "low"
-  }
-  db_parameter_group_tags = {
-    "Sensitive" = "low"
-  }
-  db_subnet_group_tags    = {
-    "Sensitive" = "high"
-  }
+  source                = "../modules/database"
+  database_identifier   = "orders-database"
+  database_username     = var.orders_database_username
+  database_password     = var.orders_database_password
+  subnet_ids            = module.networking.private_subnet_ids
+  security_group_ids    = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name  = "OrdersDatabaseMonitoringRole"
 }
 # Payments Database
 module "payments_database" {
-  source = "terraform-aws-modules/rds/aws"
-
-  identifier = "payments-database"
-
-  engine                     = "postgres"
-  engine_version             = "11.12"
-  auto_minor_version_upgrade = false
-  family                     = "postgres11" # DB parameter group
-  major_engine_version       = "11"         # DB option group
-  instance_class             = "db.t3.small"
-
-  allocated_storage     = 20
-  max_allocated_storage = 100
-  storage_encrypted     = false
-
-  name     = "postgres"
-  username = var.payments_database_username
-  password = var.payments_database_password
-  port     = 5432
-
-  multi_az               = true
-  subnet_ids             = module.networking.private_subnet_ids
-  vpc_security_group_ids = [module.private_vpc_sg.security_group_id]
-
-  maintenance_window              = "Mon:00:00-Mon:03:00"
-  backup_window                   = "03:00-06:00"
-  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
-
-  backup_retention_period = 0
-  skip_final_snapshot     = true
-  deletion_protection     = false
-
-  performance_insights_enabled          = true
-  performance_insights_retention_period = 7
-  create_monitoring_role                = true
-  monitoring_role_name                  = "PaymentsDatabaseMonitoringRole"
-  monitoring_interval                   = 60
-
-  parameters = [
-    {
-      name  = "autovacuum"
-      value = 1
-    },
-    {
-      name  = "client_encoding"
-      value = "utf8"
-    }
-  ]
-
-  db_option_group_tags    = {
-    "Sensitive" = "low"
-  }
-  db_parameter_group_tags = {
-    "Sensitive" = "low"
-  }
-  db_subnet_group_tags    = {
-    "Sensitive" = "high"
-  }
+  source                = "../modules/database"
+  database_identifier   = "payments-database"
+  database_username     = var.payments_database_username
+  database_password     = var.payments_database_password
+  subnet_ids            = module.networking.private_subnet_ids
+  security_group_ids    = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name  = "PaymentsDatabaseMonitoringRole"
 }
 # Shipments Database
 module "shipments_database" {
-  source = "terraform-aws-modules/rds/aws"
-
-  identifier = "shipments-database"
-
-  engine                     = "postgres"
-  engine_version             = "11.12"
-  auto_minor_version_upgrade = false
-  family                     = "postgres11" # DB parameter group
-  major_engine_version       = "11"         # DB option group
-  instance_class             = "db.t3.small"
-
-  allocated_storage     = 20
-  max_allocated_storage = 100
-  storage_encrypted     = false
-
-  name     = "postgres"
-  username = var.shipments_database_username
-  password = var.shipments_database_password
-  port     = 5432
-
-  multi_az               = true
-  subnet_ids             = module.networking.private_subnet_ids
-  vpc_security_group_ids = [module.private_vpc_sg.security_group_id]
-
-  maintenance_window              = "Mon:00:00-Mon:03:00"
-  backup_window                   = "03:00-06:00"
-  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
-
-  backup_retention_period = 0
-  skip_final_snapshot     = true
-  deletion_protection     = false
-
-  performance_insights_enabled          = true
-  performance_insights_retention_period = 7
-  create_monitoring_role                = true
-  monitoring_role_name                  = "ShipmentsDatabaseMonitoringRole"
-  monitoring_interval                   = 60
-
-  parameters = [
-    {
-      name  = "autovacuum"
-      value = 1
-    },
-    {
-      name  = "client_encoding"
-      value = "utf8"
-    }
-  ]
-
-  db_option_group_tags    = {
-    "Sensitive" = "low"
-  }
-  db_parameter_group_tags = {
-    "Sensitive" = "low"
-  }
-  db_subnet_group_tags    = {
-    "Sensitive" = "high"
-  }
+  source                = "../modules/database"
+  database_identifier   = "shipments-database"
+  database_username     = var.shipments_database_username
+  database_password     = var.shipments_database_password
+  subnet_ids            = module.networking.private_subnet_ids
+  security_group_ids    = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name  = "ShipmentsDatabaseMonitoringRole"
 }
 # Warehouse Database
 module "warehouse_database" {
-  source = "terraform-aws-modules/rds/aws"
-
-  identifier = "warehouse-database"
-
-  engine                     = "postgres"
-  engine_version             = "11.12"
-  auto_minor_version_upgrade = false
-  family                     = "postgres11" # DB parameter group
-  major_engine_version       = "11"         # DB option group
-  instance_class             = "db.t3.small"
-
-  allocated_storage     = 20
-  max_allocated_storage = 100
-  storage_encrypted     = false
-
-  name     = "postgres"
-  username = var.warehouse_database_username
-  password = var.warehouse_database_password
-  port     = 5432
-
-  multi_az               = true
-  subnet_ids             = module.networking.private_subnet_ids
-  vpc_security_group_ids = [module.private_vpc_sg.security_group_id]
-
-  maintenance_window              = "Mon:00:00-Mon:03:00"
-  backup_window                   = "03:00-06:00"
-  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
-
-  backup_retention_period = 0
-  skip_final_snapshot     = true
-  deletion_protection     = false
-
-  performance_insights_enabled          = true
-  performance_insights_retention_period = 7
-  create_monitoring_role                = true
-  monitoring_role_name                  = "WarehouseDatabaseMonitoringRole"
-  monitoring_interval                   = 60
-
-  parameters = [
-    {
-      name  = "autovacuum"
-      value = 1
-    },
-    {
-      name  = "client_encoding"
-      value = "utf8"
-    }
-  ]
-
-  db_option_group_tags    = {
-    "Sensitive" = "low"
-  }
-  db_parameter_group_tags = {
-    "Sensitive" = "low"
-  }
-  db_subnet_group_tags    = {
-    "Sensitive" = "high"
-  }
+  source                = "../modules/database"
+  database_identifier   = "warehouse-database"
+  database_username     = var.warehouse_database_username
+  database_password     = var.warehouse_database_password
+  subnet_ids            = module.networking.private_subnet_ids
+  security_group_ids    = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name  = "WarehouseDatabaseMonitoringRole"
 }
 # Users Database
 module "users_database" {
-  source = "terraform-aws-modules/rds/aws"
-
-  identifier = "users-database"
-
-  engine                     = "postgres"
-  engine_version             = "11.12"
-  auto_minor_version_upgrade = false
-  family                     = "postgres11" # DB parameter group
-  major_engine_version       = "11"         # DB option group
-  instance_class             = "db.t3.small"
-
-  allocated_storage     = 20
-  max_allocated_storage = 100
-  storage_encrypted     = false
-
-  name     = "postgres"
-  username = var.users_database_username
-  password = var.users_database_password
-  port     = 5432
-
-  multi_az               = true
-  subnet_ids             = module.networking.private_subnet_ids
-  vpc_security_group_ids = [module.private_vpc_sg.security_group_id]
-
-  maintenance_window              = "Mon:00:00-Mon:03:00"
-  backup_window                   = "03:00-06:00"
-  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
-
-  backup_retention_period = 0
-  skip_final_snapshot     = true
-  deletion_protection     = false
-
-  performance_insights_enabled          = true
-  performance_insights_retention_period = 7
-  create_monitoring_role                = true
-  monitoring_role_name                  = "UsersDatabaseMonitoringRole"
-  monitoring_interval                   = 60
-
-  parameters = [
-    {
-      name  = "autovacuum"
-      value = 1
-    },
-    {
-      name  = "client_encoding"
-      value = "utf8"
-    }
-  ]
-
-  db_option_group_tags    = {
-    "Sensitive" = "low"
-  }
-  db_parameter_group_tags = {
-    "Sensitive" = "low"
-  }
-  db_subnet_group_tags    = {
-    "Sensitive" = "high"
-  }
+  source                = "../modules/database"
+  database_identifier   = "users-database"
+  database_username     = var.users_database_username
+  database_password     = var.users_database_password
+  subnet_ids            = module.networking.private_subnet_ids
+  security_group_ids    = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name  = "UsersDatabaseMonitoringRole"
 }
 
 module "eks" {
@@ -446,11 +189,6 @@ resource "aws_cloudwatch_log_group" "msk_broker_logs" {
   name = "msk_broker_logs"
 }
 
-# resource "aws_s3_bucket" "msk_broker_logs" {
-#   bucket = "msk-broker-logs-bucket"
-#   acl    = "private"
-# }
-
 resource "aws_msk_cluster" "kafka" {
   cluster_name           = "kafka-eshop"
   kafka_version          = "2.8.1"
@@ -462,21 +200,6 @@ resource "aws_msk_cluster" "kafka" {
     client_subnets  = module.networking.private_subnet_ids
     security_groups = [module.private_vpc_sg.security_group_id]
   }
-
-  # encryption_info {
-  #   encryption_at_rest_kms_key_arn = aws_kms_key.kms.arn
-  # }
-
-  # open_monitoring {
-  #   prometheus {
-  #     jmx_exporter {
-  #       enabled_in_broker = true
-  #     }
-  #     node_exporter {
-  #       enabled_in_broker = true
-  #     }
-  #   }
-  # }
 
   logging_info {
     broker_logs {
@@ -493,15 +216,16 @@ resource "aws_msk_cluster" "kafka" {
   }
 }
 
-# resource "aws_msk_configuration" "example" {
-#   kafka_versions = ["2.1.0"]
-#   name           = "example"
+resource "aws_msk_configuration" "msk_config" {
+  kafka_versions = ["2.8.1"]
+  name           = "msk_config"
 
-#   server_properties = <<PROPERTIES
-# auto.create.topics.enable = true
-# delete.topic.enable = true
-# PROPERTIES
-# }
+  server_properties = <<PROPERTIES
+auto.create.topics.enable = true
+delete.topic.enable = true
+enable.idempotence = true
+PROPERTIES
+}
 
 output "zookeeper_connect_string" {
   value = aws_msk_cluster.kafka.zookeeper_connect_string
