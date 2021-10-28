@@ -1,3 +1,4 @@
+const { randomUUID } = require('crypto');
 const { Kafka } = require('kafkajs');
 const logger = require('../../../common/logger');
 const {
@@ -9,13 +10,13 @@ const {
       The producer must have a max in flight requests of 1
       The producer must wait for acknowledgement from all replicas (acks=-1)
       The producer must have unlimited retries
+      The producer mush have the transaction id is distinct for each producer
     Note: Exactly-Once Consumer
       The consumer consumers can use isolation.level to read-only read_committed to make the whole process as an atomic operation
     https://stackoverflow.com/questions/58894281/difference-between-idempotence-and-exactly-once-in-kafka-stream
     https://www.confluent.io/blog/exactly-once-semantics-are-possible-heres-how-apache-kafka-does-it/
     https://www.baeldung.com/kafka-exactly-once
 */
-
 const DEFAULT_PRODUCER_MESSAGES_CONFIG = {
   acks: -1, // The producer must wait for acknowledgement from all replicas (acks=-1)
 };
@@ -27,6 +28,7 @@ const DEFAULT_CONSUMER_CONFIG = {
 const DEFAULT_PRODUCER_CONFIG = {
   maxInFlightRequests: 1, // Note that enabling idempotence requires MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION to be less than or equal to 5,
   idempotent: true, // enable.idempotence=true”
+  transactionalId: `${kafkaConfig.clientId}_producer_${randomUUID()}`,
 };
 
 class EventBusRepository {

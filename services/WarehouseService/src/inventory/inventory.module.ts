@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Module } from '@nestjs/common';
 import { CommonModule } from '../common/common.module';
 import { InventoryService } from './domain/inventory.service';
@@ -29,6 +30,7 @@ import { ConfigService } from '@nestjs/config';
             producer: {
               maxInFlightRequests: 1,
               idempotent: true,
+              transactionalId: `inventory_producer_${randomUUID()}`,
             }
           },
         }),

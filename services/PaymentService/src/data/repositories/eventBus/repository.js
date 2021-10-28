@@ -1,3 +1,4 @@
+const { randomUUID } = require('crypto');
 const { Kafka } = require('kafkajs');
 const logger = require('../../../common/logger');
 const {
@@ -9,24 +10,25 @@ const {
       The producer must have a max in flight requests of 1
       The producer must wait for acknowledgement from all replicas (acks=-1)
       The producer must have unlimited retries
+      The producer mush have the transaction id is distinct for each producer
     Note: Exactly-Once Consumer
       The consumer consumers can use isolation.level to read-only read_committed to make the whole process as an atomic operation
     https://stackoverflow.com/questions/58894281/difference-between-idempotence-and-exactly-once-in-kafka-stream
     https://www.confluent.io/blog/exactly-once-semantics-are-possible-heres-how-apache-kafka-does-it/
     https://www.baeldung.com/kafka-exactly-once
 */
-
 const DEFAULT_PRODUCER_MESSAGES_CONFIG = {
-  acks: -1 // The producer must wait for acknowledgement from all replicas (acks=-1)
+  acks: -1, // The producer must wait for acknowledgement from all replicas (acks=-1)
 };
 
 const DEFAULT_CONSUMER_CONFIG = {
-  readUncommitted: false // isolation lvl on consumer
+  readUncommitted: false, // isolation lvl on consumer
 };
 
 const DEFAULT_PRODUCER_CONFIG = {
   maxInFlightRequests: 1, // Note that enabling idempotence requires MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION to be less than or equal to 5,
-  idempotent: true, //enable.idempotence=true”
+  idempotent: true, // enable.idempotence=true”
+  transactionalId: `${kafkaConfig.clientId}_producer_${randomUUID()}`,
 };
 
 class EventBusRepository {
@@ -36,14 +38,14 @@ class EventBusRepository {
       brokers: kafkaConfig.brokers,
       connectionTimeout: kafkaConfig.connectionTimeout,
       requestTimeout: kafkaConfig.requestTimeout,
-      ssl: process.env.NODE_ENV !== 'production' ? false : true,
+      ssl: process.env.NODE_ENV === 'production',
     });
   }
 
   async connectAsConsumer({ groupId }) {
     this.consumer = this.client.consumer({
       groupId,
-      ...DEFAULT_CONSUMER_CONFIG
+      ...DEFAULT_CONSUMER_CONFIG,
     });
     await this.consumer.connect();
   }
@@ -87,7 +89,7 @@ class EventBusRepository {
     await this.producer.send({
       topic,
       messages,
-      ...DEFAULT_PRODUCER_MESSAGES_CONFIG // ACKS_CONFIG be 'all'.
+      ...DEFAULT_PRODUCER_MESSAGES_CONFIG, // ACKS_CONFIG be 'all'.
     });
   }
 
@@ -96,15 +98,15 @@ class EventBusRepository {
     const eventsToPublish = Array.isArray(events) ? events : [events];
     try {
       await Promise.all(eventsToPublish.map(async (event) => {
-        await transaction.send({ 
-          topic: event.topic, 
+        await transaction.send({
+          topic: event.topic,
           messages: event.messages,
-          ...DEFAULT_PRODUCER_MESSAGES_CONFIG
+          ...DEFAULT_PRODUCER_MESSAGES_CONFIG,
         });
       }));
-      await transaction.commit()
+      await transaction.commit();
     } catch (e) {
-      await transaction.abort()
+      await transaction.abort();
     }
   }
 }
