@@ -17,6 +17,7 @@ module.exports.init = (services) => {
   async function handlePaymentsTopic(message) {
     switch (message.type) {
       case ORDER_PAID_EVENT: {
+        logger.info('handle OrderPaid event');
         const { payload } = message;
         await services.ordersService.updatePaidOrder({
           orderNo: payload.orderNo,
@@ -30,6 +31,7 @@ module.exports.init = (services) => {
         return;
       }
       case ORDER_FAILED_PAYMENT_EVENT: {
+        logger.info('handle PaymentFailed event');
         const { payload } = message;
         await services.ordersService.updateFailedPaymentOrder({
           orderNo: payload.orderNo,
@@ -38,7 +40,7 @@ module.exports.init = (services) => {
           currency: payload.currency,
         })
           .catch((error) => {
-            logger.error('handle OrderPaid event error', error);
+            logger.error('handle PaymentFailed event error', error);
           });
         return;
       }
@@ -50,6 +52,7 @@ module.exports.init = (services) => {
   async function handleShipmentsTopic(message) {
     switch (message.type) {
       case SHIPMENT_PREPARED_EVENT: {
+        logger.info('handle ShipmentPrepared event');
         const { payload } = message;
         await services.ordersService.updateShipmentPreparedOrder(payload.orderNo)
           .catch((error) => {
@@ -58,6 +61,7 @@ module.exports.init = (services) => {
         return;
       }
       case SHIPMENT_SHIPPED_EVENT: {
+        logger.info('handle ShipmentShipped event');
         const { payload } = message;
         await services.ordersService.completeOrder(payload.orderNo)
           .catch((error) => {
@@ -73,6 +77,7 @@ module.exports.init = (services) => {
   async function handleWarehouseTopic(message) {
     switch (message.type) {
       case WAREHOUSE_ORDER_VALIDATED_EVENT: {
+        logger.info('handle OrderValidated event');
         const { payload } = message;
         await services.ordersService.updateValidOrder(payload.orderNo)
           .catch((error) => {
@@ -81,6 +86,7 @@ module.exports.init = (services) => {
         return;
       }
       case WAREHOUSE_ORDER_INVALID_EVENT: {
+        logger.info('handle OrderInvalid event');
         const { payload } = message;
         await services.ordersService.updateOutOfStockOrder(payload.orderNo)
           .catch((error) => {

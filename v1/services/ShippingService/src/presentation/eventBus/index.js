@@ -5,13 +5,13 @@ const {
 } = require('../../common/constants');
 const logger = require('../../common/logger');
 
-
 module.exports.init = (services) => {
   const handler = async ({ topic, partition, message }) => {
     logger.info('Topic: ', topic);
     logger.info('Message consumed: ', message);
     switch (topic) {
       case ORDERS_TOPIC: {
+        logger.error('handle OrderConfirmed event');
         if (message.type === ORDER_CONFIRMED_EVENT) {
           const { payload } = message;
           await services.shipmentsService.prepareShipment({

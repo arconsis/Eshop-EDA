@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { PrismaService } from './common/prisma.service';
@@ -26,7 +25,7 @@ async function bootstrap() {
       producer: {
         maxInFlightRequests: 1,
         idempotent: true,
-        transactionalId: `inventory_producer_${randomUUID()}`,
+        transactionalId: `inventory_producer`,
       }
     },
   });

@@ -27,6 +27,7 @@ const DEFAULT_CONSUMER_CONFIG = {
 const DEFAULT_PRODUCER_CONFIG = {
   maxInFlightRequests: 1, // Note that enabling idempotence requires MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION to be less than or equal to 5,
   idempotent: true, //enable.idempotence=true”
+  transactionalId: `${kafkaConfig.clientId}_producer`,
 };
 
 class EventBusRepository {
