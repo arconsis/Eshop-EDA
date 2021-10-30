@@ -26,15 +26,16 @@ class OrdersService {
 
     private fun sendOrderEvent(eventPair: Pair<String, Order>) {
         val kafkaProducer = createProducer()
-        kafkaProducer.initTransactions()
-        try {
-            kafkaProducer.beginTransaction()
-            // Blocking until https://issues.apache.org/jira/browse/KAFKA-12227
-            kafkaProducer.send(ProducerRecord(Topics.ORDERS.topicName, eventPair.first, eventPair.second)).get()
-            kafkaProducer.commitTransaction()
-            kafkaProducer.close()
-        } catch (e: KafkaException) {
-            kafkaProducer.abortTransaction()
+        kafkaProducer.use { producer ->
+            producer.initTransactions()
+            try {
+                producer.beginTransaction()
+                // Blocking until https://issues.apache.org/jira/browse/KAFKA-12227
+                producer.send(ProducerRecord(Topics.ORDERS.topicName, eventPair.first, eventPair.second)).get()
+                producer.commitTransaction()
+            } catch (e: KafkaException) {
+                producer.abortTransaction()
+            }
         }
     }
 
@@ -47,7 +48,8 @@ class OrdersService {
         producerConfig[ProducerConfig.RETRIES_CONFIG] = Int.MAX_VALUE.toString()
         producerConfig[ProducerConfig.ACKS_CONFIG] = "all"
         producerConfig[ProducerConfig.CLIENT_ID_CONFIG] = "order-service-producer"
-        producerConfig[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = "org.apache.kafka.common.serialization.StringSerializer"
+        producerConfig[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] =
+            "org.apache.kafka.common.serialization.StringSerializer"
         producerConfig[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = OrderSerializer::class.java
         return KafkaProducer(producerConfig)
     }
