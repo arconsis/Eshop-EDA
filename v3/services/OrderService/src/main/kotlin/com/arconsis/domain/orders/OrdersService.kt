@@ -7,7 +7,7 @@ import javax.enterprise.context.ApplicationScoped
 @ApplicationScoped
 class OrdersService(val kafkaService: KafkaService) {
 
-    fun createOrder(orderCreateDto: OrderCreateDto): Order {
+    suspend fun createOrder(orderCreateDto: OrderCreateDto): Order {
 
         val orderNo = UUID.randomUUID()
         val pendingOrder = orderCreateDto.toPendingOrder(orderNo)

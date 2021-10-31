@@ -3,7 +3,6 @@ package com.arconsis.presentation.orders
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.orders.OrdersService
 import com.arconsis.presentation.orders.dto.OrderCreateDto
-import io.smallrye.common.annotation.Blocking
 import javax.enterprise.context.ApplicationScoped
 import javax.ws.rs.Consumes
 import javax.ws.rs.POST
@@ -19,8 +18,7 @@ class OrdersResource(private val ordersService: OrdersService) {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Blocking
-    fun createOrder(orderCreateDto: OrderCreateDto, uriInfo: UriInfo): Order {
+    suspend fun createOrder(orderCreateDto: OrderCreateDto, uriInfo: UriInfo): Order {
         return ordersService.createOrder(orderCreateDto)
     }
 }
