@@ -12,14 +12,7 @@ data class Order(
   val status: OrderStatus
 )
 
+// TODO: Add the rest of the OrderStatus enum values
 enum class OrderStatus {
-  pending,
-  valid,
-  out_of_stock,
-  paid,
-  out_for_shipment,
-  completed,
-  payment_failed,
-  cancelled,
-  refunded
+  PENDING,
 }

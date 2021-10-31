@@ -2,15 +2,15 @@ package com.arconsis.domain.orders
 
 import java.util.*
 
-private data class RequestOrderEvent(
+private data class OrderRequestEvent(
   val key: UUID,
   val value: Order
 )
 
-fun createRequestOrderEvent(
+fun creatOrderRequestEventPair(
   order: Order,
 ): Pair<String, Order> {
-  val event = RequestOrderEvent(
+  val event = OrderRequestEvent(
     key = UUID.randomUUID(),
     value = order
   )
