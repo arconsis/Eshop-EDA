@@ -25,7 +25,6 @@ dependencies {
     implementation("io.quarkus:quarkus-jdbc-postgresql")
     implementation("io.quarkus:quarkus-hibernate-orm")
     implementation("io.quarkus:quarkus-flyway")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.quarkus:quarkus-kotlin")
     implementation("io.quarkus:quarkus-security-jpa")
