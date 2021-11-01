@@ -4,11 +4,11 @@ import com.arconsis.domain.User
 import java.util.*
 
 data class UserEvent(
-  val key: String,
-  val value: User
+    val key: String,
+    val value: User
 )
 
 fun User.toUserEvent() = UserEvent(
-  key = UUID.randomUUID().toString(),
-  value = this
+    key = UUID.randomUUID().toString(),
+    value = this
 )
