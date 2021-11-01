@@ -11,23 +11,23 @@ import javax.persistence.EntityManager
 @ApplicationScoped
 class UsersRepository(private val entityManager: EntityManager) {
 
-  fun createUser(userCreate: UserCreate): User {
-    val password = BcryptUtil.bcryptHash(userCreate.password)
-    val userEntity = UserEntity(
-      firstName = userCreate.firstName,
-      lastName = userCreate.lastName,
-      email = userCreate.email,
-      password = password,
-      username = userCreate.username,
-    )
-    entityManager.persist(userEntity)
-    entityManager.flush()
+    fun createUser(userCreate: UserCreate): User {
+        val password = BcryptUtil.bcryptHash(userCreate.password)
+        val userEntity = UserEntity(
+            firstName = userCreate.firstName,
+            lastName = userCreate.lastName,
+            email = userCreate.email,
+            password = password,
+            username = userCreate.username,
+        )
+        entityManager.persist(userEntity)
+        entityManager.flush()
 
-    return userEntity.toUser()
-  }
+        return userEntity.toUser()
+    }
 
-  fun getUser(userId: UUID): User {
-    val userEntity = entityManager.getReference(UserEntity::class.java, userId)
-    return userEntity.toUser()
-  }
+    fun getUser(userId: UUID): User {
+        val userEntity = entityManager.getReference(UserEntity::class.java, userId)
+        return userEntity.toUser()
+    }
 }

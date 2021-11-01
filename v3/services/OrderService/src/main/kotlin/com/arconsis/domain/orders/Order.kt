@@ -1,10 +1,11 @@
 package com.arconsis.domain.orders
 
+import com.arconsis.presentation.orders.dto.OrderCreateDto
 import java.util.*
 
 data class Order(
   val userId: UUID,
-  val orderNo: UUID,
+  val orderId: UUID,
   val amount: String,
   val currency: String,
   val productId: String,
@@ -12,7 +13,24 @@ data class Order(
   val status: OrderStatus
 )
 
-// TODO: Add the rest of the OrderStatus enum values
 enum class OrderStatus {
   PENDING,
+  VALID,
+  OUT_OF_STOCK,
+  PAID,
+  OUT_FOR_SHIPMENT,
+  COMPLETED,
+  PAYMENT_FAILED,
+  CANCELLED,
+  REFUNDED
 }
+
+fun OrderCreateDto.toPendingOrder() = Order(
+  userId = userId,
+  orderId = UUID.randomUUID(),
+  amount = amount,
+  currency = currency,
+  productId = productId,
+  quantity = quantity,
+  status = OrderStatus.PENDING
+)
