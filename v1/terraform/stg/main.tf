@@ -216,16 +216,6 @@ resource "aws_msk_cluster" "kafka" {
   }
 }
 
-resource "aws_msk_configuration" "msk_config" {
-  kafka_versions = ["2.8.1"]
-  name           = "msk_config"
-
-  server_properties = <<PROPERTIES
-auto.create.topics.enable = true
-delete.topic.enable = true
-PROPERTIES
-}
-
 output "zookeeper_connect_string" {
   value = aws_msk_cluster.kafka.zookeeper_connect_string
 }
