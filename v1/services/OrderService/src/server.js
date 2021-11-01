@@ -4,7 +4,7 @@ const {
   kafka: kafkaConfig,
 } = require('./configuration');
 const dbContainer = require('./data/infrastructure/database');
-const eventsBusRepositoryContainer = require('./data/repositories/eventsBus/repository');
+const eventsBusRepository = require('./data/repositories/eventsBus/repository');
 const ordersRepositoryContainer = require('./data/repositories/orders/repository');
 const ordersServiceContainer = require('./domain/orders/service');
 const appContainer = require('./presentation/http/app');
@@ -15,7 +15,6 @@ const mainDb = dbContainer.init({
   connectionUri: databaseUri,
 });
 const ordersRepository = ordersRepositoryContainer.init(mainDb.entities);
-const eventsBusRepository = eventsBusRepositoryContainer.init(kafkaConfig);
 const runBlockInsideTransaction = mainDb.runTransaction.bind(mainDb);
 const ordersService = ordersServiceContainer.init({
   eventsBusRepository,
@@ -25,7 +24,9 @@ const ordersService = ordersServiceContainer.init({
 const app = appContainer.init({
   ordersService,
 });
-const eventBus = eventBusContainer.init({ ordersService });
+const eventBus = eventBusContainer.init({
+  ordersService,
+}, eventsBusRepository);
 
 (async () => {
   await mainDb.authenticate()
@@ -36,9 +37,16 @@ const eventBus = eventBusContainer.init({ ordersService });
     .catch((error) => {
       logger.error('Connection to main database error', error);
     });
+  await Promise.all([
+    eventBus.connectAsConsumer({
+      groupId: kafkaConfig.groupId,
+    }),
+    eventBus.connectAsProducer(),
+  ]);
   await eventBus.startConsume()
     .catch((error) => logger.error('Generic event bus consumer error', error));
 })();
+
 const server = app.listen(httpPort, () => {
   logger.info(`Listening on *:${httpPort}`);
 });
