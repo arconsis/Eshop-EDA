@@ -15,10 +15,10 @@ import javax.ws.rs.core.UriInfo
 @Path("/orders")
 class OrdersResource(private val ordersService: OrdersService) {
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    suspend fun createOrder(orderCreateDto: OrderCreateDto, uriInfo: UriInfo): Order {
-        return ordersService.createOrder(orderCreateDto)
-    }
+  @POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  suspend fun createOrder(orderCreateDto: OrderCreateDto, uriInfo: UriInfo): Order {
+    return ordersService.createOrder(orderCreateDto)
+  }
 }
