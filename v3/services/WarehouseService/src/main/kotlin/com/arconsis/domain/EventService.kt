@@ -19,7 +19,7 @@ class EventService {
     fun buildTopology(): Topology {
         val builder = StreamsBuilder()
         val orderSerde = ObjectMapperSerde(Order::class.java)
-        val orderValidationSerde = ObjectMapperSerde(OrderValidationDto::class.java)
+        val orderValidationSerde = ObjectMapperSerde(OrderValidation::class.java)
         builder
             .stream(
                 Topics.ORDERS.topicName,
@@ -28,7 +28,7 @@ class EventService {
             .filter { _, order -> order.isPending }
             .map { _, order ->
                 // TODO: Add logic to check validity of the order
-                val event = order.toOrderValidationEvent(OrderValidationType.ORDER_VALIDATED)
+                val event = order.toOrderValidationEvent(OrderValidationType.VALID)
                 KeyValue.pair(event.key, event.value)
             }.to(Topics.ORDERS_VALIDATIONS.topicName, Produced.with(Serdes.String(), orderValidationSerde))
 

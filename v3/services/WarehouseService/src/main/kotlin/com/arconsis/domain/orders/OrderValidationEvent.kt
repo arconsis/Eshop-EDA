@@ -4,25 +4,25 @@ import java.util.*
 
 data class OrderValidationEvent(
     val key: String,
-    val value: OrderValidationDto,
+    val value: OrderValidation,
 )
 
-data class OrderValidationDto(
-    val type: String,
+data class OrderValidation(
+    val type: OrderValidationType,
     val productId: String,
     val quantity: Int,
     val orderNo: UUID,
 )
 
-enum class OrderValidationType(val type: String) {
-    ORDER_VALIDATED("OrderValidated"),
-    ORDER_INVALID("OrderInvalid"),
+enum class OrderValidationType {
+    VALID,
+    INVALID,
 }
 
 fun Order.toOrderValidationEvent(type: OrderValidationType) = OrderValidationEvent(
     key = UUID.randomUUID().toString(),
-    value = OrderValidationDto(
-        type = type.type,
+    value = OrderValidation(
+        type = type,
         productId = productId,
         quantity = quantity,
         orderNo = orderNo
