@@ -30,7 +30,7 @@ dependencies {
     implementation("io.quarkus:quarkus-security-jpa")
     implementation("io.quarkus:quarkus-kafka-client")
     implementation("io.quarkus:quarkus-smallrye-reactive-messaging-kafka")
-    implementation("io.quarkus:quarkus-resteasy-reactive")
+    implementation("io.quarkus:quarkus-smallrye-health")
     implementation("io.quarkus:quarkus-kotlin")
 
     testImplementation("io.quarkus:quarkus-junit5")
