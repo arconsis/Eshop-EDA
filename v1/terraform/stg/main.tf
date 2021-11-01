@@ -207,11 +207,6 @@ resource "aws_msk_cluster" "kafka" {
         enabled   = true
         log_group = aws_cloudwatch_log_group.msk_broker_logs.name
       }
-      # s3 {
-      #   enabled = true
-      #   bucket  = aws_s3_bucket.msk_broker_logs.id
-      #   prefix  = "logs/msk-"
-      # }
     }
   }
 }
