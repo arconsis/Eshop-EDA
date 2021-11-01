@@ -20,11 +20,17 @@ import { ConfigService } from '@nestjs/config';
               clientId: 'inventory-service',
               brokers:
                 configService.get<string>('KAFKA_BROKER')?.split(',') ?? [],
-              ssl: true,
+              ssl: process.env.NODE_ENV !== 'production' ? false : true,
             },
             consumer: {
               groupId: 'inventory-consumer',
+              readUncommitted: false
             },
+            producer: {
+              maxInFlightRequests: 1,
+              idempotent: true,
+              transactionalId: `inventory_producer`,
+            }
           },
         }),
         inject: [ConfigService],

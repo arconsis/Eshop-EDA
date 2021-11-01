@@ -12,10 +12,12 @@ module.exports.init = function init(config) {
     logging: true,
     timezone: '+00:00',
     dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
+      ssl: process.env.NODE_ENV === 'production'
+        ? {
+          require: process.env.NODE_ENV === 'production',
+          rejectUnauthorized: false,
+        }
+        : undefined,
     },
     define: {
       freezeTableName: true,

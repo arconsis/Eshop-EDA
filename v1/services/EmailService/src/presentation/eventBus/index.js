@@ -1,7 +1,4 @@
-const eventBusRepositoryFactory = require('../../data/repositories/eventBus');
-const {
-  kafka: kafkaConfig,
-} = require('../../configuration');
+const eventBusRepository = require('../../data/repositories/eventBus');
 const {
   ORDERS_TOPIC,
   SHIPMENTS_TOPIC,
@@ -10,9 +7,6 @@ const logger = require('../../common/logger');
 const {
   mapEventPayloadToEmailBody,
 } = require('../mapper');
-
-const eventBusRepository = eventBusRepositoryFactory.init(kafkaConfig);
-
 
 module.exports.init = (services) => {
   const handler = async ({ topic, partition, message }) => {
@@ -37,10 +31,10 @@ module.exports.init = (services) => {
         throw new Error('Not supported topic event');
     }
   };
-
   const startConsume = async () => {
-    await eventBusRepository.consumeStream({
-      groupId: kafkaConfig.groupId,
+    logger.info('Start consume topics');
+    await eventBusRepository.startConsume({
+      fromBeginning: true,
       topics: [
         ORDERS_TOPIC,
         SHIPMENTS_TOPIC,
@@ -48,7 +42,14 @@ module.exports.init = (services) => {
     }, handler);
   };
 
+  const connectAsConsumer = async ({ groupId }) => {
+    await eventBusRepository.connectAsConsumer({
+      groupId,
+    }).then(() => logger.info('Connected as consumer'));
+  };
+
   return {
+    connectAsConsumer,
     startConsume,
   };
 };
