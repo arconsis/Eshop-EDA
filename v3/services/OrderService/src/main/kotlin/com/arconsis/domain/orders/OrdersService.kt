@@ -1,6 +1,6 @@
 package com.arconsis.domain.orders
 
-import com.arconsis.domain.EventsService
+import com.arconsis.domain.events.EventsService
 import com.arconsis.presentation.orders.dto.OrderCreateDto
 import javax.enterprise.context.ApplicationScoped
 

@@ -8,10 +8,10 @@ data class OrderValidationEvent(
 )
 
 data class OrderValidation(
-    val type: OrderValidationType,
-    val productId: String,
-    val quantity: Int,
-    val orderNo: UUID,
+  val type: OrderValidationType,
+  val productId: String,
+  val quantity: Int,
+  val orderId: UUID,
 )
 
 enum class OrderValidationType {
@@ -20,11 +20,11 @@ enum class OrderValidationType {
 }
 
 fun Order.toOrderValidationEvent(type: OrderValidationType) = OrderValidationEvent(
-    key = UUID.randomUUID().toString(),
+    key = orderId.toString(),
     value = OrderValidation(
         type = type,
         productId = productId,
         quantity = quantity,
-        orderNo = orderNo
+        orderId = orderId
     )
 )
