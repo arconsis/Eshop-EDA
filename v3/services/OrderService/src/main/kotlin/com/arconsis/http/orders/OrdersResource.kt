@@ -1,8 +1,8 @@
-package com.arconsis.presentation.orders
+package com.arconsis.http.orders
 
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.orders.OrdersService
-import com.arconsis.presentation.orders.dto.OrderCreateDto
+import com.arconsis.http.orders.dto.OrderCreateDto
 import javax.enterprise.context.ApplicationScoped
 import javax.ws.rs.Consumes
 import javax.ws.rs.POST
@@ -15,10 +15,10 @@ import javax.ws.rs.core.UriInfo
 @Path("/orders")
 class OrdersResource(private val ordersService: OrdersService) {
 
-  @POST
-  @Produces(MediaType.APPLICATION_JSON)
-  @Consumes(MediaType.APPLICATION_JSON)
-  suspend fun createOrder(orderCreateDto: OrderCreateDto, uriInfo: UriInfo): Order {
-    return ordersService.createOrder(orderCreateDto)
-  }
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    suspend fun createOrder(orderCreateDto: OrderCreateDto, uriInfo: UriInfo): Order {
+        return ordersService.createOrder(orderCreateDto)
+    }
 }

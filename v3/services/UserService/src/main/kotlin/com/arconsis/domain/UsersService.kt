@@ -10,14 +10,14 @@ import javax.transaction.Transactional
 @ApplicationScoped
 class UsersService(
     private val usersRepository: UsersRepository,
-    private val eventService: EventService,
+    private val eventsService: EventsService,
 ) {
 
     @Transactional
     fun createUser(userCreate: UserCreate): User {
         val user = usersRepository.createUser(userCreate)
         val event = user.toUserEvent()
-        eventService.sendUserEvent(event)
+        eventsService.sendUserEvent(event)
         return user
     }
 
