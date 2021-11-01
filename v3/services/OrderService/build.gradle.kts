@@ -19,8 +19,6 @@ dependencies {
   implementation("io.quarkus:quarkus-resteasy-reactive")
   implementation("io.quarkus:quarkus-kotlin")
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-  implementation("org.apache.kafka:kafka-clients:3.0.0")
-  implementation("org.apache.kafka:kafka-streams:3.0.0")
   implementation("io.quarkus:quarkus-kafka-client")
   implementation("io.quarkus:quarkus-smallrye-reactive-messaging-kafka")
   implementation("io.quarkus:quarkus-kafka-streams")

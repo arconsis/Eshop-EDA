@@ -3,19 +3,26 @@ package com.arconsis.domain.orders
 import java.util.*
 
 data class Order(
-    val userId: UUID,
-    val orderNo: UUID,
-    val amount: String,
-    val currency: String,
-    val productId: String,
-    val quantity: Int,
-    val status: OrderStatus,
+  val userId: UUID,
+  val orderId: UUID,
+  val amount: String,
+  val currency: String,
+  val productId: String,
+  val quantity: Int,
+  val status: OrderStatus,
 )
 
-// TODO: Add the rest of the OrderStatus enum values
 enum class OrderStatus {
-    PENDING,
+  PENDING,
+  VALID,
+  OUT_OF_STOCK,
+  PAID,
+  OUT_FOR_SHIPMENT,
+  COMPLETED,
+  PAYMENT_FAILED,
+  CANCELLED,
+  REFUNDED
 }
 
 val Order.isPending
-    get() = status == OrderStatus.PENDING
+  get() = status == OrderStatus.PENDING

@@ -6,10 +6,13 @@ data class OrderValidation(
   val type: OrderValidationType,
   val productId: String,
   val quantity: Int,
-  val orderNo: UUID
+  val orderId: UUID
 )
 
 enum class OrderValidationType {
   VALID,
   INVALID,
 }
+
+val OrderValidation.isValid
+  get() = type == OrderValidationType.VALID

@@ -5,7 +5,7 @@ import java.util.*
 
 data class Order(
   val userId: UUID,
-  val orderNo: UUID,
+  val orderId: UUID,
   val amount: String,
   val currency: String,
   val productId: String,
@@ -27,7 +27,7 @@ enum class OrderStatus {
 
 fun OrderCreateDto.toPendingOrder() = Order(
   userId = userId,
-  orderNo = UUID.randomUUID(),
+  orderId = UUID.randomUUID(),
   amount = amount,
   currency = currency,
   productId = productId,
