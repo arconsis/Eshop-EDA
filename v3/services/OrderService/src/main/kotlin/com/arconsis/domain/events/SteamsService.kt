@@ -14,7 +14,6 @@ import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Produced
-import java.util.*
 import javax.enterprise.inject.Produces
 
 class SteamsService {
@@ -44,7 +43,7 @@ class SteamsService {
       }
       .map { _, orderValidation ->
         val validOrder = orderValidation.copy(status = OrderStatus.VALID)
-        KeyValue.pair(UUID.randomUUID().toString(), validOrder)
+        KeyValue.pair(validOrder.orderId.toString(), validOrder)
       }
       .to(Topics.ORDERS.topicName, Produced.with(Serdes.String(), orderSerde))
 
@@ -68,7 +67,7 @@ class SteamsService {
       }
       .map { _, orderValidation ->
         val paidOrder = orderValidation.copy(status = OrderStatus.PAID)
-        KeyValue.pair(UUID.randomUUID().toString(), paidOrder)
+        KeyValue.pair(paidOrder.orderId.toString(), paidOrder)
       }
       .to(Topics.ORDERS.topicName, Produced.with(Serdes.String(), orderSerde))
 
