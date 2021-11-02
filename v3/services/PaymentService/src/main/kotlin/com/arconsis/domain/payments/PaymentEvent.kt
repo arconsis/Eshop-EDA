@@ -1,16 +1,16 @@
-package com.arconsis.domain.transactions
+package com.arconsis.domain.payments
 
 import com.arconsis.domain.orders.Order
 import java.util.*
 
-data class TransactionEvent(
+data class PaymentEvent(
   val key: String,
-  val value: Transaction,
+  val value: Payment,
 )
 
-fun Order.toTransactionEvent(status: TransactionStatus) = TransactionEvent(
+fun Order.toPaymentEvent(status: PaymentStatus) = PaymentEvent(
   key = orderId.toString(),
-  value = Transaction(
+  value = Payment(
     transactionId = UUID.randomUUID(),
     orderId = this.orderId,
     userId = this.userId,

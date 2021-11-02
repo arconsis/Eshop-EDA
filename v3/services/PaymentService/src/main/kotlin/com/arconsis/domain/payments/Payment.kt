@@ -1,17 +1,17 @@
-package com.arconsis.domain.transactions
+package com.arconsis.domain.payments
 
 import java.util.*
 
-data class Transaction(
+data class Payment(
   val transactionId: UUID,
   val orderId: UUID,
   val userId: UUID,
   val amount: String,
   val currency: String,
-  val status: TransactionStatus,
+  val status: PaymentStatus,
 )
 
-enum class TransactionStatus {
+enum class PaymentStatus {
   SUCCESS,
   FAILED,
 }

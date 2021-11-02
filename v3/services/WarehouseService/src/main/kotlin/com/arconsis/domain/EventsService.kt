@@ -13,7 +13,7 @@ import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.inject.Produces
 
 @ApplicationScoped
-class EventService {
+class EventsService {
 
     @Produces
     fun buildTopology(): Topology {

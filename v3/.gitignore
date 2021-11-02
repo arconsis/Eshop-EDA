@@ -1,6 +1,5 @@
 # OSX
 .DS_Store
-services/testHelpers/**/*
 # IntelliJ
 .idea
 
