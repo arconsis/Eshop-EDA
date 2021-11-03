@@ -12,12 +12,10 @@ import javax.ws.rs.core.Response
 @RegisterClientHeaders(EmailApiHeadersFactory::class)
 @Produces(MediaType.APPLICATION_JSON)
 @ApplicationScoped
-
 interface EmailApi {
 	@POST
 	@Path("/messages")
 	@Consumes("application/x-www-form-urlencoded")
-
 	fun sendEmail(
 		@FormParam("from") senderEmail: String,
 		@FormParam("to") receiverEmail: String,
