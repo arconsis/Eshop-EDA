@@ -12,12 +12,14 @@ import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
+import org.eclipse.microprofile.config.inject.ConfigProperty
 import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.inject.Produces
 
 @ApplicationScoped
 class StreamsService(
-	val emailRepository: EmailRepository
+	val emailRepository: EmailRepository,
+	@ConfigProperty(name = "email.sender") private val sender: String,
 ) {
 
 	@Produces
@@ -35,9 +37,6 @@ class StreamsService(
 			.filter { key, order ->
 				order.isOutForShipment || order.isPaid
 			}
-//			.selectKey { _, order ->
-//				order.userId.toString()
-//			}
 			.join(usersTable) { order, customer ->
 				Pair(order, customer)
 			}
@@ -45,7 +44,7 @@ class StreamsService(
 				when (order.isPaid) {
 					true -> emailRepository.sendEmail(
 						EmailDto(
-							senderEmail = SENDER_EMAIL,
+							senderEmail = sender,
 							receiverEmail = customer.email,
 							subject = EMAIL_SUBJECT_ORDER_PAID,
 							text = "New order with number: ${order.orderId} just placed! We will inform you with another email about shipment progress."
@@ -53,7 +52,7 @@ class StreamsService(
 					)
 					else -> emailRepository.sendEmail(
 						EmailDto(
-							senderEmail = SENDER_EMAIL,
+							senderEmail = sender,
 							receiverEmail = customer.email,
 							subject = EMAIL_SUBJECT_ORDER_OUT_FOR_SHIPMENT,
 							text = "The order with number: ${order.orderId} is on the way for delivery!"
@@ -66,7 +65,6 @@ class StreamsService(
 	}
 
 	companion object {
-		private const val SENDER_EMAIL = "dimosthenis.botsaris@arconsis.com"
 		private const val EMAIL_SUBJECT_ORDER_OUT_FOR_SHIPMENT = "New order was placed!"
 		private const val EMAIL_SUBJECT_ORDER_PAID = "New order confirmed!"
 	}
