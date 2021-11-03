@@ -19,23 +19,23 @@ import javax.enterprise.inject.Produces
 @ApplicationScoped
 class EventsService {
 
-  @Produces
-  fun buildTopology(): Topology {
-    val builder = StreamsBuilder()
-    val orderSerde = ObjectMapperSerde(Order::class.java)
-    val paymentTopicSerde = ObjectMapperSerde(Payment::class.java)
-    builder
-      .stream(
-        Topics.ORDERS.topicName,
-        Consumed.with(Serdes.String(), orderSerde)
-      )
-      .filter { _, order -> order.isValidated }
-      .map { _, order ->
-        // TODO: Add logic to make remote payments
-        val event = order.toPaymentEvent(PaymentStatus.SUCCESS)
-        KeyValue.pair(event.key, event.value)
-      }.to(Topics.PAYMENTS.topicName, Produced.with(Serdes.String(), paymentTopicSerde))
+	@Produces
+	fun buildTopology(): Topology {
+		val builder = StreamsBuilder()
+		val orderSerde = ObjectMapperSerde(Order::class.java)
+		val paymentTopicSerde = ObjectMapperSerde(Payment::class.java)
+		builder
+			.stream(
+				Topics.ORDERS.topicName,
+				Consumed.with(Serdes.String(), orderSerde)
+			)
+			.filter { _, order -> order.isValidated }
+			.map { _, order ->
+				// TODO: Add logic to make remote payments
+				val event = order.toPaymentEvent(PaymentStatus.SUCCESS)
+				KeyValue.pair(event.key, event.value)
+			}.to(Topics.PAYMENTS.topicName, Produced.with(Serdes.String(), paymentTopicSerde))
 
-    return builder.build()
-  }
+		return builder.build()
+	}
 }

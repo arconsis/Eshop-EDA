@@ -53,7 +53,7 @@ class StreamsService {
 			}
 			.map { _, orderValidation ->
 				val validOrder = orderValidation.copy(status = OrderStatus.VALID)
-				KeyValue.pair(validOrder.orderId.toString(), validOrder)
+				KeyValue.pair(validOrder.userId.toString(), validOrder)
 			}
 			.to(Topics.ORDERS.topicName, Produced.with(Serdes.String(), orderSerde))
 	}
@@ -76,7 +76,7 @@ class StreamsService {
 			}
 			.map { _, orderValidation ->
 				val paidOrder = orderValidation.copy(status = OrderStatus.PAID)
-				KeyValue.pair(paidOrder.orderId.toString(), paidOrder)
+				KeyValue.pair(paidOrder.userId.toString(), paidOrder)
 			}
 			.to(Topics.ORDERS.topicName, Produced.with(Serdes.String(), orderSerde))
 	}
@@ -99,7 +99,7 @@ class StreamsService {
 			}
 			.map { _, orderValidation ->
 				val outForShipmentOrder = orderValidation.copy(status = OrderStatus.OUT_FOR_SHIPMENT)
-				KeyValue.pair(outForShipmentOrder.orderId.toString(), outForShipmentOrder)
+				KeyValue.pair(outForShipmentOrder.userId.toString(), outForShipmentOrder)
 			}
 			.to(Topics.ORDERS.topicName, Produced.with(Serdes.String(), orderSerde))
 	}

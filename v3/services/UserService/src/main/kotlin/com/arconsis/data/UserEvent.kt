@@ -9,6 +9,6 @@ data class UserEvent(
 )
 
 fun User.toUserEvent() = UserEvent(
-    key = UUID.randomUUID().toString(),
+    key = this.id.toString(),
     value = this
 )

@@ -24,5 +24,8 @@ enum class OrderStatus {
 	REFUNDED
 }
 
-val Order.isPending
-	get() = status == OrderStatus.PENDING
+val Order.isOutForShipment
+	get() = status == OrderStatus.OUT_FOR_SHIPMENT
+
+val Order.isPaid
+	get() = status == OrderStatus.PAID
