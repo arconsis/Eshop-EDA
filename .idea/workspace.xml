@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="acc95ccc-ffe4-4c23-9fdd-8cd6a6bb5580" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/v1/packages/OrderService/docker-compose.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/packages/PaymentService/docker-compose.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/packages/UserService/docker-compose.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/packages/UserService/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/v1/packages/UserService/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/packages/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/v1/packages/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/orders/OrdersService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/orders/OrdersService.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,7 +12,15 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="feat/EDA-18_add_debezium" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="KotlinMultiplatform">
+    <allAvailableExecutables />
   </component>
   <component name="ProjectId" id="1yJnbZV76sIQyBAyNgFZCb4Zt1b" />
   <component name="ProjectViewState">
@@ -22,12 +28,18 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/v3" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -40,10 +52,14 @@
       <workItem from="1631978636081" duration="6000" />
       <workItem from="1633764135865" duration="12000" />
       <workItem from="1633854803699" duration="78000" />
+      <workItem from="1635513921365" duration="189000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
