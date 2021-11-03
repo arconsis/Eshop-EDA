@@ -10,7 +10,7 @@ import javax.enterprise.context.ApplicationScoped
 @ApplicationScoped
 class EventsService(@Channel("orders-out") private val emitter: Emitter<Record<String, Order>>) {
 
-	suspend fun sendOrderEvent(event: OrderRequestEvent) {
-		emitter.send(Record.of(event.key, event.value)).toCompletableFuture()
-	}
+    suspend fun sendOrderEvent(event: OrderRequestEvent) {
+        emitter.send(Record.of(event.key, event.value)).toCompletableFuture()
+    }
 }

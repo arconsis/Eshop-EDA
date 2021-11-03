@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.5.31"
     kotlin("plugin.allopen") version "1.5.31"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     id("io.quarkus")
 }
 
@@ -14,7 +15,7 @@ val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
 dependencies {
-    implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
+    implementation(enforcedPlatform("$quarkusPlatformGroupId:$quarkusPlatformArtifactId:$quarkusPlatformVersion"))
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
     implementation("io.quarkus:quarkus-kafka-client")
     implementation("io.quarkus:quarkus-smallrye-health")
