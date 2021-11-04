@@ -7,7 +7,6 @@ import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.persistence.EntityManager
 
-
 @ApplicationScoped
 class UsersRepository(private val entityManager: EntityManager) {
 

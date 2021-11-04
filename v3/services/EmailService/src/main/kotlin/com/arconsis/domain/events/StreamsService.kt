@@ -18,54 +18,54 @@ import javax.enterprise.inject.Produces
 
 @ApplicationScoped
 class StreamsService(
-	val emailRepository: EmailRepository,
-	@ConfigProperty(name = "email.sender") private val sender: String,
+    val emailRepository: EmailRepository,
+    @ConfigProperty(name = "email.sender") private val sender: String,
 ) {
 
-	@Produces
-	fun buildTopology(): Topology {
-		val builder = StreamsBuilder()
-		val orderTopicSerde = ObjectMapperSerde(Order::class.java)
-		val userTopicSerde = ObjectMapperSerde(User::class.java)
-		val usersTable = builder.table(Topics.USERS.topicName, Consumed.with(Serdes.String(), userTopicSerde))
+    @Produces
+    fun buildTopology(): Topology {
+        val builder = StreamsBuilder()
+        val orderTopicSerde = ObjectMapperSerde(Order::class.java)
+        val userTopicSerde = ObjectMapperSerde(User::class.java)
+        val usersTable = builder.table(Topics.USERS.topicName, Consumed.with(Serdes.String(), userTopicSerde))
 
-		builder
-			.stream(
-				Topics.ORDERS.topicName,
-				Consumed.with(Serdes.String(), orderTopicSerde)
-			)
-			.filter { key, order ->
-				order.isOutForShipment || order.isPaid
-			}
-			.join(usersTable) { order, customer ->
-				Pair(order, customer)
-			}
-			.peek { _, (order, customer) ->
-				when (order.isPaid) {
-					true -> emailRepository.sendEmail(
-						EmailDto(
-							senderEmail = sender,
-							receiverEmail = customer.email,
-							subject = EMAIL_SUBJECT_ORDER_PAID,
-							text = "New order with number: ${order.orderId} just placed! We will inform you with another email about shipment progress."
-						)
-					)
-					else -> emailRepository.sendEmail(
-						EmailDto(
-							senderEmail = sender,
-							receiverEmail = customer.email,
-							subject = EMAIL_SUBJECT_ORDER_OUT_FOR_SHIPMENT,
-							text = "The order with number: ${order.orderId} is on the way for delivery!"
-						)
-					)
-				}
-			}
+        builder
+            .stream(
+                Topics.ORDERS.topicName,
+                Consumed.with(Serdes.String(), orderTopicSerde)
+            )
+            .filter { key, order ->
+                order.isOutForShipment || order.isPaid
+            }
+            .join(usersTable) { order, customer ->
+                Pair(order, customer)
+            }
+            .peek { _, (order, customer) ->
+                when (order.isPaid) {
+                    true -> emailRepository.sendEmail(
+                        EmailDto(
+                            senderEmail = sender,
+                            receiverEmail = customer.email,
+                            subject = EMAIL_SUBJECT_ORDER_PAID,
+                            text = "New order with number: ${order.orderId} just placed! We will inform you with another email about shipment progress."
+                        )
+                    )
+                    else -> emailRepository.sendEmail(
+                        EmailDto(
+                            senderEmail = sender,
+                            receiverEmail = customer.email,
+                            subject = EMAIL_SUBJECT_ORDER_OUT_FOR_SHIPMENT,
+                            text = "The order with number: ${order.orderId} is on the way for delivery!"
+                        )
+                    )
+                }
+            }
 
-		return builder.build()
-	}
+        return builder.build()
+    }
 
-	companion object {
-		private const val EMAIL_SUBJECT_ORDER_OUT_FOR_SHIPMENT = "New order was placed!"
-		private const val EMAIL_SUBJECT_ORDER_PAID = "New order confirmed!"
-	}
+    companion object {
+        private const val EMAIL_SUBJECT_ORDER_OUT_FOR_SHIPMENT = "New order was placed!"
+        private const val EMAIL_SUBJECT_ORDER_PAID = "New order confirmed!"
+    }
 }
