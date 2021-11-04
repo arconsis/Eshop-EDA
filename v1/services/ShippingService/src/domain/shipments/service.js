@@ -58,16 +58,11 @@ function init({
       shipmentId,
       status: SHIPPED_SHIPMENT_STATUS,
     });
-    await eventsBusRepository.sendInTransaction([
-      {
-        topic: SHIPMENTS_TOPIC,
-        messages: toShipmentMessage({
-          id: uuidv4(),
-          orderNo: shipment.orderNo,
-          type: SHIPMENT_SHIPPED_EVENT,
-        }),
-      },
-    ]);
+    await eventsBusRepository.sendMessages(SHIPMENTS_TOPIC, toShipmentMessage({
+      id: uuidv4(),
+      orderNo: shipment.orderNo,
+      type: SHIPMENT_SHIPPED_EVENT,
+    }));
   }
 
   return {

@@ -47,21 +47,16 @@ function init({
       amount,
       currency,
     });
-    await eventsBusRepository.sendInTransaction([
-      {
-        topic: ORDERS_TOPIC,
-        messages: toOrderRequestedMessage({
-          id: uuidv4(),
-          orderNo: order.orderNo,
-          type: ORDER_REQUESTED_EVENT_TYPE,
-          userId: user.userId,
-          amount,
-          currency,
-          productId,
-          quantity,
-        }),
-      },
-    ]);
+    await eventsBusRepository.sendMessages(ORDERS_TOPIC, toOrderRequestedMessage({
+      id: uuidv4(),
+      orderNo: order.orderNo,
+      type: ORDER_REQUESTED_EVENT_TYPE,
+      userId: user.userId,
+      amount,
+      currency,
+      productId,
+      quantity,
+    }));
     return order;
   }
 
@@ -77,22 +72,17 @@ function init({
       lastName: 'Botsaris',
       userId: '2f5acab8-8237-4841-a188-62af0bbbaac8',
     };
-    await eventsBusRepository.sendInTransaction([
-      {
-        topic: ORDERS_TOPIC,
-        messages: toCreateOrderMessage({
-          id: uuidv4(),
-          orderNo: order.orderNo,
-          type: ORDER_CREATED_EVENT_TYPE,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          userId: user.userId,
-          amount: order.amount,
-          currency: order.currency,
-        }),
-      },
-    ]);
+    await eventsBusRepository.sendMessages(ORDERS_TOPIC, toCreateOrderMessage({
+      id: uuidv4(),
+      orderNo: order.orderNo,
+      type: ORDER_CREATED_EVENT_TYPE,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userId: user.userId,
+      amount: order.amount,
+      currency: order.currency,
+    }));
     return order;
   }
 
@@ -120,22 +110,17 @@ function init({
       orderNo,
       status: PAID_ORDER_STATUS,
     });
-    await eventsBusRepository.sendInTransaction([
-      {
-        topic: ORDERS_TOPIC,
-        messages: toCreateOrderMessage({
-          id: uuidv4(),
-          orderNo: order.orderNo,
-          type: ORDER_CONFIRMED_EVENT,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          userId: user.userId,
-          amount,
-          currency,
-        }),
-      },
-    ]);
+    await eventsBusRepository.sendMessages(ORDERS_TOPIC, toCreateOrderMessage({
+      id: uuidv4(),
+      orderNo: order.orderNo,
+      type: ORDER_CONFIRMED_EVENT,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userId: user.userId,
+      amount,
+      currency,
+    }));
     return order;
   }
 
