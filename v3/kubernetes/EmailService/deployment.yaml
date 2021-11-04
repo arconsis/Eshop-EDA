@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-backend
+  labels:
+    app: email-backend
+  namespace: eshop-eda
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: email-backend
+  template:
+    metadata:
+      labels:
+        name: email-backend
+    spec:
+      containers:
+      - name: email-api
+        imagePullPolicy: Always
+        image: eldimious/email-eda-v3:latest
+        envFrom:
+        - secretRef:
+            name: email-service-secrets
+        ports:
+          - containerPort: 3000
+            protocol: TCP       
