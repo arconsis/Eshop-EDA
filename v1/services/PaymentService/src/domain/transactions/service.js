@@ -35,20 +35,15 @@ function init({
       userId,
       metadata: paymentMetadata,
     });
-    await eventsBusRepository.sendInTransaction([
-      {
-        topic: PAYMENTS_TOPIC,
-        messages: toPaymentMessage({
-          id: uuidv4(),
-          orderNo,
-          type: ORDER_PAID_EVENT,
-          amount,
-          currency,
-          userId,
-          transactionId: payment.transactionId,
-        }),
-      },
-    ]);
+    await eventsBusRepository.sendMessages(PAYMENTS_TOPIC, toPaymentMessage({
+      id: uuidv4(),
+      orderNo,
+      type: ORDER_PAID_EVENT,
+      amount,
+      currency,
+      userId,
+      transactionId: payment.transactionId,
+    }));
     return payment;
   }
 
