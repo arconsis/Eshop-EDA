@@ -1,4 +1,4 @@
-# emailservice Project
+# ordersservice Project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
@@ -49,7 +49,7 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 ./gradlew build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
 ```
 
-You can then execute your native executable with: `./build/emailservice-1.0.0-SNAPSHOT-runner`
+You can then execute your native executable with: `./build/ordersservice-1.0.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/gradle-tooling.
 
@@ -59,7 +59,6 @@ If you want to learn more about building native executables, please consult http
   additional features. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions
   that depend on it.
 - Kotlin ([guide](https://quarkus.io/guides/kotlin)): Write your services in Kotlin
-- SmallRye Health ([guide](https://quarkus.io/guides/microprofile-health)): Monitor service health
 
 ## Provided Code
 
@@ -68,9 +67,3 @@ If you want to learn more about building native executables, please consult http
 Easily start your Reactive RESTful Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
-
-### SmallRye Health
-
-Monitor your application's health using SmallRye Health
-
-[Related guide section...](https://quarkus.io/guides/smallrye-health)
