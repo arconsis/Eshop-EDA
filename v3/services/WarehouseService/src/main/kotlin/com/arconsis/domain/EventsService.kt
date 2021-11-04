@@ -15,23 +15,23 @@ import javax.enterprise.inject.Produces
 @ApplicationScoped
 class EventsService {
 
-	@Produces
-	fun buildTopology(): Topology {
-		val builder = StreamsBuilder()
-		val orderSerde = ObjectMapperSerde(Order::class.java)
-		val orderValidationSerde = ObjectMapperSerde(OrderValidation::class.java)
-		builder
-			.stream(
-				Topics.ORDERS.topicName,
-				Consumed.with(Serdes.String(), orderSerde)
-			)
-			.filter { _, order -> order.isPending }
-			.map { _, order ->
-				// TODO: Add logic to check validity of the order
-				val event = order.toOrderValidationEvent(OrderValidationType.VALID)
-				KeyValue.pair(event.key, event.value)
-			}.to(Topics.ORDERS_VALIDATIONS.topicName, Produced.with(Serdes.String(), orderValidationSerde))
+    @Produces
+    fun buildTopology(): Topology {
+        val builder = StreamsBuilder()
+        val orderSerde = ObjectMapperSerde(Order::class.java)
+        val orderValidationSerde = ObjectMapperSerde(OrderValidation::class.java)
+        builder
+            .stream(
+                Topics.ORDERS.topicName,
+                Consumed.with(Serdes.String(), orderSerde)
+            )
+            .filter { _, order -> order.isPending }
+            .map { _, order ->
+                // TODO: Add logic to check validity of the order
+                val event = order.toOrderValidationEvent(OrderValidationType.VALID)
+                KeyValue.pair(event.key, event.value)
+            }.to(Topics.ORDERS_VALIDATIONS.topicName, Produced.with(Serdes.String(), orderValidationSerde))
 
-		return builder.build()
-	}
+        return builder.build()
+    }
 }
