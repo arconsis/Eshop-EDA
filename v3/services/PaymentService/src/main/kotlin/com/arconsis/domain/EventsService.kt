@@ -30,10 +30,10 @@ class EventsService {
                 Consumed.with(Serdes.String(), orderSerde)
             )
             .filter { _, order -> order.isValidated }
-            .map { _, order ->
+            .mapValues { order ->
                 // TODO: Add logic to make remote payments
                 val event = order.toPaymentEvent(PaymentStatus.SUCCESS)
-                KeyValue.pair(event.key, event.value)
+                event.value
             }.to(Topics.PAYMENTS.topicName, Produced.with(Serdes.String(), paymentTopicSerde))
 
         return builder.build()
