@@ -6,6 +6,6 @@ We took multiple approaches of developing an event based systems:
 
 1) Version 1 is build using events and asynchronous communication between the services. The code for v1 can be found [here](https://github.com/arconsis/Eshop-EDA/tree/main/v1)
 2) (**WIP**) Version 2 is build using Debezium to stream changes from the databases.
-3) (**WIP**) Version 3 is build using the Event Sourcing approach and KSQL and KStreams.
+3) Version 3 is build using the Event Sourcing approach and KSQL and KStreams. The code for v1 can be found [here](https://github.com/arconsis/Eshop-EDA/tree/main/v3)
 
 We will keep the readme updated providing also and info about the macro architecture of the different versions.
