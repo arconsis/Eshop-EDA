@@ -34,7 +34,7 @@ class StreamsService(
                 Topics.ORDERS.topicName,
                 Consumed.with(Serdes.String(), orderTopicSerde)
             )
-            .filter { key, order ->
+            .filter { _, order ->
                 order.isOutForShipment || order.isPaid
             }
             .join(usersTable) { order, customer ->

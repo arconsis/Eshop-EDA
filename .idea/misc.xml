@@ -9,4 +9,7 @@
     <file type="web" url="file://$PROJECT_DIR$/v3/services/UserService" />
     <file type="web" url="file://$PROJECT_DIR$/v3/services/WarehouseService" />
   </component>
+  <component name="ProjectRootManager">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
 </project>
