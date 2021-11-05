@@ -19,29 +19,19 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./testHelpers/kafka/server-jaas.conf:/opt/kafka/config/server-jaas.conf:ro,z
-  orders-db:
-    image: postgres:13.2
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
     ports:
-      - '5432:5432'
+      - "5432:5432"
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: secret
-      POSTGRES_DB: orders-db
+      POSTGRES_DB: root
     volumes:
-      - orders-postgres:/var/lib/postgresql/data
-  warehouse-db:
-    image: postgres:13.2
-    ports:
-      - '5433:5432'
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: warehouse-db
-    volumes:
-      - warehouse-postgres:/var/lib/postgresql/data
-      
+      - postgres:/var/lib/postgresql/data
+
 volumes:
-  orders-postgres: ~
-  warehouse-postgres: ~
+  postgres: ~

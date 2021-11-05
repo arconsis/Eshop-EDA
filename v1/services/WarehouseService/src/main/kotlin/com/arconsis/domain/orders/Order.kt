@@ -1,11 +1,14 @@
 package com.arconsis.domain.orders
 
+import com.arconsis.domain.ordersvalidations.OrderValidation
+import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
+import io.smallrye.reactive.messaging.kafka.Record
 import java.util.*
 
 data class Order(
     val userId: UUID,
     val orderId: UUID,
-    val amount: String,
+    val amount: Double,
     val currency: String,
     val productId: String,
     val quantity: Int,
@@ -24,5 +27,9 @@ enum class OrderStatus {
     REFUNDED
 }
 
-val Order.isPending
-    get() = status == OrderStatus.PENDING
+fun Order.toOrderRecord(): Record<String, Order> = Record.of(
+    userId.toString(),
+    this
+)
+
+class OrdersDeserializer : ObjectMapperDeserializer<Order>(Order::class.java)

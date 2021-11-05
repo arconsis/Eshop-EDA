@@ -1,6 +1,8 @@
 plugins {
     kotlin("jvm") version "1.5.31"
     kotlin("plugin.allopen") version "1.5.31"
+    kotlin("plugin.noarg") version "1.5.31"
+    kotlin("plugin.jpa") version "1.5.31"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     id("io.quarkus")
 }
@@ -17,15 +19,18 @@ val quarkusPlatformVersion: String by project
 dependencies {
     implementation(enforcedPlatform("$quarkusPlatformGroupId:$quarkusPlatformArtifactId:$quarkusPlatformVersion"))
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
-    implementation("io.quarkus:quarkus-resteasy-reactive")
-    implementation("io.quarkus:quarkus-arc")
-    implementation("io.quarkus:quarkus-smallrye-health")
     implementation("io.quarkus:quarkus-kotlin")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-kafka-client")
-    implementation("io.quarkus:quarkus-kafka-streams")
     implementation("io.quarkus:quarkus-smallrye-reactive-messaging-kafka")
+    implementation("io.quarkus:quarkus-jdbc-postgresql")
+    implementation("io.quarkus:quarkus-hibernate-orm")
+    implementation("io.quarkus:quarkus-flyway")
+    implementation("io.quarkus:quarkus-smallrye-health")
+    implementation("io.quarkus:quarkus-arc")
+
     testImplementation("io.quarkus:quarkus-junit5")
-    testImplementation("io.rest-assured:rest-assured")
+    testImplementation("io.rest-assured:rest-assured:4.4.0")
 }
 
 group = "com.arconsis"
