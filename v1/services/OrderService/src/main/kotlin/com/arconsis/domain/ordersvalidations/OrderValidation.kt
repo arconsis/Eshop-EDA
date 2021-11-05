@@ -8,13 +8,13 @@ data class OrderValidation(
     val quantity: Int,
     val orderId: UUID,
     val userId: UUID,
-	val status: OrderValidationStatus
+    val status: OrderValidationStatus,
 )
 
 enum class OrderValidationStatus {
-	VALID,
-	INVALID
+    VALID,
+    INVALID
 }
 
 class OrderValidationDeserializer :
-	ObjectMapperDeserializer<OrderValidation>(OrderValidation::class.java)
+    ObjectMapperDeserializer<OrderValidation>(OrderValidation::class.java)

@@ -7,7 +7,7 @@ data class Shipment(
     val shipmentId: UUID,
     val orderId: UUID,
     val userId: UUID,
-    val status: ShipmentStatus
+    val status: ShipmentStatus,
 )
 
 enum class ShipmentStatus {

@@ -46,7 +46,7 @@ class EventsService(
                     emitter.send(orderRecord)
                 }
             }
-			PaymentStatus.FAILED -> {
+            PaymentStatus.FAILED -> {
                 ordersRepository.updateOrder(value.orderId, OrderStatus.PAYMENT_FAILED)
             }
         }
@@ -58,10 +58,10 @@ class EventsService(
     fun consumeShipmentEvents(shipmentRecord: Record<String, Shipment>) {
         val value = shipmentRecord.value()
         when (value.status) {
-			ShipmentStatus.SHIPPED -> {
+            ShipmentStatus.SHIPPED -> {
                 ordersRepository.updateOrder(value.orderId, OrderStatus.COMPLETED)
             }
-			ShipmentStatus.OUT_FOR_SHIPMENT -> {
+            ShipmentStatus.OUT_FOR_SHIPMENT -> {
                 ordersRepository.updateOrder(value.orderId, OrderStatus.OUT_FOR_SHIPMENT)
             }
         }
@@ -80,7 +80,7 @@ class EventsService(
                 emitter.send(orderRecord).toCompletableFuture().get()
 
             }
-			OrderValidationStatus.INVALID -> {
+            OrderValidationStatus.INVALID -> {
                 // TODO: Do we need to inform the user here about the out of stock ?
                 ordersRepository.updateOrder(value.orderId, OrderStatus.OUT_OF_STOCK)
             }
