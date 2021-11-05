@@ -1,6 +1,7 @@
 package com.arconsis.domain.orders
 
 import com.arconsis.common.Message
+import io.smallrye.reactive.messaging.kafka.Record
 
 enum class OrderEventType {
     ORDER_REQUESTED,
@@ -8,12 +9,9 @@ enum class OrderEventType {
     ORDER_CONFIRMED,
 }
 
-data class OrderEvent(
-    val key: String,
-    val value: Message<OrderEventType, Order>,
-)
+class OrderMessage(override val type: OrderEventType, override val payload: Order) : Message<OrderEventType, Order>
 
-fun Order.toOrderEvent(type: OrderEventType) = OrderEvent(
-    key = userId.toString(),
-    value = Message(type, this)
+fun Order.toOrderRecord(type: OrderEventType): Record<String, OrderMessage> = Record.of(
+    userId.toString(),
+    OrderMessage(type, this)
 )

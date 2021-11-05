@@ -1,13 +1,13 @@
 package com.arconsis.domain.payments
 
 import com.arconsis.common.Message
+import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 
 enum class PaymentType {
     PAYMENT_PROCESSED,
     PAYMENT_FAILED
 }
 
-data class PaymentEvent(
-    val key: String,
-    val value: Message<PaymentType, Payment>,
-)
+class PaymentMessage(override val type: PaymentType, override val payload: Payment) : Message<PaymentType, Payment>
+
+class PaymentMessageDeserializer : ObjectMapperDeserializer<PaymentMessage>(PaymentMessage::class.java)

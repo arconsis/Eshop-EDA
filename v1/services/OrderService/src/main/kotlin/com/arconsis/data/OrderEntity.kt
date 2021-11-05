@@ -3,12 +3,17 @@ package com.arconsis.data
 import com.arconsis.common.OrderStatus
 import com.arconsis.domain.orders.CreateOrder
 import com.arconsis.domain.orders.Order
-import com.fasterxml.jackson.annotation.JsonSubTypes
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.TypeDef
 import java.time.Instant
 import java.util.*
 import javax.persistence.*
 
 @Entity(name = "orders")
+@TypeDef(
+    name = "pgsql_enum",
+    typeClass = PostgreSQLEnumType::class
+)
 class OrderEntity(
     @Id
     @GeneratedValue
@@ -18,7 +23,8 @@ class OrderEntity(
     var userId: UUID,
 
     @Enumerated(EnumType.STRING)
-    @JsonSubTypes.Type(EnumTypePostgreSql::class)
+    @Column(columnDefinition = "order_status")
+    @Type( type = "pgsql_enum" )
     var status: OrderStatus,
 
     @Column(nullable = false)

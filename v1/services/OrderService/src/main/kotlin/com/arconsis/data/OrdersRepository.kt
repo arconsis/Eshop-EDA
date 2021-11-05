@@ -10,12 +10,22 @@ import javax.persistence.EntityManager
 @ApplicationScoped
 class OrdersRepository(private val entityManager: EntityManager) {
 
-    fun updateOrder(orderId: UUID, status: OrderStatus): Order {
+    fun updateOrder(orderId: UUID, status: OrderStatus): Order? {
         val orderEntity = entityManager.find(OrderEntity::class.java, orderId)
+
+        // TODO: Handle error in kafka
+        if (orderEntity == null) {
+            return null
+        }
+
         orderEntity.status = status
-        val updatedEntity = entityManager.merge(orderEntity)
-        entityManager.flush()
-        return updatedEntity.toOrder()
+        return try {
+            val updatedEntity = entityManager.merge(orderEntity)
+            entityManager.flush()
+            updatedEntity.toOrder()
+        } catch (e: Exception) {
+            null
+        }
     }
 
     fun createOrder(createOrder: CreateOrder): Order {
