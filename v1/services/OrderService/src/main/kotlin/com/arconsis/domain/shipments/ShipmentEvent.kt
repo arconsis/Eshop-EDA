@@ -1,6 +1,5 @@
 package com.arconsis.domain.shipments
 
-import com.arconsis.common.Message
 import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 
 enum class ShipmentType {

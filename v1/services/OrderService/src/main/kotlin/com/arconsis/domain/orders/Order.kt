@@ -1,6 +1,6 @@
 package com.arconsis.domain.orders
 
-import com.arconsis.common.OrderStatus
+import io.smallrye.reactive.messaging.kafka.Record
 import java.util.*
 
 data class CreateOrder(
@@ -19,4 +19,21 @@ data class Order(
     val productId: String,
     val quantity: Int,
     val status: OrderStatus,
+)
+
+enum class OrderStatus {
+    PENDING,
+    VALID,
+    OUT_OF_STOCK,
+    PAID,
+    OUT_FOR_SHIPMENT,
+    COMPLETED,
+    PAYMENT_FAILED,
+    CANCELLED,
+    REFUNDED
+}
+
+fun Order.toOrderRecord(): Record<String, Order> = Record.of(
+    userId.toString(),
+    this
 )

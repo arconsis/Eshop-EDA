@@ -1,8 +1,10 @@
 package com.arconsis.domain.events
 
-import com.arconsis.common.OrderStatus
 import com.arconsis.data.OrdersRepository
-import com.arconsis.domain.orders.*
+import com.arconsis.domain.orders.CreateOrder
+import com.arconsis.domain.orders.Order
+import com.arconsis.domain.orders.OrderStatus
+import com.arconsis.domain.orders.toOrderRecord
 import com.arconsis.domain.ordersvalidations.OrderValidationMessage
 import com.arconsis.domain.ordersvalidations.OrderValidationType
 import com.arconsis.domain.payments.PaymentMessage
@@ -19,14 +21,14 @@ import javax.transaction.Transactional
 
 @ApplicationScoped
 class EventsService(
-    @Channel("orders-out") private val emitter: Emitter<Record<String, OrderMessage>>,
+    @Channel("orders-out") private val emitter: Emitter<Record<String, Order>>,
     private val ordersRepository: OrdersRepository,
 ) {
 
     @Transactional
     fun createOrder(createOrder: CreateOrder): Order {
         val order = ordersRepository.createOrder(createOrder)
-        val orderRecord = order.toOrderRecord(OrderEventType.ORDER_REQUESTED)
+        val orderRecord = order.toOrderRecord()
         emitter.send(orderRecord).toCompletableFuture().get()
         return order
     }
@@ -39,7 +41,7 @@ class EventsService(
         when (value.type) {
             PaymentType.PAYMENT_PROCESSED -> {
                 val order = ordersRepository.updateOrder(value.payload.orderId, OrderStatus.PAID)
-                val orderRecord = order?.toOrderRecord(OrderEventType.ORDER_CONFIRMED)
+                val orderRecord = order?.toOrderRecord()
                 if (orderRecord != null) {
                     emitter.send(orderRecord)
                 }
@@ -74,7 +76,7 @@ class EventsService(
             OrderValidationType.VALID -> {
                 val order = ordersRepository.updateOrder(value.payload.orderId, OrderStatus.VALID) ?: return
 
-                val orderRecord = order.toOrderRecord(OrderEventType.ORDER_CREATED)
+                val orderRecord = order.toOrderRecord()
                 emitter.send(orderRecord).toCompletableFuture().get()
 
             }

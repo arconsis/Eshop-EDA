@@ -1,5 +1,6 @@
 package com.arconsis.domain.payments
 
+import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 import java.util.*
 
 data class Payment(
@@ -8,4 +9,12 @@ data class Payment(
     val userId: UUID,
     val amount: Double,
     val currency: String,
+    val status: PaymentStatus,
 )
+
+enum class PaymentStatus {
+    PROCESSED,
+    FAILED
+}
+
+class PaymentDeserializer : ObjectMapperDeserializer<Payment>(Payment::class.java)

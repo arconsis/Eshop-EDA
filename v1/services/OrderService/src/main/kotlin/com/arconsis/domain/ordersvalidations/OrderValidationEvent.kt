@@ -1,6 +1,5 @@
 package com.arconsis.domain.ordersvalidations
 
-import com.arconsis.common.Message
 import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 
 enum class OrderValidationType {
