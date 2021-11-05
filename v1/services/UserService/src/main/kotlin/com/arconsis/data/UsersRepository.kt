@@ -1,18 +1,16 @@
 package com.arconsis.data
 
 import com.arconsis.domain.User
-import com.arconsis.domain.UserData
 import com.arconsis.http.dto.UserCreate
 import io.quarkus.elytron.security.common.BcryptUtil
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.persistence.EntityManager
 
-
 @ApplicationScoped
 class UsersRepository(private val entityManager: EntityManager) {
 
-    fun createUser(userCreate: UserCreate): UserData {
+    fun createUser(userCreate: UserCreate): User {
         val password = BcryptUtil.bcryptHash(userCreate.password)
         val userEntity = UserEntity(
             firstName = userCreate.firstName,
@@ -24,11 +22,11 @@ class UsersRepository(private val entityManager: EntityManager) {
         entityManager.persist(userEntity)
         entityManager.flush()
 
-        return userEntity.toUserData()
+        return userEntity.toUser()
     }
 
-    fun getSpecificUser(userId: UUID) : User {
-         val userEntity = entityManager.getReference(UserEntity::class.java,userId)
+    fun getUser(userId: UUID): User {
+        val userEntity = entityManager.getReference(UserEntity::class.java, userId)
         return userEntity.toUser()
     }
 }

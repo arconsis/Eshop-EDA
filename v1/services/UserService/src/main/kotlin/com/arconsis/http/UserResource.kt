@@ -4,14 +4,11 @@ import com.arconsis.domain.User
 import com.arconsis.domain.UsersService
 import com.arconsis.http.dto.UserCreate
 import io.smallrye.common.annotation.Blocking
-import java.net.URI
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
-import javax.persistence.Id
 import javax.validation.Valid
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriInfo
 
 @ApplicationScoped
@@ -22,11 +19,8 @@ class UserResource(private val usersService: UsersService) {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun createUser(@Valid userCreate: UserCreate, uriInfo: UriInfo): Response {
-        val user = usersService.createUser(userCreate)
-        val path = uriInfo.path
-        val location = path + user.id.toString()
-        return Response.created(URI.create(location)).entity(user).build()
+    fun createUser(@Valid userCreate: UserCreate, uriInfo: UriInfo): User {
+        return usersService.createUser(userCreate)
     }
 
     @Blocking
@@ -34,8 +28,7 @@ class UserResource(private val usersService: UsersService) {
     @Path("/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun getSpecificUser(@PathParam("userId") userId: UUID): User {
-        return usersService.getSpecificUser(userId)
+    fun getUser(@PathParam("userId") userId: UUID): User {
+        return usersService.getUser(userId)
     }
-
 }
