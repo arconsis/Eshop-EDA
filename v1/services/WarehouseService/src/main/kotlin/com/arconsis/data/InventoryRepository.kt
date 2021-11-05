@@ -1,5 +1,7 @@
 package com.arconsis.data
 
+import com.arconsis.data.InventoryEntity.Companion.PRODUCT_ID
+import com.arconsis.data.InventoryEntity.Companion.STOCK
 import com.arconsis.domain.inventory.CreateInventory
 import com.arconsis.domain.inventory.Inventory
 import com.arconsis.domain.inventory.UpdateInventory
@@ -31,15 +33,14 @@ class InventoryRepository(private val entityManager: EntityManager) {
     }
 
     fun reserveProductStock(productId: String, stock: Int): Boolean {
-//        return try {
-//            entityManager.createNamedQuery(InventoryEntity.UPDATE_PRODUCT_STOCK, InventoryEntity::class.java)
-//                .setParameter(PRODUCT_ID, productId)
-//                .setParameter(InventoryEntity.STOCK, stock)
-//                .executeUpdate()
-//            true
-//        } catch (e: Exception) {
-//            false
-//        }
-        return true
+        return try {
+            entityManager.createNamedQuery(InventoryEntity.UPDATE_PRODUCT_STOCK, InventoryEntity::class.java)
+                .setParameter(PRODUCT_ID, productId)
+                .setParameter(STOCK, stock)
+                .executeUpdate()
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 }

@@ -11,16 +11,16 @@ import java.time.Instant
 import java.util.*
 import javax.persistence.*
 
-//@NamedQueries(
-//    NamedQuery(
-//        name = UPDATE_PRODUCT_STOCK,
-//        query = """
-//            UPDATE inventory i
-//            SET i.stock = :$STOCK
-//            WHERE i.productId = :$PRODUCT_ID
-//        """
-//    )
-//)
+@NamedQueries(
+    NamedQuery(
+        name = UPDATE_PRODUCT_STOCK,
+        query = """
+            update inventory i
+            set i.stock = :$STOCK
+            where i.productId = :$PRODUCT_ID
+        """
+    )
+)
 @Entity(name = "inventory")
 class InventoryEntity(
     @Id
@@ -43,8 +43,8 @@ class InventoryEntity(
 ) {
     companion object {
         const val UPDATE_PRODUCT_STOCK = "InventoryEntity.update_product_stock"
-        const val PRODUCT_ID = "InventoryEntity.product_id"
-        const val STOCK = "InventoryEntity.stock"
+        const val PRODUCT_ID = "product_id"
+        const val STOCK = "stock"
     }
 }
 
