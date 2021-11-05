@@ -1,5 +1,6 @@
 package com.arconsis.domain.shipments
 
+import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 import java.util.*
 
 data class Shipment(
@@ -17,3 +18,5 @@ enum class ShipmentStatus {
 
 val Shipment.isOutForShipment
     get() = status == ShipmentStatus.OUT_FOR_SHIPMENT
+
+class ShipmentDeserializer : ObjectMapperDeserializer<Shipment>(Shipment::class.java)

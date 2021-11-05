@@ -1,8 +1,8 @@
 package com.arconsis.data
 
-import com.arconsis.common.OrderStatus
 import com.arconsis.domain.orders.CreateOrder
 import com.arconsis.domain.orders.Order
+import com.arconsis.domain.orders.OrderStatus
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.persistence.EntityManager
