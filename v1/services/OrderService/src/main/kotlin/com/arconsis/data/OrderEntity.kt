@@ -52,7 +52,7 @@ class OrderEntity(
 
 fun OrderEntity.toOrder() = Order(
     userId = userId,
-    orderId = id!!,
+    id = id!!,
     amount = amount,
     currency = currency,
     productId = productId,

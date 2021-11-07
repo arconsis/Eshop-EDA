@@ -12,8 +12,8 @@ data class CreateOrder(
 )
 
 data class Order(
+    val id: UUID,
     val userId: UUID,
-    val orderId: UUID,
     val amount: Double,
     val currency: String,
     val productId: String,

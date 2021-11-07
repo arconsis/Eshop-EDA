@@ -26,8 +26,12 @@ class InventoryResource(private val inventoryService: InventoryService) {
     }
 
     @PUT
+    @Path("/{id}")
     @Blocking
-    fun updateInventory(updateInventory: UpdateInventory): Inventory {
+    fun updateInventory(@PathParam("id") id: UUID, updateInventory: UpdateInventory): Inventory {
+        if (id != updateInventory.id) {
+            throw BadRequestException("Inventory id: $id is not correct")
+        }
         return inventoryService.updateInventory(updateInventory)
     }
 }

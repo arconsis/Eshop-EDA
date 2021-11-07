@@ -1,7 +1,7 @@
-package com.arconsis.data
+package com.arconsis.data.inventory
 
-import com.arconsis.data.InventoryEntity.Companion.PRODUCT_ID
-import com.arconsis.data.InventoryEntity.Companion.STOCK
+import com.arconsis.data.inventory.InventoryEntity.Companion.PRODUCT_ID
+import com.arconsis.data.inventory.InventoryEntity.Companion.STOCK
 import com.arconsis.domain.inventory.CreateInventory
 import com.arconsis.domain.inventory.Inventory
 import com.arconsis.domain.inventory.UpdateInventory
