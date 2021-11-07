@@ -35,7 +35,7 @@ class OrdersService(
     }
 
     fun handleOrderPending(order: Order) {
-        if (order.status !== OrderStatus.PENDING) {
+        if (order.status != OrderStatus.PENDING) {
             return
         }
 
