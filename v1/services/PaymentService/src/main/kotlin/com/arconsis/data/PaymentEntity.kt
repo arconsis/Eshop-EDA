@@ -67,7 +67,7 @@ fun CreatePayment.toPaymentEntity() = PaymentEntity(
 
 fun Order.toCreatePayment(status: PaymentStatus) = CreatePayment(
 	userId = userId,
-	orderId = orderId,
+	orderId = id,
 	amount = amount,
 	currency = currency,
 	status = status,

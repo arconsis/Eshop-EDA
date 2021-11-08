@@ -5,7 +5,7 @@ import java.util.*
 
 data class Order(
 	val userId: UUID,
-	val orderId: UUID,
+	val id: UUID,
 	val amount: Double,
 	val currency: String,
 	val productId: String,

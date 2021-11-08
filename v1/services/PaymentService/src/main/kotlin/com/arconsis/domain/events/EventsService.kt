@@ -28,6 +28,7 @@ class EventsService(
 		when (value.status) {
 			OrderStatus.VALID -> {
 				// TODO: simulate API call
+				Thread.sleep(5000)
 				val createPaymentDto = value.toCreatePayment(PaymentStatus.SUCCESS)
 				val payment = paymentsRepository.createPayment(createPaymentDto)
 				if (payment != null) {

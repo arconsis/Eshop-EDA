@@ -34,6 +34,6 @@ enum class OrderStatus {
 }
 
 fun Order.toOrderRecord(): Record<String, Order> = Record.of(
-    userId.toString(),
+    id.toString(),
     this
 )

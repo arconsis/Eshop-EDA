@@ -26,6 +26,6 @@ data class CreatePayment(
 )
 
 fun Payment.toPaymentRecord(): Record<String, Payment> = Record.of(
-	userId.toString(),
+	orderId.toString(),
 	this
 )

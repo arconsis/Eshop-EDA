@@ -49,7 +49,7 @@ class OrdersService(
             status = if (stockUpdated) OrderValidationStatus.VALID else OrderValidationStatus.INVALID
         )
 
-        orderValidationEmitter.send(Record.of(order.userId.toString(), orderValidation))
+        orderValidationEmitter.send(Record.of(order.id.toString(), orderValidation))
     }
 
     fun handleOrderPaid(order: Order) {
