@@ -52,7 +52,7 @@ class EventsService(
         }
     }
 
-    @Incoming("shipment-in")
+    @Incoming("shipments-in")
     @Blocking
     @Transactional
     fun consumeShipmentEvents(shipmentRecord: Record<String, Shipment>) {

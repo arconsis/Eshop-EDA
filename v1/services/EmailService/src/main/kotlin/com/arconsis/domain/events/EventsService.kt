@@ -29,7 +29,7 @@ class EventsService(
     }
 
     @Blocking
-    @Incoming("orders-in")
+    @Incoming("shipments-in")
     fun consumeShipments(shipmentEvent: ShipmentEvent) {
         val (_, shipment) = shipmentEvent
         emailRepository.sendEmail(
