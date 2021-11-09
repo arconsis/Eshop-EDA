@@ -34,7 +34,7 @@ class InventoryRepository(private val entityManager: EntityManager) {
 
     fun reserveProductStock(productId: String, stock: Int): Boolean {
         return try {
-            entityManager.createNamedQuery(InventoryEntity.UPDATE_PRODUCT_STOCK, InventoryEntity::class.java)
+            entityManager.createNamedQuery(InventoryEntity.UPDATE_PRODUCT_STOCK)
                 .setParameter(PRODUCT_ID, productId)
                 .setParameter(STOCK, stock)
                 .executeUpdate()
