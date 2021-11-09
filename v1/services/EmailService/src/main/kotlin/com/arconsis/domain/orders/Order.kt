@@ -1,5 +1,6 @@
 package com.arconsis.domain.orders
 
+import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 import java.util.*
 
 data class Order(
@@ -25,8 +26,4 @@ enum class OrderStatus {
     REFUNDED
 }
 
-val Order.isOutForShipment
-    get() = status == OrderStatus.OUT_FOR_SHIPMENT
-
-val Order.isPaid
-    get() = status == OrderStatus.PAID
+class OrdersDeserializer : ObjectMapperDeserializer<Order>(Order::class.java)
