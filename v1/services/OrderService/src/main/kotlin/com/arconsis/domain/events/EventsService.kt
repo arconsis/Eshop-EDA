@@ -39,7 +39,7 @@ class EventsService(
     fun consumePaymentEvents(paymentRecord: Record<String, Payment>) {
         val value = paymentRecord.value()
         when (value.status) {
-            PaymentStatus.PROCESSED -> {
+            PaymentStatus.SUCCESS -> {
                 val order = ordersRepository.updateOrder(value.orderId, OrderStatus.PAID)
                 val orderRecord = order?.toOrderRecord()
                 if (orderRecord != null) {
@@ -75,10 +75,8 @@ class EventsService(
         when (value.status) {
             OrderValidationStatus.VALID -> {
                 val order = ordersRepository.updateOrder(value.orderId, OrderStatus.VALID) ?: return
-
                 val orderRecord = order.toOrderRecord()
                 emitter.send(orderRecord).toCompletableFuture().get()
-
             }
             OrderValidationStatus.INVALID -> {
                 // TODO: Do we need to inform the user here about the out of stock ?

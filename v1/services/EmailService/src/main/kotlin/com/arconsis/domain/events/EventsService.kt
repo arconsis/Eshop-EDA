@@ -15,18 +15,18 @@ class EventsService(
     @ConfigProperty(name = "email.sender") private val sender: String,
 ) {
 
-    @Blocking
-    @Incoming("orders-in")
-    fun consumeOrders(order: Order) {
-        emailRepository.sendEmail(
-            EmailDto(
-                senderEmail = sender,
-                receiverEmail = order.userEmail,
-                subject = EMAIL_SUBJECT_ORDER_PAID,
-                text = "New order with number: ${order.orderId} just placed! We will inform you with another email about shipment progress."
-            ),
-        )
-    }
+//    @Blocking
+//    @Incoming("orders-in")
+//    fun consumeOrders(order: Order) {
+//        emailRepository.sendEmail(
+//            EmailDto(
+//                senderEmail = sender,
+//                receiverEmail = order.userEmail,
+//                subject = EMAIL_SUBJECT_ORDER_PAID,
+//                text = "New order with number: ${order.id} just placed! We will inform you with another email about shipment progress."
+//            ),
+//        )
+//    }
 
     @Blocking
     @Incoming("shipments-in")

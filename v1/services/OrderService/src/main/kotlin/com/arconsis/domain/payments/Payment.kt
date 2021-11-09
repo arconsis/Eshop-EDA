@@ -13,7 +13,7 @@ data class Payment(
 )
 
 enum class PaymentStatus {
-    PROCESSED,
+	SUCCESS,
     FAILED
 }
 
