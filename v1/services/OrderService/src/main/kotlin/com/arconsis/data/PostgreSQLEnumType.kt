@@ -7,7 +7,6 @@ import java.sql.PreparedStatement
 import java.sql.SQLException
 import java.sql.Types
 
-
 class PostgreSQLEnumType : EnumType<Enum<*>>() {
     @Throws(HibernateException::class, SQLException::class)
     override fun nullSafeSet(

@@ -10,6 +10,8 @@ import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
 import org.eclipse.microprofile.reactive.messaging.Emitter
 import org.eclipse.microprofile.reactive.messaging.Incoming
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletionStage
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
 
@@ -24,19 +26,19 @@ class OrdersService(
     @Incoming("order-in")
     @Blocking
     @Transactional
-    fun consumeOrderEvents(orderRecord: Record<String, Order>) {
+    fun consumeOrderEvents(orderRecord: Record<String, Order>): CompletionStage<Void> {
         val order = orderRecord.value()
 
-        when (order.status) {
+        return when (order.status) {
             OrderStatus.PENDING -> handleOrderPending(order)
             OrderStatus.PAID -> handleOrderPaid(order)
-            else -> return
+            else -> CompletableFuture.completedStage(null)
         }
     }
 
-    fun handleOrderPending(order: Order) {
+    fun handleOrderPending(order: Order): CompletionStage<Void> {
         if (order.status != OrderStatus.PENDING) {
-            return
+            return CompletableFuture.completedStage(null)
         }
 
         val stockUpdated = inventoryRepository.reserveProductStock(order.productId, order.quantity)
@@ -49,19 +51,23 @@ class OrdersService(
             status = if (stockUpdated) OrderValidationStatus.VALID else OrderValidationStatus.INVALID
         )
 
-        orderValidationEmitter.send(Record.of(order.id.toString(), orderValidation))
+        return orderValidationEmitter.send(Record.of(order.id.toString(), orderValidation))
     }
 
-    fun handleOrderPaid(order: Order) {
+    fun handleOrderPaid(order: Order): CompletionStage<Void> {
         if (order.status != OrderStatus.PAID) {
-            return
+            return CompletableFuture.completedStage(null)
         }
 
-        var shipment = this.shipmentsRepository.createShipment(CreateShipment(orderId = order.id,
-            status = ShipmentStatus.PREPARING_SHIPMENT))
+        var shipment = this.shipmentsRepository.createShipment(
+            CreateShipment(
+                orderId = order.id,
+                status = ShipmentStatus.PREPARING_SHIPMENT
+            )
+        )
         // TODO: Simulating shipment. Check if there is an alternative for this
         Thread.sleep(10000)
         shipment = this.shipmentsRepository.updateShipment(UpdateShipment(shipment.id, ShipmentStatus.OUT_FOR_SHIPMENT))
-        shipmentEmitter.send(shipment.toShipmentRecord()).toCompletableFuture().get()
+        return shipmentEmitter.send(shipment.toShipmentRecord())
     }
 }

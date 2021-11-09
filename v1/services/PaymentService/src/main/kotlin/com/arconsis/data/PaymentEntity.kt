@@ -14,61 +14,61 @@ import javax.persistence.*
 
 @Entity(name = "payments")
 @TypeDef(
-	name = "pgsql_enum",
-	typeClass = PostgreSQLEnumType::class
+    name = "pgsql_enum",
+    typeClass = PostgreSQLEnumType::class
 )
 class PaymentEntity(
-	@Id
-	@GeneratedValue
-	var id: UUID? = null,
+    @Id   
+    @GeneratedValue   
+    var id: UUID? = null,
 
-	@Column(name = "user_id", nullable = false)
-	var userId: UUID,
+    @Column(name = "user_id", nullable = false)   
+    var userId: UUID,
 
-	@Column(name = "order_id", nullable = false)
-	var orderId: UUID,
+    @Column(name = "order_id", nullable = false)   
+    var orderId: UUID,
 
-	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "order_status")
-	@Type(type = "pgsql_enum")
-	var status: PaymentStatus,
+    @Enumerated(EnumType.STRING)   
+    @Column(columnDefinition = "order_status")   
+    @Type(type = "pgsql_enum")   
+    var status: PaymentStatus,
 
-	@Column(nullable = false)
-	var amount: Double,
+    @Column(nullable = false)   
+    var amount: Double,
 
-	@Column(nullable = false)
-	var currency: String,
+    @Column(nullable = false)   
+    var currency: String,
 
-	@CreationTimestamp
-	@Column(name = "created_at")
-	var createdAt: Instant? = null,
+    @CreationTimestamp   
+    @Column(name = "created_at")   
+    var createdAt: Instant? = null,
 
-	@UpdateTimestamp
-	@Column(name = "updated_at")
-	var updatedAt: Instant? = null,
+    @UpdateTimestamp   
+    @Column(name = "updated_at")   
+    var updatedAt: Instant? = null,
 )
 
 fun PaymentEntity.toPayment() = Payment(
-	transactionId = id!!,
-	orderId = orderId,
-	userId = userId,
-	amount = amount,
-	currency = currency,
-	status = status,
+    transactionId = id!!,
+    orderId = orderId,
+    userId = userId,
+    amount = amount,
+    currency = currency,
+    status = status,
 )
 
 fun CreatePayment.toPaymentEntity() = PaymentEntity(
-	userId = userId,
-	orderId = orderId,
-	amount = amount,
-	currency = currency,
-	status = status,
+    userId = userId,
+    orderId = orderId,
+    amount = amount,
+    currency = currency,
+    status = status,
 )
 
 fun Order.toCreatePayment(status: PaymentStatus) = CreatePayment(
-	userId = userId,
-	orderId = id,
-	amount = amount,
-	currency = currency,
-	status = status,
+    userId = userId,
+    orderId = id,
+    amount = amount,
+    currency = currency,
+    status = status,
 )

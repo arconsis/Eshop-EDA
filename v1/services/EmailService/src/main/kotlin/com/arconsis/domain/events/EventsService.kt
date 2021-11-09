@@ -2,7 +2,6 @@ package com.arconsis.domain.events
 
 import com.arconsis.data.email.EmailDto
 import com.arconsis.data.email.EmailRepository
-import com.arconsis.domain.orders.Order
 import com.arconsis.domain.shipments.ShipmentEvent
 import io.smallrye.reactive.messaging.annotations.Blocking
 import org.eclipse.microprofile.config.inject.ConfigProperty

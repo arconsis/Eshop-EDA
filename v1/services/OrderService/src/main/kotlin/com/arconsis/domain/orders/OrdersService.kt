@@ -7,11 +7,11 @@ import javax.transaction.Transactional
 
 @ApplicationScoped
 class OrdersService(
-	private val ordersRepository: OrdersRepository,
+    private val ordersRepository: OrdersRepository,
 ) {
 
-	@Transactional
-	fun getOrder(orderId: UUID): Order {
-		return ordersRepository.getUser(orderId)
-	}
+    @Transactional
+    fun getOrder(orderId: UUID): Order {
+        return ordersRepository.getUser(orderId)
+    }
 }

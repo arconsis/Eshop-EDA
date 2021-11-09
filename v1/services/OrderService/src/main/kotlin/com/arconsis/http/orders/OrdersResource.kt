@@ -14,8 +14,8 @@ import javax.ws.rs.core.UriInfo
 @ApplicationScoped
 @Path("/orders")
 class OrdersResource(
-	private val eventsService: EventsService,
-	private val ordersService: OrdersService,
+    private val eventsService: EventsService,
+    private val ordersService: OrdersService,
 ) {
 
     @POST
@@ -25,12 +25,12 @@ class OrdersResource(
         return eventsService.createOrder(createOrder)
     }
 
-	@Blocking
-	@GET
-	@Path("/{orderId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	fun getOrder(@PathParam("orderId") orderId: UUID): Order {
-		return ordersService.getOrder(orderId)
-	}
+    @Blocking
+    @GET
+    @Path("/{orderId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun getOrder(@PathParam("orderId") orderId: UUID): Order {
+        return ordersService.getOrder(orderId)
+    }
 }

@@ -4,13 +4,13 @@ import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 import java.util.*
 
 data class Order(
-	val userId: UUID,
-	val id: UUID,
-	val amount: String,
-	val currency: String,
-	val productId: String,
-	val quantity: Int,
-	val status: OrderStatus,
+    val userId: UUID,
+    val id: UUID,
+    val amount: String,
+    val currency: String,
+    val productId: String,
+    val quantity: Int,
+    val status: OrderStatus,
 )
 
 enum class OrderStatus {

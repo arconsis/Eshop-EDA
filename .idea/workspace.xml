@@ -5,19 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ff6440ac-e013-4cf8-8361-f11025772b09" name="Changes" comment="EDA-57:">
-      <change afterPath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/kotlin/com/arconsis/data/InventoryEntity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/kotlin/com/arconsis/data/InventoryRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/kotlin/com/arconsis/domain/inventory/Inventory.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/kotlin/com/arconsis/domain/inventory/InventoryService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/kotlin/com/arconsis/domain/ordersvalidations/OrderValidation.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/kotlin/com/arconsis/http/inventory/InventoryResource.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/resources/migration/V1.0.0__CreateInventory.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/services/OrderService/src/main/kotlin/com/arconsis/data/OrderEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v1/services/OrderService/src/main/kotlin/com/arconsis/data/OrderEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/services/WarehouseService/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v1/services/WarehouseService/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/kotlin/com/arconsis/domain/EventsService.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/kotlin/com/arconsis/domain/orders/OrderValidationEvent.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/v1/services/WarehouseService/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +113,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Quarkus.ordersservice.main">
+  <component name="RunManager" selected="Quarkus.warehouseservice.main">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="Eshop-EDA" />
       <working_directory value="$PROJECT_DIR$" />
@@ -384,7 +372,9 @@
             <list />
           </option>
           <option name="taskNames">
-            <list />
+            <list>
+              <option value="quarkusDev" />
+            </list>
           </option>
           <option name="vmOptions" />
         </ExternalSystemSettings>
@@ -417,6 +407,7 @@
       <workItem from="1635963304399" duration="1267000" />
       <workItem from="1636127827389" duration="19000" />
       <workItem from="1636145884452" duration="8000" />
+      <workItem from="1636479182731" duration="822000" />
     </task>
     <servers />
   </component>

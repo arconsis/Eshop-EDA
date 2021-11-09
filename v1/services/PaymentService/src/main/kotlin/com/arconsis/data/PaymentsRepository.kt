@@ -8,14 +8,14 @@ import javax.persistence.EntityManager
 @ApplicationScoped
 class PaymentsRepository(private val entityManager: EntityManager) {
 
-	fun createPayment(payment: CreatePayment): Payment? {
-		return try {
-			val paymentEntity = payment.toPaymentEntity()
-			entityManager.persist(paymentEntity)
-			entityManager.flush()
-			return paymentEntity.toPayment()
-		} catch (e: Exception) {
-			null
-		}
-	}
+    fun createPayment(payment: CreatePayment): Payment? {
+        return try {
+            val paymentEntity = payment.toPaymentEntity()
+            entityManager.persist(paymentEntity)
+            entityManager.flush()
+            return paymentEntity.toPayment()
+        } catch (e: Exception) {
+            null
+        }
+    }
 }

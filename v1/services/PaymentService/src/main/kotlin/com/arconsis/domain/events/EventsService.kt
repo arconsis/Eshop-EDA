@@ -17,25 +17,25 @@ import javax.transaction.Transactional
 
 @ApplicationScoped
 class EventsService(
-	@Channel("payments-out") private val emitter: Emitter<Record<String, Payment>>,
-	private val paymentsRepository: PaymentsRepository,
+    @Channel("payments-out") private val emitter: Emitter<Record<String, Payment>>,
+    private val paymentsRepository: PaymentsRepository,
 ) {
-	@Incoming("orders-in")
-	@Blocking
-	@Transactional
-	fun consumeOrderEvents(orderRecord: Record<String, Order>) {
-		val value = orderRecord.value()
-		when (value.status) {
-			OrderStatus.VALID -> {
-				// TODO: simulate API call
-				Thread.sleep(5000)
-				val createPaymentDto = value.toCreatePayment(PaymentStatus.SUCCESS)
-				val payment = paymentsRepository.createPayment(createPaymentDto)
-				if (payment != null) {
-					val paymentRecord = payment.toPaymentRecord()
-					emitter.send(paymentRecord)
-				}
-			}
-		}
-	}
+    @Incoming("orders-in")
+    @Blocking
+    @Transactional
+    fun consumeOrderEvents(orderRecord: Record<String, Order>) {
+        val value = orderRecord.value()
+        when (value.status) {
+            OrderStatus.VALID -> {
+                // TODO: simulate API call
+                Thread.sleep(5000)
+                val createPaymentDto = value.toCreatePayment(PaymentStatus.SUCCESS)
+                val payment = paymentsRepository.createPayment(createPaymentDto)
+                if (payment != null) {
+                    val paymentRecord = payment.toPaymentRecord()
+                    emitter.send(paymentRecord)
+                }
+            }
+        }
+    }
 }

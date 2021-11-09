@@ -35,8 +35,8 @@ class OrdersRepository(private val entityManager: EntityManager) {
         return orderEntity.toOrder()
     }
 
-	fun getUser(orderId: UUID): Order {
-		val orderEntity = entityManager.getReference(OrderEntity::class.java, orderId)
-		return orderEntity.toOrder()
-	}
+    fun getUser(orderId: UUID): Order {
+        val orderEntity = entityManager.getReference(OrderEntity::class.java, orderId)
+        return orderEntity.toOrder()
+    }
 }
