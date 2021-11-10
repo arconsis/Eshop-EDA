@@ -43,7 +43,7 @@ class EventsService(
                 val order = ordersRepository.updateOrder(value.orderId, OrderStatus.PAID)
                 val orderRecord = order?.toOrderRecord()
                 if (orderRecord != null) {
-                    emitter.send(orderRecord)
+                    emitter.send(orderRecord).toCompletableFuture().get()
                 }
             }
             PaymentStatus.FAILED -> {
@@ -64,6 +64,7 @@ class EventsService(
             ShipmentStatus.OUT_FOR_SHIPMENT -> {
                 ordersRepository.updateOrder(value.orderId, OrderStatus.OUT_FOR_SHIPMENT)
             }
+            else -> return
         }
     }
 

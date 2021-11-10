@@ -33,9 +33,10 @@ class EventsService(
                 val payment = paymentsRepository.createPayment(createPaymentDto)
                 if (payment != null) {
                     val paymentRecord = payment.toPaymentRecord()
-                    emitter.send(paymentRecord)
+                    emitter.send(paymentRecord).toCompletableFuture().get()
                 }
             }
+            else -> return
         }
     }
 }
