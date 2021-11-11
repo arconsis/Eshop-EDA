@@ -16,6 +16,8 @@ import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
 import org.eclipse.microprofile.reactive.messaging.Emitter
 import org.eclipse.microprofile.reactive.messaging.Incoming
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletionStage
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
 
@@ -36,18 +38,17 @@ class EventsService(
     @Incoming("payments-in")
     @Blocking
     @Transactional
-    fun consumePaymentEvents(paymentRecord: Record<String, Payment>) {
+    fun consumePaymentEvents(paymentRecord: Record<String, Payment>): CompletionStage<Void> {
         val value = paymentRecord.value()
-        when (value.status) {
+        return when (value.status) {
             PaymentStatus.SUCCESS -> {
-                val order = ordersRepository.updateOrder(value.orderId, OrderStatus.PAID)
-                val orderRecord = order?.toOrderRecord()
-                if (orderRecord != null) {
-                    emitter.send(orderRecord).toCompletableFuture().get()
-                }
+                val order = ordersRepository.updateOrder(value.orderId, OrderStatus.PAID) ?: return CompletableFuture.completedStage(null)
+                val orderRecord = order.toOrderRecord()
+				emitter.send(orderRecord)
             }
             PaymentStatus.FAILED -> {
                 ordersRepository.updateOrder(value.orderId, OrderStatus.PAYMENT_FAILED)
+				CompletableFuture.completedStage(null)
             }
         }
     }
@@ -71,17 +72,18 @@ class EventsService(
     @Incoming("order-validation-in")
     @Blocking
     @Transactional
-    fun consumeOrderValidationEvents(orderValidationRecord: Record<String, OrderValidation>) {
+    fun consumeOrderValidationEvents(orderValidationRecord: Record<String, OrderValidation>): CompletionStage<Void> {
         val value = orderValidationRecord.value()
-        when (value.status) {
+        return when (value.status) {
             OrderValidationStatus.VALID -> {
-                val order = ordersRepository.updateOrder(value.orderId, OrderStatus.VALID) ?: return
+                val order = ordersRepository.updateOrder(value.orderId, OrderStatus.VALID) ?: return CompletableFuture.completedStage(null)
                 val orderRecord = order.toOrderRecord()
-                emitter.send(orderRecord).toCompletableFuture().get()
+                emitter.send(orderRecord)
             }
             OrderValidationStatus.INVALID -> {
                 // TODO: Do we need to inform the user here about the out of stock ?
                 ordersRepository.updateOrder(value.orderId, OrderStatus.OUT_OF_STOCK)
+				CompletableFuture.completedStage(null)
             }
         }
     }

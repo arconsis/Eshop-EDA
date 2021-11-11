@@ -12,6 +12,8 @@ import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
 import org.eclipse.microprofile.reactive.messaging.Emitter
 import org.eclipse.microprofile.reactive.messaging.Incoming
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletionStage
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
 
@@ -23,20 +25,18 @@ class EventsService(
     @Incoming("orders-in")
     @Blocking
     @Transactional
-    fun consumeOrderEvents(orderRecord: Record<String, Order>) {
+    fun consumeOrderEvents(orderRecord: Record<String, Order>): CompletionStage<Void> {
         val value = orderRecord.value()
-        when (value.status) {
+        return when (value.status) {
             OrderStatus.VALID -> {
                 // TODO: simulate API call
                 Thread.sleep(5000)
                 val createPaymentDto = value.toCreatePayment(PaymentStatus.SUCCESS)
-                val payment = paymentsRepository.createPayment(createPaymentDto)
-                if (payment != null) {
-                    val paymentRecord = payment.toPaymentRecord()
-                    emitter.send(paymentRecord).toCompletableFuture().get()
-                }
+                val payment = paymentsRepository.createPayment(createPaymentDto) ?: return CompletableFuture.completedStage(null)
+				val paymentRecord = payment.toPaymentRecord()
+				emitter.send(paymentRecord)
             }
-            else -> return
+            else -> CompletableFuture.completedStage(null)
         }
     }
 }
