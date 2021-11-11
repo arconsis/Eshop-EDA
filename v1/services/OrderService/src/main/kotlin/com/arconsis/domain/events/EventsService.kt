@@ -44,11 +44,11 @@ class EventsService(
             PaymentStatus.SUCCESS -> {
                 val order = ordersRepository.updateOrder(value.orderId, OrderStatus.PAID) ?: return CompletableFuture.completedStage(null)
                 val orderRecord = order.toOrderRecord()
-				emitter.send(orderRecord)
+                emitter.send(orderRecord)
             }
             PaymentStatus.FAILED -> {
                 ordersRepository.updateOrder(value.orderId, OrderStatus.PAYMENT_FAILED)
-				CompletableFuture.completedStage(null)
+                CompletableFuture.completedStage(null)
             }
         }
     }
@@ -60,14 +60,14 @@ class EventsService(
         val value = shipmentRecord.value()
         return when (value.status) {
             ShipmentStatus.SHIPPED -> {
-				val order = ordersRepository.updateOrder(value.orderId, OrderStatus.COMPLETED) ?: return CompletableFuture.completedStage(null)
-				val orderRecord = order.toOrderRecord()
-				emitter.send(orderRecord)
+                val order = ordersRepository.updateOrder(value.orderId, OrderStatus.COMPLETED) ?: return CompletableFuture.completedStage(null)
+                val orderRecord = order.toOrderRecord()
+                emitter.send(orderRecord)
             }
             ShipmentStatus.OUT_FOR_SHIPMENT -> {
-				val order = ordersRepository.updateOrder(value.orderId, OrderStatus.OUT_FOR_SHIPMENT) ?: return CompletableFuture.completedStage(null)
-				val orderRecord = order.toOrderRecord()
-				emitter.send(orderRecord)
+                val order = ordersRepository.updateOrder(value.orderId, OrderStatus.OUT_FOR_SHIPMENT) ?: return CompletableFuture.completedStage(null)
+                val orderRecord = order.toOrderRecord()
+                emitter.send(orderRecord)
             }
             else -> return CompletableFuture.completedStage(null)
         }
@@ -87,7 +87,7 @@ class EventsService(
             OrderValidationStatus.INVALID -> {
                 // TODO: Do we need to inform the user here about the out of stock ?
                 ordersRepository.updateOrder(value.orderId, OrderStatus.OUT_OF_STOCK)
-				CompletableFuture.completedStage(null)
+                CompletableFuture.completedStage(null)
             }
         }
     }

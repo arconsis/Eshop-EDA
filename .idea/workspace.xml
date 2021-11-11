@@ -6,6 +6,56 @@
   <component name="ChangeListManager">
     <list default="true" id="ff6440ac-e013-4cf8-8361-f11025772b09" name="Changes" comment="EDA-57:">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/EmailService/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/EmailService/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/EmailService/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/EmailService/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/common/Topics.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/common/Topics.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/common/Utils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/common/Utils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/data/email/EmailApi.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/data/email/EmailApi.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/data/email/EmailApiHeadersFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/data/email/EmailApiHeadersFactory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/data/email/EmailRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/data/email/EmailRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/domain/events/StreamsService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/domain/events/StreamsService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/domain/users/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/EmailService/src/main/kotlin/com/arconsis/domain/users/User.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/common/Topics.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/common/Topics.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/events/EventsService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/events/EventsService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/events/StreamsService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/events/StreamsService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/orders/OrderRequestEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/orders/OrderRequestEvent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/orders/OrdersService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/orders/OrdersService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/ordersValidations/OrderValidation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/ordersValidations/OrderValidation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/payments/Payment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/payments/Payment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/shipments/Shipment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/domain/shipments/Shipment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/http/orders/OrdersResource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/http/orders/OrdersResource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/http/orders/dto/OrderCreateDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/OrderService/src/main/kotlin/com/arconsis/http/orders/dto/OrderCreateDto.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/PaymentService/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/PaymentService/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/PaymentService/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/PaymentService/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/PaymentService/src/main/kotlin/com/arconsis/common/Topics.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/PaymentService/src/main/kotlin/com/arconsis/common/Topics.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/PaymentService/src/main/kotlin/com/arconsis/domain/EventsService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/PaymentService/src/main/kotlin/com/arconsis/domain/EventsService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/PaymentService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/PaymentService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/PaymentService/src/main/kotlin/com/arconsis/domain/payments/Payment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/PaymentService/src/main/kotlin/com/arconsis/domain/payments/Payment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/PaymentService/src/main/kotlin/com/arconsis/domain/payments/PaymentEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/PaymentService/src/main/kotlin/com/arconsis/domain/payments/PaymentEvent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/data/UserEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/data/UserEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/data/UserEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/data/UserEvent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/data/UsersMapper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/data/UsersMapper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/data/UsersRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/data/UsersRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/domain/EventsService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/domain/EventsService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/domain/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/domain/User.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/domain/UsersService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/domain/UsersService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/http/UserResource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/http/UserResource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/http/dto/UserCreate.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/src/main/kotlin/com/arconsis/http/dto/UserCreate.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/src/native-test/kotlin/com/arconsis/NativeReactiveGreetingResourceIT.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/src/native-test/kotlin/com/arconsis/NativeReactiveGreetingResourceIT.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/UserService/src/test/kotlin/com/arconsis/ReactiveGreetingResourceTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/UserService/src/test/kotlin/com/arconsis/ReactiveGreetingResourceTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/WarehouseService/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/WarehouseService/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/WarehouseService/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/WarehouseService/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/common/Topics.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/common/Topics.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/domain/EventsService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/domain/EventsService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/domain/orders/OrderValidationEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/domain/orders/OrderValidationEvent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/domain/products/Product.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/domain/products/Product.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +108,83 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="emailservice" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="emailservice" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="emailservice" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="formatting" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ordersservice" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ordersservice" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ordersservice" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="formatting" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="paymentsservice" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="paymentsservice" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="paymentsservice" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="formatting" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="userservice" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="userservice" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="userservice" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="formatting" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="warehouseservice" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="warehouseservice" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="warehouseservice" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="formatting" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -72,6 +198,14 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="false" />
@@ -113,7 +247,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Quarkus.warehouseservice.main">
+  <component name="RunManager" selected="Gradle.WarehouseService [ktlintFormat]">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="Eshop-EDA" />
       <working_directory value="$PROJECT_DIR$" />
@@ -133,10 +267,10 @@
       <framework value="gotest" />
       <method v="2" />
     </configuration>
-    <configuration name="ShippingService [ktlintCheck]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="EmailService [ktlintFormat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/ShippingService" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/EmailService" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" />
         <option name="taskDescriptions">
@@ -144,7 +278,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="ktlintCheck" />
+            <option value="ktlintFormat" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -154,10 +288,10 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="UserService [ktlintCheck]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="OrderService [ktlintFormat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/UserService" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/OrderService" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" />
         <option name="taskDescriptions">
@@ -165,7 +299,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="ktlintCheck" />
+            <option value="ktlintFormat" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -175,10 +309,10 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="UserService [ktlintFormat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="PaymentService [ktlintFormat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/UserService" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/PaymentService" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" />
         <option name="taskDescriptions">
@@ -388,11 +522,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.WarehouseService [ktlintCheck]" />
         <item itemvalue="Gradle.WarehouseService [ktlintFormat]" />
-        <item itemvalue="Gradle.UserService [ktlintCheck]" />
-        <item itemvalue="Gradle.UserService [ktlintFormat]" />
-        <item itemvalue="Gradle.ShippingService [ktlintCheck]" />
+        <item itemvalue="Gradle.PaymentService [ktlintFormat]" />
+        <item itemvalue="Gradle.OrderService [ktlintFormat]" />
+        <item itemvalue="Gradle.EmailService [ktlintFormat]" />
+        <item itemvalue="Gradle.WarehouseService [ktlintCheck]" />
       </list>
     </recent_temporary>
   </component>
@@ -408,6 +542,7 @@
       <workItem from="1636127827389" duration="19000" />
       <workItem from="1636145884452" duration="8000" />
       <workItem from="1636479182731" duration="822000" />
+      <workItem from="1636652885734" duration="154000" />
     </task>
     <servers />
   </component>

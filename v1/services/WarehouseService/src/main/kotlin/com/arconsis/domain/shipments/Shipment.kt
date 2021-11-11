@@ -10,10 +10,10 @@ enum class ShipmentStatus {
 }
 
 data class Shipment(
-	val id: UUID,
-	val orderId: UUID,
-	val status: ShipmentStatus,
-	val userId: UUID
+    val id: UUID,
+    val orderId: UUID,
+    val status: ShipmentStatus,
+    val userId: UUID
 )
 
 class UpdateShipment(val id: UUID, val status: ShipmentStatus)

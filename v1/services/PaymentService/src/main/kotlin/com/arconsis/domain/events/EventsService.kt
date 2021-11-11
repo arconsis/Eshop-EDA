@@ -33,8 +33,8 @@ class EventsService(
                 Thread.sleep(5000)
                 val createPaymentDto = value.toCreatePayment(PaymentStatus.SUCCESS)
                 val payment = paymentsRepository.createPayment(createPaymentDto) ?: return CompletableFuture.completedStage(null)
-				val paymentRecord = payment.toPaymentRecord()
-				emitter.send(paymentRecord)
+                val paymentRecord = payment.toPaymentRecord()
+                emitter.send(paymentRecord)
             }
             else -> CompletableFuture.completedStage(null)
         }

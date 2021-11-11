@@ -8,7 +8,6 @@ import com.arconsis.domain.payments.PaymentStatus
 import com.arconsis.domain.payments.toPaymentEvent
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde
 import org.apache.kafka.common.serialization.Serdes
-import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
