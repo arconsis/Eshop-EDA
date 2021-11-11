@@ -25,8 +25,8 @@ class ShipmentEntity(
     @Column(name = "order_id", nullable = false)
     var orderId: UUID,
 
-	@Column(name = "user_id", nullable = false)
-	var userId: UUID,
+    @Column(name = "user_id", nullable = false)
+    var userId: UUID,
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "shipment_status")
@@ -46,11 +46,11 @@ fun ShipmentEntity.toShipment() = Shipment(
     id = id!!,
     orderId = orderId,
     status = status,
-	userId = userId
+    userId = userId
 )
 
 fun CreateShipment.toShipmentEntity() = ShipmentEntity(
     orderId = orderId,
-	userId = userId,
+    userId = userId,
     status = ShipmentStatus.PREPARING_SHIPMENT
 )

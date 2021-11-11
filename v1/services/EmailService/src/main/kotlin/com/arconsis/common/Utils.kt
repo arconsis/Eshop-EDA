@@ -10,9 +10,9 @@ fun String?.addHeader(name: String, clientHeaders: MultivaluedMap<String, String
 }
 
 inline fun <reified T> Response.body(statusCodeRange: IntRange = 200..299, onError: (Response) -> T? = { null }): T? = when (this.status) {
-	in statusCodeRange -> {
-		bufferEntity()
-		readEntity(T::class.java)
-	}
-	else               -> onError(this)
+    in statusCodeRange -> {
+        bufferEntity()
+        readEntity(T::class.java)
+    }
+    else -> onError(this)
 }

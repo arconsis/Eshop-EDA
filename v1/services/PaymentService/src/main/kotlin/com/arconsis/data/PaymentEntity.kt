@@ -18,33 +18,33 @@ import javax.persistence.*
     typeClass = PostgreSQLEnumType::class
 )
 class PaymentEntity(
-    @Id   
-    @GeneratedValue   
+    @Id
+    @GeneratedValue
     var id: UUID? = null,
 
-    @Column(name = "user_id", nullable = false)   
+    @Column(name = "user_id", nullable = false)
     var userId: UUID,
 
-    @Column(name = "order_id", nullable = false)   
+    @Column(name = "order_id", nullable = false)
     var orderId: UUID,
 
-    @Enumerated(EnumType.STRING)   
-    @Column(columnDefinition = "order_status")   
-    @Type(type = "pgsql_enum")   
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "order_status")
+    @Type(type = "pgsql_enum")
     var status: PaymentStatus,
 
-    @Column(nullable = false)   
+    @Column(nullable = false)
     var amount: Double,
 
-    @Column(nullable = false)   
+    @Column(nullable = false)
     var currency: String,
 
-    @CreationTimestamp   
-    @Column(name = "created_at")   
+    @CreationTimestamp
+    @Column(name = "created_at")
     var createdAt: Instant? = null,
 
-    @UpdateTimestamp   
-    @Column(name = "updated_at")   
+    @UpdateTimestamp
+    @Column(name = "updated_at")
     var updatedAt: Instant? = null,
 )
 

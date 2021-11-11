@@ -32,7 +32,7 @@ class OrdersService(
         return when (order.status) {
             OrderStatus.PENDING -> handleOrderPending(order)
             OrderStatus.PAID -> handleOrderPaid(order)
-			else -> CompletableFuture.completedStage(null)
+            else -> CompletableFuture.completedStage(null)
         }
     }
 
@@ -47,14 +47,14 @@ class OrdersService(
             status = if (stockUpdated) OrderValidationStatus.VALID else OrderValidationStatus.INVALID
         )
 
-		return orderValidationEmitter.send(Record.of(order.id.toString(), orderValidation))
+        return orderValidationEmitter.send(Record.of(order.id.toString(), orderValidation))
     }
 
     private fun handleOrderPaid(order: Order): CompletionStage<Void> {
         var shipment = this.shipmentsRepository.createShipment(
             CreateShipment(
                 orderId = order.id,
-				userId = order.userId,
+                userId = order.userId,
                 status = ShipmentStatus.PREPARING_SHIPMENT
             )
         )
