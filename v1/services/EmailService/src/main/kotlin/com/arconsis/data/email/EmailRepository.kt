@@ -8,12 +8,17 @@ class EmailRepository(
     @RestClient val emailApi: EmailApi
 ) {
     fun sendEmail(emailDto: EmailDto) {
-        emailApi.sendEmail(
-            senderEmail = emailDto.senderEmail,
-            receiverEmail = emailDto.receiverEmail,
-            subject = emailDto.subject,
-            text = emailDto.text
-        ).await().indefinitely()
+		try {
+			emailApi.sendEmail(
+				senderEmail = emailDto.senderEmail,
+				receiverEmail = emailDto.receiverEmail,
+				subject = emailDto.subject,
+				text = emailDto.text
+			).await().indefinitely()
+		} catch (e: Exception) {
+			return
+		}
+
     }
 }
 
