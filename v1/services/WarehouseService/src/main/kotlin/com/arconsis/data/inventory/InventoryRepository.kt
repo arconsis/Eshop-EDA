@@ -5,6 +5,7 @@ import com.arconsis.data.inventory.InventoryEntity.Companion.STOCK
 import com.arconsis.domain.inventory.CreateInventory
 import com.arconsis.domain.inventory.Inventory
 import com.arconsis.domain.inventory.UpdateInventory
+import io.smallrye.mutiny.Uni
 import io.smallrye.mutiny.coroutines.awaitSuspending
 import org.hibernate.reactive.mutiny.Mutiny
 import java.util.*
@@ -42,19 +43,13 @@ class InventoryRepository(private val sessionFactory: Mutiny.SessionFactory) {
         return inventoryEntity.toInventory()
     }
 
-    suspend fun reserveProductStock(productId: String, stock: Int): Boolean {
-        return try {
-
-            val updatedRows = sessionFactory.withTransaction { s, _ ->
-                s.createNamedQuery(InventoryEntity.UPDATE_PRODUCT_STOCK, InventoryEntity::class.java)
-                    .setParameter(PRODUCT_ID, productId)
-                    .setParameter(STOCK, stock)
-                    .executeUpdate()
-            }.awaitSuspending()
-
-            return updatedRows == 1
-        } catch (e: Exception) {
-            false
+    fun reserveProductStock(productId: String, stock: Int): Uni<Boolean> {
+        return sessionFactory.withTransaction { s, _ ->
+            s.createNamedQuery<InventoryEntity>(InventoryEntity.UPDATE_PRODUCT_STOCK)
+                .setParameter(PRODUCT_ID, productId)
+                .setParameter(STOCK, stock)
+                .executeUpdate()
+                .onItem().transform { updatedRows -> updatedRows == 1 }
         }
     }
 }

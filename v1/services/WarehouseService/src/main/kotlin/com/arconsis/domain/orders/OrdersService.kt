@@ -5,10 +5,9 @@ import com.arconsis.data.shipments.ShipmentsRepository
 import com.arconsis.domain.ordersvalidations.OrderValidation
 import com.arconsis.domain.ordersvalidations.OrderValidationStatus
 import com.arconsis.domain.shipments.*
-import io.smallrye.mutiny.coroutines.awaitSuspending
+import io.smallrye.mutiny.Uni
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
-import kotlinx.coroutines.delay
 import org.eclipse.microprofile.reactive.messaging.Channel
 import org.eclipse.microprofile.reactive.messaging.Incoming
 import javax.enterprise.context.ApplicationScoped
@@ -22,41 +21,48 @@ class OrdersService(
 ) {
 
     @Incoming("order-in")
-    suspend fun consumeOrderEvents(orderRecord: Record<String, Order>) {
+    fun consumeOrderEvents(orderRecord: Record<String, Order>): Uni<Void> {
         val order = orderRecord.value()
 
-        when (order.status) {
+        return when (order.status) {
             OrderStatus.PENDING -> handleOrderPending(order)
             OrderStatus.PAID -> handleOrderPaid(order)
-            else -> return
+            else -> Uni.createFrom().voidItem()
         }
     }
 
-    private suspend fun handleOrderPending(order: Order) {
-        val stockUpdated = inventoryRepository.reserveProductStock(order.productId, order.quantity)
+    private fun handleOrderPending(order: Order): Uni<Void> {
 
-        val orderValidation = OrderValidation(
-            productId = order.productId,
-            quantity = order.quantity,
-            orderId = order.id,
-            userId = order.userId,
-            status = if (stockUpdated) OrderValidationStatus.VALID else OrderValidationStatus.INVALID
-        )
+        return inventoryRepository.reserveProductStock(order.productId, order.quantity).onItem()
+            .transformToUni { stockUpdated ->
+                val orderValidation = OrderValidation(
+                    productId = order.productId,
+                    quantity = order.quantity,
+                    orderId = order.id,
+                    userId = order.userId,
+                    status = if (stockUpdated) OrderValidationStatus.VALID else OrderValidationStatus.INVALID
+                )
 
-        orderValidationEmitter.send(Record.of(order.id.toString(), orderValidation)).awaitSuspending()
+                orderValidationEmitter.send(Record.of(order.id.toString(), orderValidation))
+            }
     }
 
-    private suspend fun handleOrderPaid(order: Order) {
-        var shipment = this.shipmentsRepository.createShipment(
+    private fun handleOrderPaid(order: Order): Uni<Void> {
+        return this.shipmentsRepository.createShipment(
             CreateShipment(
                 orderId = order.id,
                 userId = order.userId,
                 status = ShipmentStatus.PREPARING_SHIPMENT
             )
-        )
-        // TODO: Simulating shipment. Check if there is an alternative for this
-        delay(10000)
-        shipment = this.shipmentsRepository.updateShipment(UpdateShipment(shipment.id, ShipmentStatus.OUT_FOR_SHIPMENT))
-        shipmentEmitter.send(shipment.toShipmentRecord()).awaitSuspending()
+        ).onItem().transformToUni { shipment ->
+            this.shipmentsRepository.updateShipment(
+                UpdateShipment(
+                    shipment.id,
+                    ShipmentStatus.OUT_FOR_SHIPMENT
+                )
+            )
+        }.onItem().transformToUni { shipment ->
+            shipmentEmitter.send(shipment.toShipmentRecord())
+        }
     }
 }
