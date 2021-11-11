@@ -26,10 +26,10 @@ class EventsService {
                 Consumed.with(Serdes.String(), orderSerde)
             )
             .filter { _, order -> order.isPending }
-            .map { _, order ->
+            .mapValues { order ->
                 // TODO: Add logic to check validity of the order
                 val event = order.toOrderValidationEvent(OrderValidationType.VALID)
-                KeyValue.pair(event.key, event.value)
+                event.value
             }.to(Topics.ORDERS_VALIDATIONS.topicName, Produced.with(Serdes.String(), orderValidationSerde))
 
         return builder.build()

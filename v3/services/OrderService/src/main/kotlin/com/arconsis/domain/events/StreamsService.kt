@@ -51,9 +51,9 @@ class StreamsService {
             .join(ordersTable) { _, order ->
                 order
             }
-            .map { _, orderValidation ->
+            .mapValues { orderValidation ->
                 val validOrder = orderValidation.copy(status = OrderStatus.VALID)
-                KeyValue.pair(validOrder.userId.toString(), validOrder)
+                validOrder
             }
             .to(Topics.ORDERS.topicName, Produced.with(Serdes.String(), orderSerde))
     }

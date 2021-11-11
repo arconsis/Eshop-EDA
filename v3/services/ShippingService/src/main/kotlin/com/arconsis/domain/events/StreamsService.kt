@@ -8,7 +8,6 @@ import com.arconsis.domain.shipments.ShipmentStatus
 import com.arconsis.domain.shipments.toShipmentEvent
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde
 import org.apache.kafka.common.serialization.Serdes
-import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
@@ -30,10 +29,10 @@ class StreamsService {
                 Consumed.with(Serdes.String(), orderTopicSerde)
             )
             .filter { _, order -> order.isPaid }
-            .map { _, order ->
+            .mapValues { order ->
                 // TODO: add some latency to simulate remote call with some courier
                 val event = order.toShipmentEvent(ShipmentStatus.OUT_FOR_SHIPMENT)
-                KeyValue.pair(event.key, event.value)
+                event.value
             }.to(Topics.SHIPMENTS.topicName, Produced.with(Serdes.String(), shipmentTopicSerde))
 
         return builder.build()
