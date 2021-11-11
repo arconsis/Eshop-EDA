@@ -56,16 +56,20 @@ class EventsService(
     @Incoming("shipments-in")
     @Blocking
     @Transactional
-    fun consumeShipmentEvents(shipmentRecord: Record<String, Shipment>) {
+    fun consumeShipmentEvents(shipmentRecord: Record<String, Shipment>): CompletionStage<Void> {
         val value = shipmentRecord.value()
-        when (value.status) {
+        return when (value.status) {
             ShipmentStatus.SHIPPED -> {
-                ordersRepository.updateOrder(value.orderId, OrderStatus.COMPLETED)
+				val order = ordersRepository.updateOrder(value.orderId, OrderStatus.COMPLETED) ?: return CompletableFuture.completedStage(null)
+				val orderRecord = order.toOrderRecord()
+				emitter.send(orderRecord)
             }
             ShipmentStatus.OUT_FOR_SHIPMENT -> {
-                ordersRepository.updateOrder(value.orderId, OrderStatus.OUT_FOR_SHIPMENT)
+				val order = ordersRepository.updateOrder(value.orderId, OrderStatus.OUT_FOR_SHIPMENT) ?: return CompletableFuture.completedStage(null)
+				val orderRecord = order.toOrderRecord()
+				emitter.send(orderRecord)
             }
-            else -> return
+            else -> return CompletableFuture.completedStage(null)
         }
     }
 
