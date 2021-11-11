@@ -4,10 +4,10 @@ import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 import java.util.*
 
 data class Shipment(
-    val shipmentId: UUID,
-    val orderId: UUID,
-    val userId: UUID,
-    val status: ShipmentStatus,
+	val id: UUID,
+	val orderId: UUID,
+	val userId: UUID,
+	val status: ShipmentStatus,
 )
 
 enum class ShipmentStatus {

@@ -25,6 +25,9 @@ class ShipmentEntity(
     @Column(name = "order_id", nullable = false)
     var orderId: UUID,
 
+	@Column(name = "user_id", nullable = false)
+	var userId: UUID,
+
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "shipment_status")
     @Type(type = "pgsql_enum")
@@ -43,9 +46,11 @@ fun ShipmentEntity.toShipment() = Shipment(
     id = id!!,
     orderId = orderId,
     status = status,
+	userId = userId
 )
 
 fun CreateShipment.toShipmentEntity() = ShipmentEntity(
     orderId = orderId,
+	userId = userId,
     status = ShipmentStatus.PREPARING_SHIPMENT
 )

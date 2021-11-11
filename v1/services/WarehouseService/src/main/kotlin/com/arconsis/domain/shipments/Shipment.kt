@@ -9,11 +9,16 @@ enum class ShipmentStatus {
     SHIPPED,
 }
 
-data class Shipment(val id: UUID, val orderId: UUID, val status: ShipmentStatus)
+data class Shipment(
+	val id: UUID,
+	val orderId: UUID,
+	val status: ShipmentStatus,
+	val userId: UUID
+)
 
 class UpdateShipment(val id: UUID, val status: ShipmentStatus)
 
-class CreateShipment(val orderId: UUID, val status: ShipmentStatus)
+class CreateShipment(val orderId: UUID, val userId: UUID, val status: ShipmentStatus)
 
 fun Shipment.toShipmentRecord(): Record<String, Shipment> = Record.of(
     orderId.toString(),

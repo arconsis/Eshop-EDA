@@ -54,6 +54,7 @@ class OrdersService(
         var shipment = this.shipmentsRepository.createShipment(
             CreateShipment(
                 orderId = order.id,
+				userId = order.userId,
                 status = ShipmentStatus.PREPARING_SHIPMENT
             )
         )

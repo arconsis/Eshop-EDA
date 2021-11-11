@@ -8,6 +8,7 @@ CREATE TABLE shipments
 (
     id       UUID PRIMARY KEY,
     order_id UUID            NOT NULL UNIQUE,
+    user_id UUID            NOT NULL UNIQUE,
     status   shipment_status NOT NULL,
     created_at TIMESTAMP,
     updated_at TIMESTAMP

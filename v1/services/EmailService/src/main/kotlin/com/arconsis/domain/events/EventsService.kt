@@ -27,19 +27,19 @@ class EventsService(
 //        )
 //    }
 
-    @Blocking
-    @Incoming("shipments-in")
-    fun consumeShipments(shipmentEvent: ShipmentEvent) {
-        val (_, shipment) = shipmentEvent
-        emailRepository.sendEmail(
-            EmailDto(
-                senderEmail = sender,
-                receiverEmail = shipment.userEmail,
-                subject = EMAIL_SUBJECT_ORDER_PAID,
-                text = "New order with number: ${shipment.orderId} just placed! We will inform you with another email about shipment progress."
-            ),
-        )
-    }
+//    @Blocking
+//    @Incoming("shipments-in")
+//    fun consumeShipments(shipmentEvent: ShipmentEvent) {
+//        val (_, shipment) = shipmentEvent
+//        emailRepository.sendEmail(
+//            EmailDto(
+//                senderEmail = sender,
+//                receiverEmail = shipment.userEmail,
+//                subject = EMAIL_SUBJECT_ORDER_PAID,
+//                text = "New order with number: ${shipment.orderId} just placed! We will inform you with another email about shipment progress."
+//            ),
+//        )
+//    }
 
     companion object {
         private const val EMAIL_SUBJECT_ORDER_OUT_FOR_SHIPMENT = "New order was placed!"
