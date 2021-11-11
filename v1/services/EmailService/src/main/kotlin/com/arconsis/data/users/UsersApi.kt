@@ -1,5 +1,6 @@
 package com.arconsis.data.users
 
+import io.smallrye.common.annotation.Blocking
 import io.smallrye.mutiny.Uni
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
 import java.util.*
@@ -13,8 +14,7 @@ import javax.ws.rs.core.Response
 @ApplicationScoped
 interface UsersApi {
 	@GET
-	@Path("/{userId}")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{userId}")
 	fun getUser(
 		@PathParam("userId") userId: UUID
 	): Uni<UsersResponse>
