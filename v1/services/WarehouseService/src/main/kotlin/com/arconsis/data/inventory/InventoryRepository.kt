@@ -5,42 +5,51 @@ import com.arconsis.data.inventory.InventoryEntity.Companion.STOCK
 import com.arconsis.domain.inventory.CreateInventory
 import com.arconsis.domain.inventory.Inventory
 import com.arconsis.domain.inventory.UpdateInventory
+import io.smallrye.mutiny.Uni
+import io.smallrye.mutiny.coroutines.awaitSuspending
+import org.hibernate.reactive.mutiny.Mutiny
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
-import javax.persistence.EntityManager
 
 @ApplicationScoped
-class InventoryRepository(private val entityManager: EntityManager) {
+class InventoryRepository(private val sessionFactory: Mutiny.SessionFactory) {
 
-    fun getInventory(id: UUID): Inventory? {
-        val inventoryEntity = entityManager.find(InventoryEntity::class.java, id)
+    suspend fun getInventory(id: UUID): Inventory? {
+
+        val inventoryEntity = sessionFactory.withTransaction { s, _ ->
+            s.find(InventoryEntity::class.java, id)
+        }.awaitSuspending()
+
         return inventoryEntity?.toInventory()
     }
 
-    fun createInventory(createInventory: CreateInventory): Inventory {
+    suspend fun createInventory(createInventory: CreateInventory): Inventory {
+
         val inventoryEntity = createInventory.toInventoryEntity()
-        entityManager.persist(inventoryEntity)
-        entityManager.flush()
+        sessionFactory.withTransaction { s, _ ->
+            s.persist(inventoryEntity)
+        }.awaitSuspending()
+
         return inventoryEntity.toInventory()
     }
 
-    fun updateInventory(updateInventory: UpdateInventory): Inventory {
-        val inventoryEntity = entityManager.find(InventoryEntity::class.java, updateInventory.id)
-        inventoryEntity.stock = updateInventory.stock ?: inventoryEntity.stock
-        entityManager.merge(inventoryEntity)
-        entityManager.flush()
+    suspend fun updateInventory(updateInventory: UpdateInventory): Inventory {
+
+        val inventoryEntity = sessionFactory.withTransaction { s, _ ->
+            s.find(InventoryEntity::class.java, updateInventory.id)
+                .onItem().ifNotNull().invoke { entity -> entity.stock = updateInventory.stock ?: entity.stock }
+                .onItem().ifNotNull().transformToUni { entity -> s.merge(entity) }
+        }.awaitSuspending()
         return inventoryEntity.toInventory()
     }
 
-    fun reserveProductStock(productId: String, stock: Int): Boolean {
-        return try {
-            val updatedRows = entityManager.createNamedQuery(InventoryEntity.UPDATE_PRODUCT_STOCK)
+    fun reserveProductStock(productId: String, stock: Int): Uni<Boolean> {
+        return sessionFactory.withTransaction { s, _ ->
+            s.createNamedQuery<InventoryEntity>(InventoryEntity.UPDATE_PRODUCT_STOCK)
                 .setParameter(PRODUCT_ID, productId)
                 .setParameter(STOCK, stock)
                 .executeUpdate()
-            return updatedRows == 1
-        } catch (e: Exception) {
-            false
+                .onItem().transform { updatedRows -> updatedRows == 1 }
         }
     }
 }

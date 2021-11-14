@@ -23,8 +23,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-kafka-client")
     implementation("io.quarkus:quarkus-smallrye-reactive-messaging-kafka")
-    implementation("io.quarkus:quarkus-jdbc-postgresql")
-    implementation("io.quarkus:quarkus-hibernate-orm")
+    implementation("io.quarkus:quarkus-smallrye-reactive-messaging-kotlin")
+    implementation("io.quarkus:quarkus-hibernate-reactive")
+    implementation("io.quarkus:quarkus-reactive-pg-client")
     implementation("io.quarkus:quarkus-flyway")
     implementation("io.quarkus:quarkus-smallrye-health")
     implementation("io.quarkus:quarkus-arc")
@@ -43,6 +44,7 @@ java {
 
 allOpen {
     annotation("javax.ws.rs.Path")
+    annotation("javax.persistence.Entity")
     annotation("javax.enterprise.context.ApplicationScoped")
     annotation("javax.enterprise.context.RequestScoped")
     annotation("io.quarkus.test.junit.QuarkusTest")

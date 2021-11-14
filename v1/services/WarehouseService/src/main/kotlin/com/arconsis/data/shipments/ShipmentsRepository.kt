@@ -3,24 +3,27 @@ package com.arconsis.data.shipments
 import com.arconsis.domain.shipments.CreateShipment
 import com.arconsis.domain.shipments.Shipment
 import com.arconsis.domain.shipments.UpdateShipment
+import io.smallrye.mutiny.Uni
+import org.hibernate.reactive.mutiny.Mutiny
 import javax.enterprise.context.ApplicationScoped
-import javax.persistence.EntityManager
 
 @ApplicationScoped
-class ShipmentsRepository(private val entityManager: EntityManager) {
+class ShipmentsRepository(private val sessionFactory: Mutiny.SessionFactory) {
 
-    fun createShipment(createShipment: CreateShipment): Shipment {
+    fun createShipment(createShipment: CreateShipment): Uni<Shipment> {
+
         val shipmentEntity = createShipment.toShipmentEntity()
-        entityManager.persist(shipmentEntity)
-        entityManager.flush()
-        return shipmentEntity.toShipment()
+        return sessionFactory.withTransaction { s, _ ->
+            s.persist(shipmentEntity).map { shipmentEntity.toShipment() }
+        }
     }
 
-    fun updateShipment(updateShipment: UpdateShipment): Shipment {
-        val shipmentEntity = entityManager.find(ShipmentEntity::class.java, updateShipment.id)
-        shipmentEntity.status = updateShipment.status
-        entityManager.merge(shipmentEntity)
-        entityManager.flush()
-        return shipmentEntity.toShipment()
+    fun updateShipment(updateShipment: UpdateShipment): Uni<Shipment> {
+        return sessionFactory.withTransaction { s, _ ->
+            s.find(ShipmentEntity::class.java, updateShipment.id)
+                .onItem().ifNotNull().invoke { entity -> entity.status = updateShipment.status }
+                .onItem().ifNotNull().transformToUni { entity -> s.merge(entity) }
+                .onItem().transform { it.toShipment() }
+        }
     }
 }
