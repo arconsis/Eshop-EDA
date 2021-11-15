@@ -27,12 +27,12 @@ class OrdersService(
         return when (order.status) {
             OrderStatus.PENDING -> handleOrderPending(order)
             OrderStatus.PAID -> handleOrderPaid(order)
+            OrderStatus.PAYMENT_FAILED -> handleOrderPaymentFailed(order)
             else -> Uni.createFrom().voidItem()
         }
     }
 
     private fun handleOrderPending(order: Order): Uni<Void> {
-
         return inventoryRepository.reserveProductStock(order.productId, order.quantity).onItem()
             .transformToUni { stockUpdated ->
                 val orderValidation = OrderValidation(
@@ -64,5 +64,12 @@ class OrdersService(
         }.flatMap { shipment ->
             shipmentEmitter.send(shipment.toShipmentRecord())
         }
+    }
+
+    private fun handleOrderPaymentFailed(order: Order): Uni<Void> {
+        return inventoryRepository.increaseProductStock(order.productId, order.quantity)
+            .flatMap {
+                Uni.createFrom().voidItem()
+            }
     }
 }

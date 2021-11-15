@@ -7,6 +7,7 @@ enum class ShipmentStatus {
     PREPARING_SHIPMENT,
     OUT_FOR_SHIPMENT,
     SHIPPED,
+    CANCELLED,
 }
 
 data class Shipment(
