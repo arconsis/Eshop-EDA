@@ -23,7 +23,7 @@ class ShipmentsRepository(private val sessionFactory: Mutiny.SessionFactory) {
             s.find(ShipmentEntity::class.java, updateShipment.id)
                 .onItem().ifNotNull().invoke { entity -> entity.status = updateShipment.status }
                 .onItem().ifNotNull().transformToUni { entity -> s.merge(entity) }
-                .onItem().transform { it.toShipment() }
+                .map { it.toShipment() }
         }
     }
 }

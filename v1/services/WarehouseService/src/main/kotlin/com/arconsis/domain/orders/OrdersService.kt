@@ -54,14 +54,14 @@ class OrdersService(
                 userId = order.userId,
                 status = ShipmentStatus.PREPARING_SHIPMENT
             )
-        ).onItem().transformToUni { shipment ->
+        ).flatMap { shipment ->
             this.shipmentsRepository.updateShipment(
                 UpdateShipment(
                     shipment.id,
                     ShipmentStatus.OUT_FOR_SHIPMENT
                 )
             )
-        }.onItem().transformToUni { shipment ->
+        }.flatMap { shipment ->
             shipmentEmitter.send(shipment.toShipmentRecord())
         }
     }

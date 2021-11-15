@@ -49,7 +49,7 @@ class InventoryRepository(private val sessionFactory: Mutiny.SessionFactory) {
                 .setParameter(PRODUCT_ID, productId)
                 .setParameter(STOCK, stock)
                 .executeUpdate()
-                .onItem().transform { updatedRows -> updatedRows == 1 }
+                .map { updatedRows -> updatedRows == 1 }
         }
     }
 }
