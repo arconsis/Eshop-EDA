@@ -16,7 +16,7 @@ import javax.persistence.*
         name = UPDATE_PRODUCT_STOCK,
         query = """
             update inventory i
-            set i.stock = :$STOCK
+            set i.stock = i.stock - :$STOCK
             where i.productId = :$PRODUCT_ID
         """
     )

@@ -4,7 +4,7 @@ import com.arconsis.domain.events.EventsService
 import com.arconsis.domain.orders.CreateOrder
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.orders.OrdersService
-import io.smallrye.common.annotation.Blocking
+import io.smallrye.mutiny.Uni
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.ws.rs.*
@@ -21,16 +21,15 @@ class OrdersResource(
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun createOrder(createOrder: CreateOrder, uriInfo: UriInfo): Order {
+    fun createOrder(createOrder: CreateOrder, uriInfo: UriInfo): Uni<Order> {
         return eventsService.createOrder(createOrder)
     }
 
-    @Blocking
     @GET
     @Path("/{orderId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun getOrder(@PathParam("orderId") orderId: UUID): Order {
+    fun getOrder(@PathParam("orderId") orderId: UUID): Uni<Order> {
         return ordersService.getOrder(orderId)
     }
 }
