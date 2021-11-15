@@ -16,14 +16,14 @@ class OrdersRepository(private val sessionFactory: Mutiny.SessionFactory) {
         return sessionFactory.withTransaction { s, _ ->
 
             s.find(OrderEntity::class.java, orderId)
-                .onItem().transform { orderEntity ->
+                .map { orderEntity ->
                     orderEntity.status = status
                     orderEntity
                 }
                 .onItem().ifNotNull().transformToUni { orderEntity ->
                     s.merge(orderEntity)
                 }
-                .onItem().transform { updatedEntity -> updatedEntity.toOrder() }
+                .map { updatedEntity -> updatedEntity.toOrder() }
         }
     }
 
@@ -32,7 +32,7 @@ class OrdersRepository(private val sessionFactory: Mutiny.SessionFactory) {
 
         return sessionFactory.withTransaction { s, _ ->
             s.persist(orderEntity)
-                .onItem().transform { orderEntity.toOrder() }
+                .map { orderEntity.toOrder() }
         }
     }
 
@@ -40,7 +40,7 @@ class OrdersRepository(private val sessionFactory: Mutiny.SessionFactory) {
 
         return sessionFactory.withTransaction { s, _ ->
             s.find(OrderEntity::class.java, orderId)
-                .onItem().transform { orderEntity -> orderEntity.toOrder() }
+                .map { orderEntity -> orderEntity.toOrder() }
         }
     }
 }

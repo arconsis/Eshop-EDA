@@ -26,9 +26,9 @@ class EventsService(
 
     fun createOrder(createOrder: CreateOrder): Uni<Order> {
         return ordersRepository.createOrder(createOrder)
-            .onItem().transformToUni { order ->
+            .flatMap { order ->
                 val orderRecord = order.toOrderRecord()
-                emitter.send(orderRecord).onItem().transform {
+                emitter.send(orderRecord).map {
                     order
                 }
             }
@@ -39,10 +39,11 @@ class EventsService(
         val value = paymentRecord.value()
         return when (value.status) {
             PaymentStatus.SUCCESS -> {
-                ordersRepository.updateOrder(value.orderId, OrderStatus.PAID).onItem().transformToUni { order ->
-                    val orderRecord = order.toOrderRecord()
-                    emitter.send(orderRecord)
-                }
+                ordersRepository.updateOrder(value.orderId, OrderStatus.PAID)
+                    .flatMap { order ->
+                        val orderRecord = order.toOrderRecord()
+                        emitter.send(orderRecord)
+                    }
 
             }
             PaymentStatus.FAILED -> {
@@ -56,10 +57,11 @@ class EventsService(
         val value = shipmentRecord.value()
         return when (value.status) {
             ShipmentStatus.SHIPPED -> {
-                ordersRepository.updateOrder(value.orderId, OrderStatus.COMPLETED).onItem().transformToUni { order ->
-                    val orderRecord = order.toOrderRecord()
-                    emitter.send(orderRecord)
-                }
+                ordersRepository.updateOrder(value.orderId, OrderStatus.COMPLETED)
+                    .flatMap { order ->
+                        val orderRecord = order.toOrderRecord()
+                        emitter.send(orderRecord)
+                    }
 
             }
             ShipmentStatus.OUT_FOR_SHIPMENT -> {
@@ -78,10 +80,11 @@ class EventsService(
         val value = orderValidationRecord.value()
         return when (value.status) {
             OrderValidationStatus.VALID -> {
-                ordersRepository.updateOrder(value.orderId, OrderStatus.VALID).onItem().transformToUni { order ->
-                    val orderRecord = order.toOrderRecord()
-                    emitter.send(orderRecord)
-                }
+                ordersRepository.updateOrder(value.orderId, OrderStatus.VALID)
+                    .flatMap { order ->
+                        val orderRecord = order.toOrderRecord()
+                        emitter.send(orderRecord)
+                    }
             }
             OrderValidationStatus.INVALID -> {
                 // TODO: Do we need to inform the user here about the out of stock ?
