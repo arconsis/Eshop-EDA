@@ -47,7 +47,11 @@ class EventsService(
 
             }
             PaymentStatus.FAILED -> {
-                ordersRepository.updateOrder(value.orderId, OrderStatus.PAYMENT_FAILED).replaceWithVoid()
+                ordersRepository.updateOrder(value.orderId, OrderStatus.PAYMENT_FAILED)
+                    .flatMap { order ->
+                        val orderRecord = order.toOrderRecord()
+                        emitter.send(orderRecord)
+                    }
             }
         }
     }
