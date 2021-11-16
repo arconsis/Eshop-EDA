@@ -15,7 +15,7 @@ import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.inject.Produces
 
 @ApplicationScoped
-class SteamsService {
+class StreamsService {
 
     @Produces
     fun createTopology(): Topology {
