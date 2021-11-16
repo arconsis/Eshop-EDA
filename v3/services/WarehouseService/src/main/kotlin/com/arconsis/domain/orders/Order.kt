@@ -26,3 +26,6 @@ enum class OrderStatus {
 
 val Order.isPending
     get() = status == OrderStatus.PENDING
+
+val Order.isPaid
+    get() = status == OrderStatus.PAID
