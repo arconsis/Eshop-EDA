@@ -1,8 +1,8 @@
-package com.arconsis.http
+package com.arconsis.presentation.http
 
 import com.arconsis.domain.User
 import com.arconsis.domain.UsersService
-import com.arconsis.http.dto.UserCreate
+import com.arconsis.presentation.http.dto.UserCreate
 import io.smallrye.common.annotation.Blocking
 import java.util.*
 import javax.enterprise.context.ApplicationScoped

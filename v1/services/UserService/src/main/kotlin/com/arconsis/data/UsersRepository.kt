@@ -1,7 +1,7 @@
 package com.arconsis.data
 
 import com.arconsis.domain.User
-import com.arconsis.http.dto.UserCreate
+import com.arconsis.presentation.http.dto.UserCreate
 import io.quarkus.elytron.security.common.BcryptUtil
 import java.util.*
 import javax.enterprise.context.ApplicationScoped

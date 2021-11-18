@@ -2,7 +2,7 @@ package com.arconsis.domain
 
 import com.arconsis.data.UsersRepository
 import com.arconsis.data.toUserEvent
-import com.arconsis.http.dto.UserCreate
+import com.arconsis.presentation.http.dto.UserCreate
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional

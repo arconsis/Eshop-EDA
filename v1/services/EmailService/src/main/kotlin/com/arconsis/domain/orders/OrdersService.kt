@@ -1,25 +1,19 @@
-package com.arconsis.domain.events
+package com.arconsis.domain.orders
 
 import com.arconsis.data.email.EmailDto
 import com.arconsis.data.email.EmailRepository
 import com.arconsis.data.users.UsersRepository
-import com.arconsis.domain.orders.Order
-import com.arconsis.domain.orders.OrderStatus
 import io.smallrye.reactive.messaging.annotations.Blocking
 import org.eclipse.microprofile.config.inject.ConfigProperty
-import org.eclipse.microprofile.reactive.messaging.Incoming
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class EventsService(
+class OrdersService(
     val emailRepository: EmailRepository,
     val usersRepository: UsersRepository,
     @ConfigProperty(name = "email.sender") private val sender: String,
 ) {
-
-    @Blocking
-    @Incoming("orders-in")
-    fun consumeOrders(order: Order) {
+    fun handleOrderEvents(order: Order) {
         when (order.status) {
             OrderStatus.PAID -> handlePaidOrders(order)
             OrderStatus.OUT_FOR_SHIPMENT -> handleOutForShipmentOrders(order)
