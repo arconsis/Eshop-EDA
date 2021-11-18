@@ -9,7 +9,6 @@ import io.smallrye.mutiny.Uni
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
-import org.eclipse.microprofile.reactive.messaging.Incoming
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -19,11 +18,7 @@ class OrdersService(
     private val shipmentsRepository: ShipmentsRepository,
     private val inventoryRepository: InventoryRepository,
 ) {
-
-    @Incoming("order-in")
-    fun consumeOrderEvents(orderRecord: Record<String, Order>): Uni<Void> {
-        val order = orderRecord.value()
-
+    fun handleOrderEvents(order: Order): Uni<Void> {
         return when (order.status) {
             OrderStatus.PENDING -> handleOrderPending(order)
             OrderStatus.PAID -> handleOrderPaid(order)

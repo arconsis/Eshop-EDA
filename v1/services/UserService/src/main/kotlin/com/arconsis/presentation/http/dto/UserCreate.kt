@@ -1,4 +1,4 @@
-package com.arconsis.http.dto
+package com.arconsis.presentation.http.dto
 
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank

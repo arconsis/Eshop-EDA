@@ -1,4 +1,4 @@
-package com.arconsis.http.shipments
+package com.arconsis.presentation.http.shipments
 
 import com.arconsis.domain.shipments.Shipment
 import com.arconsis.domain.shipments.ShipmentsService

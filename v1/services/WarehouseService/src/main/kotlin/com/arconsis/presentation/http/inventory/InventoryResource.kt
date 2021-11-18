@@ -1,4 +1,4 @@
-package com.arconsis.http.inventory
+package com.arconsis.presentation.http.inventory
 
 import com.arconsis.domain.inventory.CreateInventory
 import com.arconsis.domain.inventory.Inventory
