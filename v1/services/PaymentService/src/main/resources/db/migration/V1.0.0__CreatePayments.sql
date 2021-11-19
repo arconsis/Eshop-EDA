@@ -1,6 +1,7 @@
 CREATE TYPE payment_status AS ENUM (
     'SUCCESS',
-    'FAILED'
+    'FAILED',
+    'REFUNDED'
 );
 
 CREATE TABLE payments

@@ -22,7 +22,8 @@ enum class OrderStatus {
     COMPLETED,
     PAYMENT_FAILED,
     CANCELLED,
-    REFUNDED
+    REFUNDED,
+    SHIPMENT_FAILED
 }
 
 class OrdersDeserializer : ObjectMapperDeserializer<Order>(Order::class.java)

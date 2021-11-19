@@ -28,8 +28,8 @@ class OrdersService(
     }
 
     private fun handleOrderPending(order: Order): Uni<Void> {
-        return inventoryRepository.reserveProductStock(order.productId, order.quantity).onItem()
-            .transformToUni { stockUpdated ->
+        return inventoryRepository.reserveProductStock(order.productId, order.quantity)
+            .flatMap { stockUpdated ->
                 val orderValidation = OrderValidation(
                     productId = order.productId,
                     quantity = order.quantity,
@@ -49,20 +49,32 @@ class OrdersService(
                 userId = order.userId,
                 status = ShipmentStatus.PREPARING_SHIPMENT
             )
-        ).flatMap { shipment ->
-            this.shipmentsRepository.updateShipment(
-                UpdateShipment(
-                    shipment.id,
-                    ShipmentStatus.OUT_FOR_SHIPMENT
+        )
+            .onFailure()
+            .invoke { _ -> shipmentEmitter.send(order.toFailedShipment(null).toShipmentRecord()) }
+            .flatMap { shipment ->
+                if (shipment?.id == null) {
+                    throw Exception("Shipment failed")
+                }
+                this.shipmentsRepository.updateShipment(
+                    UpdateShipment(
+                        shipment.id,
+                        ShipmentStatus.OUT_FOR_SHIPMENT
+                    )
                 )
-            )
-        }.flatMap { shipment ->
-            shipmentEmitter.send(shipment.toShipmentRecord())
-        }
+                    .onFailure()
+                    .invoke { _ -> shipmentEmitter.send(order.toFailedShipment(shipment.id).toShipmentRecord()) }
+            }
+            .flatMap { shipment -> shipmentEmitter.send(shipment.toShipmentRecord()) }
+            .onFailure()
+            .recoverWithNull()
     }
 
     private fun handleOrderPaymentFailed(order: Order): Uni<Void> {
         return inventoryRepository.increaseProductStock(order.productId, order.quantity)
+            .onFailure()
+            .retry()
+            .atMost(3)
             .flatMap {
                 Uni.createFrom().voidItem()
             }

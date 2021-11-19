@@ -30,7 +30,8 @@ enum class OrderStatus {
     COMPLETED,
     PAYMENT_FAILED,
     CANCELLED,
-    REFUNDED
+    REFUNDED,
+    SHIPMENT_FAILED
 }
 
 fun Order.toOrderRecord(): Record<String, Order> = Record.of(

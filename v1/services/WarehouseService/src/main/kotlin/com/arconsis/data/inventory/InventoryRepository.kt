@@ -50,8 +50,8 @@ class InventoryRepository(private val sessionFactory: Mutiny.SessionFactory) {
                 .setParameter(STOCK, stock)
                 .executeUpdate()
                 .map { updatedRows -> updatedRows == 1 }
-                // TODO: Check if we need to handle only the update stock constraint error here
-                .onFailure().recoverWithItem(false)
+                .onFailure()
+                .recoverWithItem(false)
         }
     }
 

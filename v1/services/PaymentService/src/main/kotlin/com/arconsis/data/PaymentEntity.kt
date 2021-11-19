@@ -57,7 +57,8 @@ fun PaymentEntity.toPayment() = Payment(
     status = status,
 )
 
-fun CreatePayment.toPaymentEntity() = PaymentEntity(
+fun Payment.toPaymentEntity() = PaymentEntity(
+    id = transactionId,
     userId = userId,
     orderId = orderId,
     amount = amount,
@@ -65,10 +66,9 @@ fun CreatePayment.toPaymentEntity() = PaymentEntity(
     status = status,
 )
 
-fun Order.toCreatePayment(status: PaymentStatus) = CreatePayment(
+fun Order.toCreatePayment() = CreatePayment(
     userId = userId,
     orderId = id,
     amount = amount,
     currency = currency,
-    status = status,
 )

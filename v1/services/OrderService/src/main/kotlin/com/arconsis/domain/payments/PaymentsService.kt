@@ -32,6 +32,7 @@ class PaymentsService(
                         emitter.send(orderRecord)
                     }
             }
+            else -> return Uni.createFrom().voidItem()
         }
     }
 }

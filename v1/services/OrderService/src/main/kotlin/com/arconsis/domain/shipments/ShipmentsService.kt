@@ -8,7 +8,6 @@ import io.smallrye.mutiny.Uni
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
-import org.eclipse.microprofile.reactive.messaging.Incoming
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -24,11 +23,17 @@ class ShipmentsService(
                         val orderRecord = order.toOrderRecord()
                         emitter.send(orderRecord)
                     }
-
             }
             ShipmentStatus.OUT_FOR_SHIPMENT -> {
-                ordersRepository.updateOrder(shipment.orderId, OrderStatus.OUT_FOR_SHIPMENT).onItem()
-                    .transformToUni { order ->
+                ordersRepository.updateOrder(shipment.orderId, OrderStatus.OUT_FOR_SHIPMENT)
+                    .flatMap { order ->
+                        val orderRecord = order.toOrderRecord()
+                        emitter.send(orderRecord)
+                    }
+            }
+            ShipmentStatus.FAILED -> {
+                ordersRepository.updateOrder(shipment.orderId, OrderStatus.SHIPMENT_FAILED)
+                    .flatMap { order ->
                         val orderRecord = order.toOrderRecord()
                         emitter.send(orderRecord)
                     }

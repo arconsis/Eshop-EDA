@@ -2,7 +2,8 @@ CREATE TYPE shipment_status AS ENUM (
     'PREPARING_SHIPMENT',
     'OUT_FOR_SHIPMENT',
     'SHIPPED',
-    'CANCELLED'
+    'CANCELLED',
+    'FAILED'
     );
 
 CREATE TABLE shipments
