@@ -38,3 +38,8 @@ fun Order.toOrderRecord(): Record<String, Order> = Record.of(
     id.toString(),
     this
 )
+
+fun Order.toOrderRecordWithStatus(status: OrderStatus): Record<String, Order> = Record.of(
+    id.toString(),
+    this.copy(status = status)
+)

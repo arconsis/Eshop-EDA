@@ -4,10 +4,13 @@ import com.arconsis.data.OrdersRepository
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.orders.OrderStatus
 import com.arconsis.domain.orders.toOrderRecord
+import com.arconsis.domain.orders.toOrderRecordWithStatus
 import io.smallrye.mutiny.Uni
+import io.smallrye.mutiny.groups.UniOnFailure
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
+import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -20,9 +23,11 @@ class OrderValidationsService(
         return when (orderValidation.status) {
             OrderValidationStatus.VALID -> {
                 ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.VALID)
+                    .onFailure()
+                    .handleValidOrderErrors(orderValidation.orderId)
                     .flatMap { order ->
                         val orderRecord = order.toOrderRecord()
-                        emitter.send(orderRecord)
+                        sendOrderEvent(orderRecord)
                     }
             }
             OrderValidationStatus.INVALID -> {
@@ -31,4 +36,16 @@ class OrderValidationsService(
             }
         }
     }
+
+    private fun UniOnFailure<Order>.handleValidOrderErrors(orderId: UUID) = invoke { _ ->
+        ordersRepository.getOrder(orderId)
+            .flatMap { order ->
+                val orderRecord = order.toOrderRecordWithStatus(status = OrderStatus.VALID)
+                sendOrderEvent(orderRecord)
+            }
+    }
+
+
+
+    private fun sendOrderEvent(orderRecord: Record<String, Order>) = emitter.send(orderRecord)
 }

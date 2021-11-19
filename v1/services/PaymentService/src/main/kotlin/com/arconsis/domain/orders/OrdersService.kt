@@ -5,6 +5,7 @@ import com.arconsis.data.toCreatePayment
 import com.arconsis.domain.payments.Payment
 import com.arconsis.domain.payments.toPaymentRecord
 import io.smallrye.mutiny.Uni
+import io.smallrye.mutiny.groups.UniOnFailure
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
@@ -20,15 +21,8 @@ class OrdersService(
             OrderStatus.VALID -> {
                 paymentsRepository.createPayment(order.toCreatePayment())
                     .onFailure()
-                    .invoke { _ ->
-                        val payment = order.toPaymentFailed()
-                        val paymentRecord = payment.toPaymentRecord()
-                        emitter.send(paymentRecord)
-                    }
-                    .flatMap { payment ->
-                        val paymentRecord = payment.toPaymentRecord()
-                        emitter.send(paymentRecord)
-                    }
+                    .handleCreatePaymentError(order)
+                    .sendPaymentEvent()
                     .onFailure()
                     .recoverWithNull()
             }
@@ -41,4 +35,17 @@ class OrdersService(
             else -> Uni.createFrom().voidItem()
         }
     }
+
+    private fun UniOnFailure<Payment>.handleCreatePaymentError(order: Order) = invoke { _ ->
+        val payment = order.toPaymentFailed()
+        val paymentRecord = payment.toPaymentRecord()
+        sendPaymentEvent(paymentRecord)
+    }
+
+    private fun Uni<Payment>.sendPaymentEvent() = flatMap { payment ->
+        val paymentRecord = payment.toPaymentRecord()
+        sendPaymentEvent(paymentRecord)
+    }
+
+    private fun sendPaymentEvent(paymentRecord: Record<String, Payment>) = emitter.send(paymentRecord)
 }
