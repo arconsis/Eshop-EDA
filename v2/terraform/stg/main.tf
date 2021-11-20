@@ -70,93 +70,53 @@ module "private_vpc_sg" {
 ################################################################################
 # Orders Database
 module "orders_database" {
-  source = "../modules/database"
-  database_identifier = "orders-database"
-  database_username = var.orders_database_username
-  database_password = var.orders_database_password
-  subnet_ids             = module.networking.private_subnet_ids
-  security_group_ids = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name = "OrdersDatabaseMonitoringRole"
-  database_parameters = [
-    {
-      name = "rds.logical_replication"
-      value = "1"
-      apply_method = "pending-reboot"
-    }
-  ]
+  source                = "../modules/database"
+  database_identifier   = "orders-database"
+  database_username     = var.orders_database_username
+  database_password     = var.orders_database_password
+  subnet_ids            = module.networking.private_subnet_ids
+  security_group_ids    = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name  = "OrdersDatabaseMonitoringRole"
 }
-
 # Payments Database
-
 module "payments_database" {
-  source = "../modules/database"
-  database_identifier = "payments-database"
-  database_username = var.payments_database_username
-  database_password = var.payments_database_password
-  subnet_ids             = module.networking.private_subnet_ids
-  security_group_ids = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name = "PaymentsDatabaseMonitoringRole"
-  database_parameters = [
-    {
-      name = "rds.logical_replication"
-      value = "1"
-      apply_method = "pending-reboot"
-    }
-  ]
+  source                = "../modules/database"
+  database_identifier   = "payments-database"
+  database_username     = var.payments_database_username
+  database_password     = var.payments_database_password
+  subnet_ids            = module.networking.private_subnet_ids
+  security_group_ids    = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name  = "PaymentsDatabaseMonitoringRole"
 }
-
 # Shipments Database
 module "shipments_database" {
-  source = "../modules/database"
-  database_identifier = "shipments-database"
-  database_username = var.shipments_database_username
-  database_password = var.shipments_database_password
-  subnet_ids             = module.networking.private_subnet_ids
-  security_group_ids = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name = "ShipmentsDatabaseMonitoringRole"
-  database_parameters = [
-    {
-      name = "rds.logical_replication"
-      value = "1"
-      apply_method = "pending-reboot"
-    }
-  ]
+  source                = "../modules/database"
+  database_identifier   = "shipments-database"
+  database_username     = var.shipments_database_username
+  database_password     = var.shipments_database_password
+  subnet_ids            = module.networking.private_subnet_ids
+  security_group_ids    = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name  = "ShipmentsDatabaseMonitoringRole"
 }
-
 # Warehouse Database
 module "warehouse_database" {
-  source = "../modules/database"
-  database_identifier = "warehouse-database"
-  database_username = var.warehouse_database_username
-  database_password = var.warehouse_database_password
-  subnet_ids             = module.networking.private_subnet_ids
-  security_group_ids = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name = "WarehouseDatabaseMonitoringRole"
-  database_parameters = [
-    {
-      name = "rds.logical_replication"
-      value = "1"
-      apply_method = "pending-reboot"
-    }
-  ]
+  source                = "../modules/database"
+  database_identifier   = "warehouse-database"
+  database_username     = var.warehouse_database_username
+  database_password     = var.warehouse_database_password
+  subnet_ids            = module.networking.private_subnet_ids
+  security_group_ids    = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name  = "WarehouseDatabaseMonitoringRole"
 }
-
 # Users Database
 module "users_database" {
-  source = "../modules/database"
-  database_identifier = "users-database"
-  database_username = var.users_database_username
-  database_password = var.users_database_password
-  subnet_ids             = module.networking.private_subnet_ids
-  security_group_ids = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name = "UsersDatabaseMonitoringRole"
-  database_parameters = [
-    {
-      name = "rds.logical_replication"
-      value = "1"
-      apply_method = "pending-reboot"
-    }
-  ]
+  source                = "../modules/database"
+  database_identifier   = "users-database"
+  database_username     = var.users_database_username
+  database_password     = var.users_database_password
+  subnet_ids            = module.networking.private_subnet_ids
+  security_group_ids    = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name  = "UsersDatabaseMonitoringRole"
 }
 
 module "eks" {
@@ -229,11 +189,6 @@ resource "aws_cloudwatch_log_group" "msk_broker_logs" {
   name = "msk_broker_logs"
 }
 
-# resource "aws_s3_bucket" "msk_broker_logs" {
-#   bucket = "msk-broker-logs-bucket"
-#   acl    = "private"
-# }
-
 resource "aws_msk_cluster" "kafka" {
   cluster_name           = "kafka-eshop"
   kafka_version          = "2.8.1"
@@ -246,45 +201,15 @@ resource "aws_msk_cluster" "kafka" {
     security_groups = [module.private_vpc_sg.security_group_id]
   }
 
-  # encryption_info {
-  #   encryption_at_rest_kms_key_arn = aws_kms_key.kms.arn
-  # }
-
-  # open_monitoring {
-  #   prometheus {
-  #     jmx_exporter {
-  #       enabled_in_broker = true
-  #     }
-  #     node_exporter {
-  #       enabled_in_broker = true
-  #     }
-  #   }
-  # }
-
   logging_info {
     broker_logs {
       cloudwatch_logs {
         enabled   = true
         log_group = aws_cloudwatch_log_group.msk_broker_logs.name
       }
-      # s3 {
-      #   enabled = true
-      #   bucket  = aws_s3_bucket.msk_broker_logs.id
-      #   prefix  = "logs/msk-"
-      # }
     }
   }
 }
-
-# resource "aws_msk_configuration" "example" {
-#   kafka_versions = ["2.1.0"]
-#   name           = "example"
-
-#   server_properties = <<PROPERTIES
-# auto.create.topics.enable = true
-# delete.topic.enable = true
-# PROPERTIES
-# }
 
 output "zookeeper_connect_string" {
   value = aws_msk_cluster.kafka.zookeeper_connect_string

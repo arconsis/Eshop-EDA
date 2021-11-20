@@ -4,7 +4,297 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ff6440ac-e013-4cf8-8361-f11025772b09" name="Changes" comment="EDA-57:" />
+    <list default="true" id="ff6440ac-e013-4cf8-8361-f11025772b09" name="Changes" comment="EDA-57:">
+      <change afterPath="$PROJECT_DIR$/v2/services/Dockerfile.postgres" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/settings.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/docker/Dockerfile.jvm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/docker/Dockerfile.legacy-jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/docker/Dockerfile.native" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/docker/Dockerfile.native-distroless" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/common/Topics.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/common/Utils.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/data/email/EmailApi.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/data/email/EmailApiHeadersFactory.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/data/email/EmailRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/data/users/UserDto.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/data/users/UsersApi.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/data/users/UsersMapper.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/data/users/UsersRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/domain/orders/OrdersService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/presentation/events/orders/OrderEventsResource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/resources/META-INF/resources/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/settings.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/docker/Dockerfile.jvm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/docker/Dockerfile.legacy-jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/docker/Dockerfile.native" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/docker/Dockerfile.native-distroless" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/common/FlywaySetup.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/common/Topics.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/data/OrderEntity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/data/OrdersRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/data/PostgreSQLEnumType.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/domain/orders/OrdersService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/domain/ordersvalidations/OrderValidation.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/domain/ordersvalidations/OrderValidationsService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/domain/payments/Payment.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/domain/payments/PaymentsService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/domain/shipments/Shipment.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/domain/shipments/ShipmentsService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/presentation/events/ordersvalidations/OrderValidationEventsResource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/presentation/events/payments/PaymentEventsResource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/presentation/events/shipments/ShipmentEventsResource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/kotlin/com/arconsis/presentation/http/orders/OrdersResource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/resources/META-INF/resources/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/OrderService/src/main/resources/db/migration/V1.0.0__CreateOrders.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/settings.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/docker/Dockerfile.jvm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/docker/Dockerfile.legacy-jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/docker/Dockerfile.native" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/docker/Dockerfile.native-distroless" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/kotlin/com/arconsis/common/FlywaySetup.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/kotlin/com/arconsis/common/Topics.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/kotlin/com/arconsis/data/EnumTypePostgres.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/kotlin/com/arconsis/data/PaymentEntity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/kotlin/com/arconsis/data/PaymentsRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/kotlin/com/arconsis/domain/orders/OrdersService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/kotlin/com/arconsis/domain/payments/Payment.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/kotlin/com/arconsis/presentation/events/orders/OrderEventsResource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/resources/META-INF/resources/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/PaymentService/src/main/resources/db/migration/V1.0.0__CreatePayments.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/UserService/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/UserService/deploy copy.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/data/UserEvent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/domain/EventsService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/settings.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/docker/Dockerfile.jvm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/docker/Dockerfile.legacy-jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/docker/Dockerfile.native" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/docker/Dockerfile.native-distroless" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/common/FlywaySetup.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/common/Topics.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/data/common/PostgreSQLEnumType.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/data/inventory/InventoryEntity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/data/inventory/InventoryRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/data/shipments/ShipmentEntity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/data/shipments/ShipmentsRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/domain/inventory/Inventory.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/domain/inventory/InventoryService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/domain/orders/Order.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/domain/orders/OrdersService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/domain/ordersvalidations/OrderValidation.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/domain/shipments/Shipment.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/domain/shipments/ShipmentsService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/presentation/events/orders/OrderEventsResource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/presentation/http/inventory/InventoryResource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/kotlin/com/arconsis/presentation/http/shipments/ShipmentsResource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/resources/META-INF/resources/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/resources/db/migration/V1.0.0__CreateInventory.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/main/resources/db/migration/V1.0.1__CreateShipment.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/native-test/java/com/arconsis/NativeReactiveGreetingResourceIT.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/WarehouseService/src/test/java/com/arconsis/ReactiveGreetingResourceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v2/services/init_databases.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/kubernetes/EmailService/temp-secret.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/v2/kubernetes/EmailService/temp-secret.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/kubernetes/OrderService/temp-secret.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/v2/kubernetes/OrderService/temp-secret.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/kubernetes/PaymentService/service.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/v2/kubernetes/PaymentService/service.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/kubernetes/PaymentService/temp-secret.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/v2/kubernetes/PaymentService/temp-secret.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/kubernetes/ShippingService/temp-secret.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/v2/kubernetes/ShippingService/temp-secret.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/.eslintignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/.eslintrc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/EmailService/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/EmailService/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/EmailService/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/deploy.sh" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/EmailService/deploy.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/src/common/constants.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/src/common/logger.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/src/common/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/src/configuration/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/src/data/repositories/emailDispatcher/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/src/data/repositories/eventBus/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/src/domain/email/service.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/src/presentation/eventBus/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/src/presentation/mapper/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/src/server.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/EmailService/tests/data/repositories/emailDispatcher/index.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/.eslintignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/.eslintrc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/OrderService/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/OrderService/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/deploy.sh" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/OrderService/deploy.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/common/constants.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/common/errors.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/common/logger.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/configuration/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/data/infrastructure/database/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/data/infrastructure/database/models/Order.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/data/infrastructure/database/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/data/repositories/eventsBus/mapper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/data/repositories/eventsBus/repository.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/data/repositories/orders/mapper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/data/repositories/orders/repository.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/domain/orders/model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/domain/orders/service.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/presentation/eventBus/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/presentation/eventBus/mapper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/presentation/http/app.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/presentation/http/middleware/routerValidator.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/presentation/http/routes/errors/router.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/presentation/http/routes/orders/router.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/presentation/http/utils/asyncWrapper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/OrderService/src/server.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/.eslintignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/.eslintrc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/PaymentService/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/PaymentService/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/deploy.sh" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/PaymentService/deploy.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/common/constants.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/common/errors.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/common/logger.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/configuration/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/data/infrastructure/database/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/data/infrastructure/database/models/Transaction.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/data/infrastructure/database/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/data/repositories/eventBus/mapper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/data/repositories/eventBus/repository.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/data/repositories/transactions/mapper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/data/repositories/transactions/repository.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/domain/transactions/model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/domain/transactions/service.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/presentation/eventBus/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/presentation/eventBus/mapper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/PaymentService/src/server.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/.eslintignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/.eslintrc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/deploy.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/common/constants.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/common/errors.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/common/logger.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/configuration/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/data/infrastructure/database/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/data/infrastructure/database/models/Shipment.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/data/infrastructure/database/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/data/repositories/eventBus/mapper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/data/repositories/eventBus/repository.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/data/repositories/shipments/mapper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/data/repositories/shipments/repository.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/domain/shipments/model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/domain/shipments/service.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/presentation/eventBus/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/presentation/eventBus/mapper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/presentation/http/app.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/presentation/http/routes/errors/router.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/presentation/http/routes/shipments/router.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/presentation/http/utils/asyncWrapper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/ShippingService/src/server.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/data/UsersMapper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/data/UsersMapper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/data/UsersRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/data/UsersRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/domain/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/domain/User.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/domain/UserData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/EmailService/src/main/kotlin/com/arconsis/domain/users/User.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/domain/UsersService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/domain/UsersService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/http/UserResource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/presentation/http/UserResource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/http/dto/UserCreate.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/src/main/kotlin/com/arconsis/presentation/http/dto/UserCreate.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/UserService/src/test/kotlin/com/arconsis/ReactiveGreetingResourceTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/UserService/src/test/kotlin/com/arconsis/ReactiveGreetingResourceTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/WarehouseService/.dockerignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/.eslintrc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/WarehouseService/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/.prettierrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/WarehouseService/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/WarehouseService/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/deploy.sh" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/WarehouseService/deploy.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/nest-cli.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/prisma/migrations/20211003070157_init/migration.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/prisma/migrations/migration_lock.toml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/prisma/schema.prisma" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/app.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/common/common.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/common/kafka.models.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/common/prisma.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/inventory/domain/inventory.service.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/inventory/domain/inventory.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/inventory/http/inventory.controller.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/inventory/http/inventory.controller.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/inventory/http/inventory.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/inventory/inventory.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/inventory/inventory.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/inventory/kafka/inventory.event.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/inventory/kafka/inventorykafka.controller.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/src/main.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/startup.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/test/app.e2e-spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/test/jest-e2e.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/tsconfig.build.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/WarehouseService/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/services/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/v2/services/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/terraform/common/templates/debezium/connector.json.tpl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/terraform/common/templates/rds/psql-connector.json.tpl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/terraform/modules/database/main.tf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/terraform/modules/database/output.tf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/terraform/modules/database/variables.tf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/terraform/stg/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/v2/terraform/stg/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2/terraform/stg/main.tf" beforeDir="false" afterPath="$PROJECT_DIR$/v2/terraform/stg/main.tf" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -185,6 +475,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/v1/services" />
     </key>
   </component>
@@ -322,36 +613,144 @@
     </configuration>
     <configuration name="emailservice.main" type="QuarkusRunConfigurationType" factoryName="Quarkus">
       <module name="emailservice.main" />
+      <QsGradleRunConfiguration>
+        <ExternalSystemSettings>
+          <option name="executionName" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/EmailService" />
+          <option name="externalSystemIdString" value="GRADLE" />
+          <option name="scriptParameters" />
+          <option name="taskDescriptions">
+            <list />
+          </option>
+          <option name="taskNames">
+            <list />
+          </option>
+          <option name="vmOptions" />
+        </ExternalSystemSettings>
+        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+        <DebugAllEnabled>false</DebugAllEnabled>
+      </QsGradleRunConfiguration>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="ordersservice.main" type="QuarkusRunConfigurationType" factoryName="Quarkus">
       <module name="ordersservice.main" />
+      <QsGradleRunConfiguration>
+        <ExternalSystemSettings>
+          <option name="executionName" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/OrderService" />
+          <option name="externalSystemIdString" value="GRADLE" />
+          <option name="scriptParameters" />
+          <option name="taskDescriptions">
+            <list />
+          </option>
+          <option name="taskNames">
+            <list />
+          </option>
+          <option name="vmOptions" />
+        </ExternalSystemSettings>
+        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+        <DebugAllEnabled>false</DebugAllEnabled>
+      </QsGradleRunConfiguration>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="paymentsservice.main" type="QuarkusRunConfigurationType" factoryName="Quarkus">
       <module name="paymentsservice.main" />
+      <QsGradleRunConfiguration>
+        <ExternalSystemSettings>
+          <option name="executionName" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/PaymentService" />
+          <option name="externalSystemIdString" value="GRADLE" />
+          <option name="scriptParameters" />
+          <option name="taskDescriptions">
+            <list />
+          </option>
+          <option name="taskNames">
+            <list />
+          </option>
+          <option name="vmOptions" />
+        </ExternalSystemSettings>
+        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+        <DebugAllEnabled>false</DebugAllEnabled>
+      </QsGradleRunConfiguration>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="shippingservice.main" type="QuarkusRunConfigurationType" factoryName="Quarkus">
       <module name="shippingservice.main" />
+      <QsGradleRunConfiguration>
+        <ExternalSystemSettings>
+          <option name="executionName" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/ShippingService" />
+          <option name="externalSystemIdString" value="GRADLE" />
+          <option name="scriptParameters" />
+          <option name="taskDescriptions">
+            <list />
+          </option>
+          <option name="taskNames">
+            <list />
+          </option>
+          <option name="vmOptions" />
+        </ExternalSystemSettings>
+        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+        <DebugAllEnabled>false</DebugAllEnabled>
+      </QsGradleRunConfiguration>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="userservice.main" type="QuarkusRunConfigurationType" factoryName="Quarkus">
       <module name="userservice.main" />
+      <QsGradleRunConfiguration>
+        <ExternalSystemSettings>
+          <option name="executionName" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/UserService" />
+          <option name="externalSystemIdString" value="GRADLE" />
+          <option name="scriptParameters" />
+          <option name="taskDescriptions">
+            <list />
+          </option>
+          <option name="taskNames">
+            <list />
+          </option>
+          <option name="vmOptions" />
+        </ExternalSystemSettings>
+        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+        <DebugAllEnabled>false</DebugAllEnabled>
+      </QsGradleRunConfiguration>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="warehouseservice.main" type="QuarkusRunConfigurationType" factoryName="Quarkus">
       <module name="warehouseservice.main" />
+      <QsGradleRunConfiguration>
+        <ExternalSystemSettings>
+          <option name="executionName" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/WarehouseService" />
+          <option name="externalSystemIdString" value="GRADLE" />
+          <option name="scriptParameters" />
+          <option name="taskDescriptions">
+            <list />
+          </option>
+          <option name="taskNames">
+            <list />
+          </option>
+          <option name="vmOptions" />
+        </ExternalSystemSettings>
+        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+        <DebugAllEnabled>false</DebugAllEnabled>
+      </QsGradleRunConfiguration>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -380,6 +779,7 @@
       <workItem from="1636479182731" duration="822000" />
       <workItem from="1636652885734" duration="154000" />
       <workItem from="1637062087287" duration="27000" />
+      <workItem from="1637414882997" duration="894000" />
     </task>
     <servers />
   </component>

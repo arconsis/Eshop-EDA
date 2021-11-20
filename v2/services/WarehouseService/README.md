@@ -1,73 +1,60 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# warehouseservice Project
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
-## Description
+## Running the application in dev mode
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+You can run your application in dev mode that enables live coding using:
+```shell script
+./gradlew quarkusDev
 ```
 
-## Running the app
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
-```bash
-# development
-$ npm run start
+## Packaging and running the application
 
-# watch mode
-$ npm run start:dev
+The application can be packaged using:
+```shell script
+./gradlew build
+```
+It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
+Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
 
-# production mode
-$ npm run start:prod
+The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
+
+If you want to build an _über-jar_, execute the following command:
+```shell script
+./gradlew build -Dquarkus.package.type=uber-jar
 ```
 
-## Test
+The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
 
-```bash
-# unit tests
-$ npm run test
+## Creating a native executable
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+You can create a native executable using: 
+```shell script
+./gradlew build -Dquarkus.package.type=native
 ```
 
-## Support
+Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
+```shell script
+./gradlew build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+You can then execute your native executable with: `./build/warehouseservice-1.0.0-SNAPSHOT-runner`
 
-## Stay in touch
+If you want to learn more about building native executables, please consult https://quarkus.io/guides/gradle-tooling.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Related Guides
 
-## License
+- RESTEasy Reactive ([guide](https://quarkus.io/guides/resteasy-reactive)): Reactive implementation of JAX-RS with additional features. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
 
-Nest is [MIT licensed](LICENSE).
+## Provided Code
+
+### RESTEasy Reactive
+
+Easily start your Reactive RESTful Web Services
+
+[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
