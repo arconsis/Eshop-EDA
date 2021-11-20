@@ -1,5 +1,6 @@
 package com.arconsis.domain.orders
 
+import com.arconsis.common.retryWithBackoff
 import com.arconsis.data.OrdersRepository
 import io.smallrye.mutiny.Uni
 import io.smallrye.reactive.messaging.MutinyEmitter
@@ -15,17 +16,13 @@ class OrdersService(
 ) {
     fun createOrder(createOrder: CreateOrder): Uni<Order> {
         return ordersRepository.createOrder(createOrder)
-            .onFailure()
-            .retry()
-            .atMost(3)
+            .retryWithBackoff()
             .flatMap { order ->
                 val orderRecord = order.toOrderRecord()
                 emitter.send(orderRecord).map {
                     order
                 }
             }
-            .onFailure()
-            .recoverWithNull()
     }
 
     fun getOrder(orderId: UUID): Uni<Order> {

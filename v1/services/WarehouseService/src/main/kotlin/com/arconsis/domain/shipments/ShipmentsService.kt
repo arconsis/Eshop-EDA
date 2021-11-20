@@ -12,7 +12,11 @@ class ShipmentsService(
 ) {
 
     suspend fun updateShipment(updateShipment: UpdateShipment): Shipment {
-        val shipment = this.shipmentsRepository.updateShipment(updateShipment).awaitSuspending()
+        val shipment = this.shipmentsRepository.updateShipment(updateShipment)
+            .onFailure()
+            .retry()
+            .atMost(3)
+            .awaitSuspending()
         emitter.send(shipment.toShipmentRecord()).awaitSuspending()
         return shipment
     }
