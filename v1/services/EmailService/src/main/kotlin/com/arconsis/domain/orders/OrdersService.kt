@@ -3,7 +3,6 @@ package com.arconsis.domain.orders
 import com.arconsis.data.email.EmailDto
 import com.arconsis.data.email.EmailRepository
 import com.arconsis.data.users.UsersRepository
-import io.smallrye.reactive.messaging.annotations.Blocking
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import javax.enterprise.context.ApplicationScoped
 
