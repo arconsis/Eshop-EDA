@@ -4,15 +4,15 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 
 data class UserCreate(
-    @NotBlank
+    @field:NotBlank
     val firstName: String,
-    @NotBlank
+    @field:NotBlank
     val lastName: String,
-    @NotBlank
-    @Email
+    @field:NotBlank
+    @field:Email
     val email: String,
-    @NotBlank
+    @field:NotBlank
     val password: String,
-    @NotBlank
+    @field:NotBlank
     val username: String,
 )

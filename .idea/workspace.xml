@@ -4,22 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ff6440ac-e013-4cf8-8361-f11025772b09" name="Changes" comment="EDA-18: Update with changes from v1">
-      <change beforePath="$PROJECT_DIR$/kubernetes/Bastion/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/v2/kubernetes/Bastion/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kubernetes/Bastion/deployment.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/v2/kubernetes/Bastion/deployment.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kubernetes/Bastion/init.sh" beforeDir="false" afterPath="$PROJECT_DIR$/v2/kubernetes/Bastion/init.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kubernetes/Debezium/deployment.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/v2/kubernetes/Debezium/deployment.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kubernetes/Debezium/service.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/v2/kubernetes/Debezium/service.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/terraform/stg/main.tf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/kubernetes/ShippingService/deployment.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/kubernetes/ShippingService/service.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v1/kubernetes/ShippingService/temp-secret.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v2/kubernetes/ShippingService/deployment.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v2/kubernetes/ShippingService/service.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v2/kubernetes/ShippingService/temp-secret.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v3/kubernetes/ShippingService/deployment.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v3/kubernetes/ShippingService/service.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/v3/kubernetes/ShippingService/temp-secret.yaml" beforeDir="false" />
+    <list default="true" id="ff6440ac-e013-4cf8-8361-f11025772b09" name="Changes" comment="EDA-57:">
+      <change afterPath="$PROJECT_DIR$/v1/services/UserService/src/main/kotlin/com/arconsis/presentation/http/errors/AppExceptionMapper.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/v1/services/UserService/src/main/kotlin/com/arconsis/presentation/http/errors/ErrorPayload.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v1/services/UserService/src/main/kotlin/com/arconsis/presentation/http/dto/UserCreate.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v1/services/UserService/src/main/kotlin/com/arconsis/presentation/http/dto/UserCreate.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/domain/shipments/Shipment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/domain/shipments/Shipment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/domain/shipments/ShipmentEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/v3/services/WarehouseService/src/main/kotlin/com/arconsis/domain/shipments/ShipmentEvent.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +61,21 @@
         <task path="$PROJECT_DIR$/v3/services/WarehouseService">
           <activation />
         </task>
+        <task path="$PROJECT_DIR$/v1/services/WarehouseService">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/v1/services/UserService">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/v1/services/PaymentService">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/v1/services/OrderService">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/v1/services/EmailService">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -92,62 +98,6 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="ordersservice" type="f1a62948:ProjectNode" />
               </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="ordersservice" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="ordersservice" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="formatting" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="paymentsservice" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="paymentsservice" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="paymentsservice" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="formatting" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="userservice" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="userservice" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="userservice" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="formatting" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="warehouseservice" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="warehouseservice" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="warehouseservice" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="formatting" type="c8890929:TasksNode$1" />
-              </path>
             </expand>
             <select />
           </tree_state>
@@ -158,7 +108,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="feat/EDA-37_implement_exception_and_validation_mapper" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -189,21 +139,19 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="TF_FMT" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.formatter.settings.were.checked" value="true" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/v2/kubernetes" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.40037072" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/v2/kubernetes" />
-      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/v1/services" />
     </key>
   </component>
@@ -214,7 +162,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.WarehouseService [ktlintFormat]">
+  <component name="RunManager" selected="Gradle.EmailService [ktlintFormat] (1)">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="Eshop-EDA" />
       <working_directory value="$PROJECT_DIR$" />
@@ -232,6 +180,27 @@
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
       <framework value="gotest" />
+      <method v="2" />
+    </configuration>
+    <configuration name="EmailService [ktlintFormat] (1)" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/v1/services/EmailService" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="ktlintFormat" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
     <configuration name="EmailService [ktlintFormat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -297,27 +266,6 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="WarehouseService [ktlintCheck]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/WarehouseService" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="ktlintCheck" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="WarehouseService [ktlintFormat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -344,7 +292,7 @@
       <QsGradleRunConfiguration>
         <ExternalSystemSettings>
           <option name="executionName" />
-          <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/EmailService" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/v1/services/EmailService" />
           <option name="externalSystemIdString" value="GRADLE" />
           <option name="scriptParameters" />
           <option name="taskDescriptions">
@@ -368,7 +316,7 @@
       <QsGradleRunConfiguration>
         <ExternalSystemSettings>
           <option name="executionName" />
-          <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/OrderService" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/v1/services/OrderService" />
           <option name="externalSystemIdString" value="GRADLE" />
           <option name="scriptParameters" />
           <option name="taskDescriptions">
@@ -392,7 +340,7 @@
       <QsGradleRunConfiguration>
         <ExternalSystemSettings>
           <option name="executionName" />
-          <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/PaymentService" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/v1/services/PaymentService" />
           <option name="externalSystemIdString" value="GRADLE" />
           <option name="scriptParameters" />
           <option name="taskDescriptions">
@@ -413,24 +361,6 @@
     </configuration>
     <configuration name="shippingservice.main" type="QuarkusRunConfigurationType" factoryName="Quarkus">
       <module name="shippingservice.main" />
-      <QsGradleRunConfiguration>
-        <ExternalSystemSettings>
-          <option name="executionName" />
-          <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/ShippingService" />
-          <option name="externalSystemIdString" value="GRADLE" />
-          <option name="scriptParameters" />
-          <option name="taskDescriptions">
-            <list />
-          </option>
-          <option name="taskNames">
-            <list />
-          </option>
-          <option name="vmOptions" />
-        </ExternalSystemSettings>
-        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-        <DebugAllEnabled>false</DebugAllEnabled>
-      </QsGradleRunConfiguration>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -440,7 +370,7 @@
       <QsGradleRunConfiguration>
         <ExternalSystemSettings>
           <option name="executionName" />
-          <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/UserService" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/v1/services/UserService" />
           <option name="externalSystemIdString" value="GRADLE" />
           <option name="scriptParameters" />
           <option name="taskDescriptions">
@@ -464,7 +394,7 @@
       <QsGradleRunConfiguration>
         <ExternalSystemSettings>
           <option name="executionName" />
-          <option name="externalProjectPath" value="$PROJECT_DIR$/v3/services/WarehouseService" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/v1/services/WarehouseService" />
           <option name="externalSystemIdString" value="GRADLE" />
           <option name="scriptParameters" />
           <option name="taskDescriptions">
@@ -483,13 +413,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Gradle.EmailService [ktlintFormat]" />
+      <item itemvalue="Gradle.OrderService [ktlintFormat]" />
+      <item itemvalue="Gradle.PaymentService [ktlintFormat]" />
+      <item itemvalue="Gradle.WarehouseService [ktlintFormat]" />
+      <item itemvalue="Quarkus.shippingservice.main" />
+      <item itemvalue="Quarkus.userservice.main" />
+      <item itemvalue="Quarkus.emailservice.main" />
+      <item itemvalue="Quarkus.ordersservice.main" />
+      <item itemvalue="Quarkus.paymentsservice.main" />
+      <item itemvalue="Quarkus.warehouseservice.main" />
+      <item itemvalue="Gradle.EmailService [ktlintFormat] (1)" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.EmailService [ktlintFormat] (1)" />
         <item itemvalue="Gradle.WarehouseService [ktlintFormat]" />
         <item itemvalue="Gradle.PaymentService [ktlintFormat]" />
         <item itemvalue="Gradle.OrderService [ktlintFormat]" />
         <item itemvalue="Gradle.EmailService [ktlintFormat]" />
-        <item itemvalue="Gradle.WarehouseService [ktlintCheck]" />
       </list>
     </recent_temporary>
   </component>
@@ -507,16 +450,7 @@
       <workItem from="1636479182731" duration="822000" />
       <workItem from="1636652885734" duration="154000" />
       <workItem from="1637062087287" duration="27000" />
-      <workItem from="1637414882997" duration="1216000" />
     </task>
-    <task id="LOCAL-00001" summary="EDA-18: Update with changes from v1">
-      <created>1637415932626</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1637415932626</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -828,10 +762,6 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="EDA-18: Update with changes from v1" />
-    <option name="LAST_COMMIT_MESSAGE" value="EDA-18: Update with changes from v1" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
