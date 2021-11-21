@@ -1,5 +1,6 @@
 package com.arconsis.domain.orders
 
+import com.arconsis.common.retryWithBackoff
 import com.arconsis.data.inventory.InventoryRepository
 import com.arconsis.data.shipments.ShipmentsRepository
 import com.arconsis.domain.ordersvalidations.OrderValidation
@@ -9,6 +10,8 @@ import io.smallrye.mutiny.Uni
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
+import org.jboss.logging.Logger
+import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -17,6 +20,7 @@ class OrdersService(
     @Channel("order-validation-out") private val orderValidationEmitter: MutinyEmitter<Record<String, OrderValidation>>,
     private val shipmentsRepository: ShipmentsRepository,
     private val inventoryRepository: InventoryRepository,
+    private val logger: Logger
 ) {
     fun handleOrderEvents(order: Order): Uni<Void> {
         return when (order.status) {
@@ -28,8 +32,8 @@ class OrdersService(
     }
 
     private fun handleOrderPending(order: Order): Uni<Void> {
-        return inventoryRepository.reserveProductStock(order.productId, order.quantity).onItem()
-            .transformToUni { stockUpdated ->
+        return inventoryRepository.reserveProductStock(order.productId, order.quantity)
+            .flatMap { stockUpdated ->
                 val orderValidation = OrderValidation(
                     productId = order.productId,
                     quantity = order.quantity,
@@ -37,34 +41,52 @@ class OrdersService(
                     userId = order.userId,
                     status = if (stockUpdated) OrderValidationStatus.VALID else OrderValidationStatus.INVALID
                 )
-
                 orderValidationEmitter.send(Record.of(order.id.toString(), orderValidation))
             }
     }
 
     private fun handleOrderPaid(order: Order): Uni<Void> {
-        return this.shipmentsRepository.createShipment(
+        return shipmentsRepository.createShipment(
             CreateShipment(
                 orderId = order.id,
                 userId = order.userId,
                 status = ShipmentStatus.PREPARING_SHIPMENT
             )
-        ).flatMap { shipment ->
-            this.shipmentsRepository.updateShipment(
-                UpdateShipment(
-                    shipment.id,
-                    ShipmentStatus.OUT_FOR_SHIPMENT
-                )
-            )
-        }.flatMap { shipment ->
-            shipmentEmitter.send(shipment.toShipmentRecord())
-        }
+        )
+            .handleShipmentError(order, null)
+            .updateShipment(order)
+            .flatMap { shipment -> sendShipmentEvent(shipment.toShipmentRecord()) }
     }
 
     private fun handleOrderPaymentFailed(order: Order): Uni<Void> {
         return inventoryRepository.increaseProductStock(order.productId, order.quantity)
+            .onFailure()
+            .retry()
+            .atMost(3)
             .flatMap {
                 Uni.createFrom().voidItem()
             }
+    }
+
+    private fun Uni<Shipment>.updateShipment(order: Order) = flatMap { shipment ->
+        if (shipment?.id == null) {
+            throw Exception("Shipment failed")
+        }
+        shipmentsRepository.updateShipment(
+            UpdateShipment(
+                shipment.id,
+                ShipmentStatus.OUT_FOR_SHIPMENT
+            )
+        )
+            .handleShipmentError(order, shipment.id)
+    }
+
+    private fun Uni<Shipment>.handleShipmentError(order: Order, shipmentId: UUID?) = retryWithBackoff()
+        .onFailure()
+        .call { _ -> sendShipmentEvent(order.toFailedShipment(shipmentId).toShipmentRecord()) }
+
+    private fun sendShipmentEvent(shipmentRecord: Record<String, Shipment>): Uni<Void> {
+        logger.info("Send shipment record $shipmentRecord")
+        return shipmentEmitter.send(shipmentRecord)
     }
 }

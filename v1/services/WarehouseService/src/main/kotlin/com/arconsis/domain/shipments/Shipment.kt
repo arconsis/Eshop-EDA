@@ -8,10 +8,11 @@ enum class ShipmentStatus {
     OUT_FOR_SHIPMENT,
     SHIPPED,
     CANCELLED,
+    FAILED,
 }
 
 data class Shipment(
-    val id: UUID,
+    val id: UUID?,
     val orderId: UUID,
     val status: ShipmentStatus,
     val userId: UUID

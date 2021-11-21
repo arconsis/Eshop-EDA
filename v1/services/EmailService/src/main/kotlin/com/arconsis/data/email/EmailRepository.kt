@@ -14,7 +14,10 @@ class EmailRepository(
                 receiverEmail = emailDto.receiverEmail,
                 subject = emailDto.subject,
                 text = emailDto.text
-            ).await().indefinitely()
+            )
+                .onFailure()
+                .recoverWithNull()
+                .await().indefinitely()
         } catch (e: Exception) {
             return
         }

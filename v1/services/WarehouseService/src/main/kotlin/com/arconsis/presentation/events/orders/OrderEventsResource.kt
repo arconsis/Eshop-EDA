@@ -13,5 +13,7 @@ class OrderEventsResource(private val ordersService: OrdersService) {
     fun consumeOrderEvents(orderRecord: Record<String, Order>): Uni<Void> {
         val order = orderRecord.value()
         return ordersService.handleOrderEvents(order)
+            .onFailure()
+            .recoverWithNull()
     }
 }

@@ -7,7 +7,8 @@ CREATE TYPE order_status AS ENUM (
     'COMPLETED',
     'PAYMENT_FAILED',
     'CANCELLED',
-    'REFUNDED'
+    'REFUNDED',
+    'SHIPMENT_FAILED'
 );
 
 CREATE TABLE orders

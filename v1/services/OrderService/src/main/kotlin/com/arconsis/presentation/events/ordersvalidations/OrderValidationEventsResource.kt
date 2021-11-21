@@ -14,5 +14,7 @@ class OrderValidationEventsResource(private val orderValidationsService: OrderVa
     fun consumeOrderValidationEvents(orderValidationRecord: Record<String, OrderValidation>): Uni<Void> {
         val orderValidation = orderValidationRecord.value()
         return orderValidationsService.handleOrderValidationEvents(orderValidation)
+            .onFailure()
+            .recoverWithNull()
     }
 }

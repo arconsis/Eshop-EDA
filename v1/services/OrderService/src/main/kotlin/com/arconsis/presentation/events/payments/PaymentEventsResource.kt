@@ -14,5 +14,7 @@ class PaymentEventsResource(private val paymentsService: PaymentsService) {
     fun consumePaymentEvents(paymentRecord: Record<String, Payment>): Uni<Void> {
         val payment = paymentRecord.value()
         return paymentsService.handlePaymentEvents(payment)
+            .onFailure()
+            .recoverWithNull()
     }
 }
