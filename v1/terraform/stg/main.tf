@@ -88,16 +88,6 @@ module "payments_database" {
   security_group_ids    = [module.private_vpc_sg.security_group_id]
   monitoring_role_name  = "PaymentsDatabaseMonitoringRole"
 }
-# Shipments Database
-module "shipments_database" {
-  source                = "../modules/database"
-  database_identifier   = "shipments-database"
-  database_username     = var.shipments_database_username
-  database_password     = var.shipments_database_password
-  subnet_ids            = module.networking.private_subnet_ids
-  security_group_ids    = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name  = "ShipmentsDatabaseMonitoringRole"
-}
 # Warehouse Database
 module "warehouse_database" {
   source                = "../modules/database"

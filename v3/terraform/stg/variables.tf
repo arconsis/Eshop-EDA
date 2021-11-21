@@ -125,18 +125,6 @@ variable "payments_database_password" {
   sensitive   = true
 }
 
-variable "shipments_database_username" {
-  description = "The password for the shipments DB master"
-  type        = string
-  sensitive   = true
-}
-
-variable "shipments_database_password" {
-  description = "The password for the shipments DB master"
-  type        = string
-  sensitive   = true
-}
-
 variable "warehouse_database_username" {
   description = "The password for the warehouse DB master"
   type        = string
