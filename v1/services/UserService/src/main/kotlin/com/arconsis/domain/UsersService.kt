@@ -31,6 +31,7 @@ class UsersService(
     }
 
     private fun sendUserEvent(event: UserEvent) {
+        print { "Send user record ${event.value}" }
         emitter.send(Record.of(event.key, event.value)).toCompletableFuture().get()
     }
 }

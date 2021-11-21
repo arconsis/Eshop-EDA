@@ -18,7 +18,7 @@ class OrdersService(
     @Channel("shipment-out") private val shipmentEmitter: MutinyEmitter<Record<String, Shipment>>,
     @Channel("order-validation-out") private val orderValidationEmitter: MutinyEmitter<Record<String, OrderValidation>>,
     private val shipmentsRepository: ShipmentsRepository,
-    private val inventoryRepository: InventoryRepository,
+    private val inventoryRepository: InventoryRepository
 ) {
     fun handleOrderEvents(order: Order): Uni<Void> {
         return when (order.status) {
@@ -83,5 +83,8 @@ class OrdersService(
         .onFailure()
         .invoke { _ -> sendShipmentEvent(order.toFailedShipment(shipmentId).toShipmentRecord()) }
 
-    private fun sendShipmentEvent(shipmentRecord: Record<String, Shipment>) = shipmentEmitter.send(shipmentRecord)
+    private fun sendShipmentEvent(shipmentRecord: Record<String, Shipment>): Uni<Void> {
+        print { "Send shipment record $shipmentRecord" }
+        return shipmentEmitter.send(shipmentRecord)
+    }
 }

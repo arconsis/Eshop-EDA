@@ -17,7 +17,7 @@ import javax.enterprise.context.ApplicationScoped
 @ApplicationScoped
 class PaymentsService(
     @Channel("orders-out") private val emitter: MutinyEmitter<Record<String, Order>>,
-    private val ordersRepository: OrdersRepository,
+    private val ordersRepository: OrdersRepository
 ) {
     fun handlePaymentEvents(payment: Payment): Uni<Void> {
         return when (payment.status) {
@@ -49,5 +49,8 @@ class PaymentsService(
             }
         }
 
-    private fun sendOrderEvent(orderRecord: Record<String, Order>) = emitter.send(orderRecord)
+    private fun sendOrderEvent(orderRecord: Record<String, Order>): Uni<Void> {
+        print { "Send order record $orderRecord" }
+        return emitter.send(orderRecord)
+    }
 }

@@ -48,5 +48,8 @@ class OrderValidationsService(
                 }
         }
 
-    private fun sendOrderEvent(orderRecord: Record<String, Order>) = emitter.send(orderRecord)
+    private fun sendOrderEvent(orderRecord: Record<String, Order>): Uni<Void> {
+        print { "Send order record $orderRecord" }
+        return emitter.send(orderRecord)
+    }
 }

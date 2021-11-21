@@ -16,7 +16,7 @@ import javax.enterprise.context.ApplicationScoped
 @ApplicationScoped
 class ShipmentsService(
     @Channel("orders-out") private val emitter: MutinyEmitter<Record<String, Order>>,
-    private val ordersRepository: OrdersRepository,
+    private val ordersRepository: OrdersRepository
 ) {
     fun handleShipmentEvents(shipment: Shipment): Uni<Void> {
         return when (shipment.status) {
@@ -58,5 +58,8 @@ class ShipmentsService(
                 }
         }
 
-    private fun sendOrderEvent(orderRecord: Record<String, Order>) = emitter.send(orderRecord)
+    private fun sendOrderEvent(orderRecord: Record<String, Order>): Uni<Void> {
+        print { "Send order record $orderRecord" }
+        return emitter.send(orderRecord)
+    }
 }

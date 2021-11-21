@@ -8,7 +8,7 @@ import org.eclipse.microprofile.reactive.messaging.Channel
 
 class ShipmentsService(
     @Channel("shipment-out") private val emitter: MutinyEmitter<Record<String, Shipment>>,
-    private val shipmentsRepository: ShipmentsRepository,
+    private val shipmentsRepository: ShipmentsRepository
 ) {
 
     suspend fun updateShipment(updateShipment: UpdateShipment): Shipment {
@@ -17,7 +17,12 @@ class ShipmentsService(
             .retry()
             .atMost(3)
             .awaitSuspending()
-        emitter.send(shipment.toShipmentRecord()).awaitSuspending()
+        sendShipmentEvent(shipment.toShipmentRecord())
         return shipment
+    }
+
+    private suspend fun sendShipmentEvent(shipmentRecord: Record<String, Shipment>) {
+        print { "Send shipment record $shipmentRecord" }
+        emitter.send(shipmentRecord).awaitSuspending()
     }
 }
