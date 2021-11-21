@@ -9,10 +9,11 @@ import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class PaymentEventsResource(private val paymentsService: PaymentsService) {
-
     @Incoming("payments-in")
-    suspend fun consumePaymentEvents(paymentRecord: Record<String, Payment>) {
+    fun consumePaymentEvents(paymentRecord: Record<String, Payment>): Uni<Void> {
         val payment = paymentRecord.value()
         return paymentsService.handlePaymentEvents(payment)
+            .onFailure()
+            .recoverWithNull()
     }
 }

@@ -5,7 +5,7 @@ import com.arconsis.data.outboxevents.OutboxEventsRepository
 import com.arconsis.domain.orders.OrderStatus
 import com.arconsis.domain.orders.toCreateOutboxEvent
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.smallrye.mutiny.coroutines.awaitSuspending
+import io.smallrye.mutiny.Uni
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
 
@@ -16,19 +16,32 @@ class PaymentsService(
     private val objectMapper: ObjectMapper,
 ) {
     @Transactional
-    suspend fun handlePaymentEvents(payment: Payment) {
-        when (payment.status) {
-            PaymentStatus.SUCCESS -> {
-                val order = ordersRepository.updateOrder(payment.orderId, OrderStatus.PAID).awaitSuspending()
-                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
-                outboxEventsRepository.createEvent(createOutboxEvent).awaitSuspending()
-
-            }
-            PaymentStatus.FAILED -> {
-                val order = ordersRepository.updateOrder(payment.orderId, OrderStatus.PAYMENT_FAILED).awaitSuspending()
-                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
-                outboxEventsRepository.createEvent(createOutboxEvent).awaitSuspending()
-            }
+    fun handlePaymentEvents(payment: Payment): Uni<Void> {
+        return when (payment.status) {
+            PaymentStatus.SUCCESS -> handleSucceedPayment(payment)
+            PaymentStatus.FAILED -> handleFailedPayment(payment)
         }
+    }
+
+    private fun handleSucceedPayment(payment: Payment): Uni<Void> {
+        return ordersRepository.updateOrder(payment.orderId, OrderStatus.PAID)
+            .flatMap { order ->
+                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                outboxEventsRepository.createEvent(createOutboxEvent)
+            }
+            .map {
+                null
+            }
+    }
+
+    private fun handleFailedPayment(payment: Payment): Uni<Void> {
+        return ordersRepository.updateOrder(payment.orderId, OrderStatus.PAYMENT_FAILED)
+            .flatMap { order ->
+                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                outboxEventsRepository.createEvent(createOutboxEvent)
+            }
+            .map {
+                null
+            }
     }
 }

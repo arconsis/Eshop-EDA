@@ -1,5 +1,6 @@
-package com.arconsis.data
+package com.arconsis.data.payments
 
+import com.arconsis.data.PostgreSQLEnumType
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.payments.CreatePayment
 import com.arconsis.domain.payments.Payment

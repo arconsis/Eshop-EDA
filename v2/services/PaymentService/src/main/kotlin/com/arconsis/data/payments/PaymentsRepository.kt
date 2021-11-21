@@ -1,8 +1,8 @@
-package com.arconsis.data
+package com.arconsis.data.payments
 
 import com.arconsis.domain.payments.CreatePayment
 import com.arconsis.domain.payments.Payment
-import io.smallrye.mutiny.coroutines.awaitSuspending
+import io.smallrye.mutiny.Uni
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -10,9 +10,10 @@ class PaymentsRepository(
     private val paymentsRemoteStore: PaymentsRemoteStore,
     private val paymentsDataStore: PaymentsDataStore
 ) {
-    suspend fun createPayment(createPayment: CreatePayment): Payment {
-        val payment = paymentsRemoteStore.createPayment(createPayment)
-        paymentsDataStore.createPayment(payment).awaitSuspending()
-        return payment
+    fun createPayment(createPayment: CreatePayment): Uni<Payment> {
+        return paymentsRemoteStore.createPayment(createPayment)
+            .flatMap { payment ->
+                paymentsDataStore.createPayment(payment)
+            }
     }
 }

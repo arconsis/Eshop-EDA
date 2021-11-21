@@ -6,7 +6,6 @@ import com.arconsis.domain.orders.OrderStatus
 import com.arconsis.domain.orders.toCreateOutboxEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
-import io.smallrye.mutiny.coroutines.awaitSuspending
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
 
@@ -17,20 +16,33 @@ class ShipmentsService(
     private val objectMapper: ObjectMapper,
 ) {
     @Transactional
-    suspend fun handleShipmentEvents(shipment: Shipment) {
-        when (shipment.status) {
-            ShipmentStatus.SHIPPED -> {
-                val order = ordersRepository.updateOrder(shipment.orderId, OrderStatus.COMPLETED).awaitSuspending()
-                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
-                outboxEventsRepository.createEvent(createOutboxEvent).awaitSuspending()
-
-            }
-            ShipmentStatus.OUT_FOR_SHIPMENT -> {
-                val order = ordersRepository.updateOrder(shipment.orderId, OrderStatus.OUT_FOR_SHIPMENT).awaitSuspending()
-                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
-                outboxEventsRepository.createEvent(createOutboxEvent).awaitSuspending()
-            }
-            else -> null
+    fun handleShipmentEvents(shipment: Shipment): Uni<Void> {
+        return when (shipment.status) {
+            ShipmentStatus.SHIPPED -> handleShippedShipment(shipment)
+            ShipmentStatus.OUT_FOR_SHIPMENT -> handleOutForShipment(shipment)
+            else -> return Uni.createFrom().voidItem()
         }
+    }
+
+    private fun handleShippedShipment(shipment: Shipment): Uni<Void> {
+        return ordersRepository.updateOrder(shipment.orderId, OrderStatus.COMPLETED)
+            .flatMap { order ->
+                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                outboxEventsRepository.createEvent(createOutboxEvent)
+            }
+            .map {
+                null
+            }
+    }
+
+    private fun handleOutForShipment(shipment: Shipment): Uni<Void> {
+        return ordersRepository.updateOrder(shipment.orderId, OrderStatus.OUT_FOR_SHIPMENT)
+            .flatMap { order ->
+                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                outboxEventsRepository.createEvent(createOutboxEvent)
+            }
+            .map {
+                null
+            }
     }
 }

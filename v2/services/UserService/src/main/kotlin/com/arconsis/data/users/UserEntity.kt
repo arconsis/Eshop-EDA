@@ -1,4 +1,4 @@
-package com.arconsis.data
+package com.arconsis.data.users
 
 import io.quarkus.security.jpa.Password
 import java.time.Instant

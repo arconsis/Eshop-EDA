@@ -1,12 +1,12 @@
 package com.arconsis.domain.orders
 
-import com.arconsis.data.PaymentsRepository
 import com.arconsis.data.outboxevents.OutboxEventsRepository
-import com.arconsis.data.toCreatePayment
+import com.arconsis.data.payments.PaymentsRepository
+import com.arconsis.data.payments.toCreatePayment
+import com.arconsis.domain.payments.Payment
 import com.arconsis.domain.payments.toCreateOutboxEvent
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.smallrye.mutiny.coroutines.awaitSuspending
-import kotlinx.coroutines.delay
+import io.smallrye.mutiny.Uni
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
 
@@ -18,17 +18,23 @@ class OrdersService(
 ) {
 
     @Transactional
-    suspend fun handleOrderEvents(order: Order) {
-        when (order.status) {
-            OrderStatus.VALID -> {
-                // TODO: simulate API call
-                delay(5000)
-                val createPaymentDto = order.toCreatePayment()
-                val payment = paymentsRepository.createPayment(createPaymentDto)
-                val createOutboxEvent = payment.toCreateOutboxEvent(objectMapper)
-                outboxEventsRepository.createEvent(createOutboxEvent).awaitSuspending()
-            }
-            else -> null
+    fun handleOrderEvents(order: Order): Uni<Void> {
+        return when (order.status) {
+            OrderStatus.VALID -> handleValidOrder(order)
+            else -> Uni.createFrom().voidItem()
         }
+    }
+
+    private fun handleValidOrder(order: Order): Uni<Void> {
+        return paymentsRepository.createPayment(order.toCreatePayment())
+            .createOutboxEvent()
+            .map {
+                null
+            }
+    }
+
+    private fun Uni<Payment>.createOutboxEvent() = flatMap { payment ->
+        val createOutboxEvent = payment.toCreateOutboxEvent(objectMapper)
+        outboxEventsRepository.createEvent(createOutboxEvent)
     }
 }

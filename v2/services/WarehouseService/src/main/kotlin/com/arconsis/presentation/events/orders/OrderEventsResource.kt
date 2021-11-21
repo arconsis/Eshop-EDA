@@ -10,8 +10,10 @@ import javax.enterprise.context.ApplicationScoped
 @ApplicationScoped
 class OrderEventsResource(private val ordersService: OrdersService) {
     @Incoming("order-in")
-    suspend fun consumeOrderEvents(orderRecord: Record<String, Order>) {
+    fun consumeOrderEvents(orderRecord: Record<String, Order>): Uni<Void> {
         val order = orderRecord.value()
         return ordersService.handleOrderEvents(order)
+            .onFailure()
+            .recoverWithNull()
     }
 }

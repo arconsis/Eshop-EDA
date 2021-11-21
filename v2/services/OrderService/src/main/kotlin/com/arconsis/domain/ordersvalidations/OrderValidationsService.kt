@@ -6,7 +6,6 @@ import com.arconsis.domain.orders.OrderStatus
 import com.arconsis.domain.orders.toCreateOutboxEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
-import io.smallrye.mutiny.coroutines.awaitSuspending
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
 
@@ -18,17 +17,24 @@ class OrderValidationsService(
 ) {
 
     @Transactional
-    suspend fun handleOrderValidationEvents(orderValidation: OrderValidation) {
-        when (orderValidation.status) {
-            OrderValidationStatus.VALID -> {
-                val order = ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.VALID).awaitSuspending()
-                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
-                outboxEventsRepository.createEvent(createOutboxEvent).awaitSuspending()
-            }
-            OrderValidationStatus.INVALID -> {
-                // TODO: Do we need to inform the user here about the out of stock ?
-                ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.OUT_OF_STOCK).awaitSuspending()
-            }
+    fun handleOrderValidationEvents(orderValidation: OrderValidation): Uni<Void> {
+        return when (orderValidation.status) {
+            OrderValidationStatus.VALID -> handleValidOrderValidation(orderValidation)
+            OrderValidationStatus.INVALID -> handleValidOrderInvalidation(orderValidation)
         }
     }
+
+    private fun handleValidOrderValidation(orderValidation: OrderValidation): Uni<Void> {
+        return ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.VALID)
+            .flatMap { order ->
+                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                outboxEventsRepository.createEvent(createOutboxEvent)
+            }
+            .map {
+                null
+            }
+    }
+
+    private fun handleValidOrderInvalidation(orderValidation: OrderValidation): Uni<Void> =
+        ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.OUT_OF_STOCK).replaceWithVoid()
 }

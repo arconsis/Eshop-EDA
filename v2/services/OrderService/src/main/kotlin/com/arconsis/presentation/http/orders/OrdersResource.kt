@@ -19,7 +19,7 @@ class OrdersResource(
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    suspend fun createOrder(createOrder: CreateOrder, uriInfo: UriInfo): Order {
+    fun createOrder(createOrder: CreateOrder, uriInfo: UriInfo): Uni<Order> {
         return ordersService.createOrder(createOrder)
     }
 
@@ -27,7 +27,7 @@ class OrdersResource(
     @Path("/{orderId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    suspend fun getOrder(@PathParam("orderId") orderId: UUID): Order {
+    suspend fun getOrder(@PathParam("orderId") orderId: UUID): Uni<Order> {
         return ordersService.getOrder(orderId)
     }
 }

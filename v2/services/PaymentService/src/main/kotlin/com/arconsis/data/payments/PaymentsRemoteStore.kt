@@ -1,19 +1,20 @@
-package com.arconsis.data
+package com.arconsis.data.payments
 
 import com.arconsis.domain.payments.CreatePayment
 import com.arconsis.domain.payments.Payment
 import com.arconsis.domain.payments.PaymentStatus
 import com.arconsis.domain.payments.toPayment
-import kotlinx.coroutines.delay
+import io.smallrye.mutiny.Uni
+import java.time.Duration
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class PaymentsRemoteStore {
-    suspend fun createPayment(createPayment: CreatePayment): Payment {
+    fun createPayment(createPayment: CreatePayment): Uni<Payment> {
         // The transactionId is created by external API service
         val payment = createPayment.toPayment(transactionId = UUID.randomUUID(), status = PaymentStatus.SUCCESS)
-        delay(5000)
-        return payment
+        return Uni.createFrom().item(payment).onItem().delayIt().by(Duration.ofMillis(5000))
+        //return Uni.createFrom().failure(Exception("test"))
     }
 }

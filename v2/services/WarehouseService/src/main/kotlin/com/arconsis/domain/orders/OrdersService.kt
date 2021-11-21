@@ -6,12 +6,9 @@ import com.arconsis.data.shipments.ShipmentsRepository
 import com.arconsis.domain.ordersvalidations.OrderValidation
 import com.arconsis.domain.ordersvalidations.OrderValidationStatus
 import com.arconsis.domain.ordersvalidations.toCreateOutboxEvent
-import com.arconsis.domain.shipments.CreateShipment
-import com.arconsis.domain.shipments.ShipmentStatus
-import com.arconsis.domain.shipments.UpdateShipment
-import com.arconsis.domain.shipments.toCreateOutboxEvent
+import com.arconsis.domain.shipments.*
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.smallrye.mutiny.coroutines.awaitSuspending
+import io.smallrye.mutiny.Uni
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
 
@@ -23,17 +20,46 @@ class OrdersService(
     private val objectMapper: ObjectMapper,
 ) {
     @Transactional
-    suspend fun handleOrderEvents(order: Order) {
-        when (order.status) {
+    fun handleOrderEvents(order: Order): Uni<Void> {
+        return when (order.status) {
             OrderStatus.PENDING -> handleOrderPending(order)
             OrderStatus.PAID -> handleOrderPaid(order)
             OrderStatus.PAYMENT_FAILED -> handleOrderPaymentFailed(order)
-            else -> null
+            else -> Uni.createFrom().voidItem()
         }
     }
 
-    private suspend fun handleOrderPending(order: Order) {
-        val stockUpdated = inventoryRepository.reserveProductStock(order.productId, order.quantity).awaitSuspending()
+    private fun handleOrderPending(order: Order): Uni<Void> {
+        return inventoryRepository.reserveProductStock(order.productId, order.quantity)
+            .createOrderValidation(order)
+            .createOrderValidationEvent()
+            .map {
+                null
+            }
+    }
+
+    private fun handleOrderPaid(order: Order): Uni<Void> {
+        return shipmentsRepository.createShipment(
+            CreateShipment(
+                orderId = order.id,
+                userId = order.userId,
+                status = ShipmentStatus.PREPARING_SHIPMENT
+            )
+        )
+            .updateShipment()
+            .createShipmentEvent()
+            .map {
+                null
+            }
+    }
+
+    private fun handleOrderPaymentFailed(order: Order): Uni<Void> =
+        inventoryRepository.increaseProductStock(order.productId, order.quantity)
+            .flatMap {
+                Uni.createFrom().voidItem()
+            }
+
+    private fun Uni<Boolean>.createOrderValidation(order: Order) = map { stockUpdated ->
         val orderValidation = OrderValidation(
             productId = order.productId,
             quantity = order.quantity,
@@ -41,28 +67,25 @@ class OrdersService(
             userId = order.userId,
             status = if (stockUpdated) OrderValidationStatus.VALID else OrderValidationStatus.INVALID
         )
-        val createOutboxEvent = orderValidation.toCreateOutboxEvent(objectMapper)
-        outboxEventsRepository.createEvent(createOutboxEvent).awaitSuspending()
+        orderValidation
     }
 
-    private suspend fun handleOrderPaid(order: Order) {
-        val shipment = shipmentsRepository.createShipment(
-            CreateShipment(
-                orderId = order.id,
-                userId = order.userId,
-                status = ShipmentStatus.PREPARING_SHIPMENT
-            )
-        ).awaitSuspending()
-        val updatedShipment = shipmentsRepository.updateShipment(
+    private fun Uni<OrderValidation>.createOrderValidationEvent() = flatMap { orderValidation ->
+        val createOutboxEvent = orderValidation.toCreateOutboxEvent(objectMapper)
+        outboxEventsRepository.createEvent(createOutboxEvent)
+    }
+
+    private fun Uni<Shipment>.updateShipment() = flatMap { shipment ->
+        shipmentsRepository.updateShipment(
             UpdateShipment(
                 shipment.id,
                 ShipmentStatus.OUT_FOR_SHIPMENT
             )
-        ).awaitSuspending()
-        val createOutboxEvent = updatedShipment.toCreateOutboxEvent(objectMapper)
-        outboxEventsRepository.createEvent(createOutboxEvent).awaitSuspending()
+        )
     }
 
-    private suspend fun handleOrderPaymentFailed(order: Order) =
-        inventoryRepository.increaseProductStock(order.productId, order.quantity).awaitSuspending()
+    private fun Uni<Shipment>.createShipmentEvent() = flatMap { shipment ->
+        val createOutboxEvent = shipment.toCreateOutboxEvent(objectMapper)
+        outboxEventsRepository.createEvent(createOutboxEvent)
+    }
 }

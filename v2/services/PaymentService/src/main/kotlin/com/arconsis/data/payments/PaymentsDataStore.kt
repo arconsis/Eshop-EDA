@@ -1,4 +1,4 @@
-package com.arconsis.data
+package com.arconsis.data.payments
 
 import com.arconsis.domain.payments.Payment
 import io.smallrye.mutiny.Uni

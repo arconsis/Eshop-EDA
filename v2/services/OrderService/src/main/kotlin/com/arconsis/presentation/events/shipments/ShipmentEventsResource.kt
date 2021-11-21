@@ -9,10 +9,11 @@ import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class ShipmentEventsResource(private val shipmentsService: ShipmentsService) {
-
     @Incoming("shipments-in")
-    suspend fun consumeShipmentEvents(shipmentRecord: Record<String, Shipment>) {
+    fun consumeShipmentEvents(shipmentRecord: Record<String, Shipment>): Uni<Void> {
         val shipment = shipmentRecord.value()
         return shipmentsService.handleShipmentEvents(shipment)
+            .onFailure()
+            .recoverWithNull()
     }
 }
