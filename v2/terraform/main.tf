@@ -71,7 +71,7 @@ module "private_vpc_sg" {
 # Orders Database
 module "orders_database" {
   source               = "../modules/database"
-  database_identifier  = "orders-database"
+  database_identifier  = var.orders_database_name
   database_username    = var.orders_database_username
   database_password    = var.orders_database_password
   subnet_ids           = module.networking.private_subnet_ids
@@ -81,7 +81,7 @@ module "orders_database" {
 # Payments Database
 module "payments_database" {
   source               = "../modules/database"
-  database_identifier  = "payments-database"
+  database_identifier  = var.payments_database_name
   database_username    = var.payments_database_username
   database_password    = var.payments_database_password
   subnet_ids           = module.networking.private_subnet_ids
@@ -91,7 +91,7 @@ module "payments_database" {
 # Warehouse Database
 module "warehouse_database" {
   source               = "../modules/database"
-  database_identifier  = "warehouse-database"
+  database_identifier  = var.warehouse_database_name
   database_username    = var.warehouse_database_username
   database_password    = var.warehouse_database_password
   subnet_ids           = module.networking.private_subnet_ids
@@ -101,7 +101,7 @@ module "warehouse_database" {
 # Users Database
 module "users_database" {
   source               = "../modules/database"
-  database_identifier  = "users-database"
+  database_identifier  = var.users_database_name
   database_username    = var.users_database_username
   database_password    = var.users_database_password
   subnet_ids           = module.networking.private_subnet_ids
@@ -238,14 +238,33 @@ resource "kubernetes_config_map" "debezium_configmap" {
   }
 }
 
-data "template_file" "connector_initializer" {
+data "template_file" "orders_connector_initializer" {
   template = file("../common/templates/debezium/connector.json.tpl")
-  #  TODO: Add the correct vars to create the json from the template file
   vars     = {
-    #    database_hostname = aws_db_instance.debezium_db.address
-    #    database_user = var.db_username
-    #    database_password = var.db_password
-    #    database_name = var.database_name
+    database_hostname = module.orders_database.db_instance_endpoint
+    database_user     = var.orders_database_username
+    database_password = var.orders_database_password
+    database_name     = var.orders_database_name
+  }
+}
+
+data "template_file" "warehouse_connector_initializer" {
+  template = file("../common/templates/debezium/connector.json.tpl")
+  vars     = {
+    database_hostname = module.warehouse_database.db_instance_endpoint
+    database_user     = var.warehouse_database_username
+    database_password = var.warehouse_database_password
+    database_name     = var.warehouse_database_name
+  }
+}
+
+data "template_file" "payment_connector_initializer" {
+  template = file("../common/templates/debezium/connector.json.tpl")
+  vars     = {
+    database_hostname = module.payments_database.db_instance_endpoint
+    database_user     = var.payments_database_username
+    database_password = var.payments_database_password
+    database_name     = var.payments_database_name
   }
 }
 
@@ -256,6 +275,8 @@ resource "kubernetes_config_map" "bastion_configmap" {
   }
 
   data = {
-    CONNECTOR_JSON = jsonencode(replace(data.template_file.connector_initializer.rendered, "\n", " "))
+    ORDERS_CONNECTOR_JSON    = jsonencode(replace(data.template_file.orders_connector_initializer.rendered, "\n", " "))
+    WAREHOUSE_CONNECTOR_JSON = jsonencode(replace(data.template_file.warehouse_connector_initializer.rendered, "\n", " "))
+    PAYMENTS_CONNECTOR_JSON  = jsonencode(replace(data.template_file.payment_connector_initializer.rendered, "\n", " "))
   }
 }

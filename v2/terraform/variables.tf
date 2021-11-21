@@ -101,6 +101,11 @@ variable "users_database_password" {
   sensitive   = true
 }
 
+variable "users_database_name" {
+  description = "users DB name"
+  type        = string
+}
+
 variable "orders_database_username" {
   description = "The password for the orders DB master"
   type        = string
@@ -111,6 +116,11 @@ variable "orders_database_password" {
   description = "The password for the orders DB master"
   type        = string
   sensitive   = true
+}
+
+variable "orders_database_name" {
+  description = "orders DB name"
+  type        = string
 }
 
 variable "payments_database_username" {
@@ -125,6 +135,11 @@ variable "payments_database_password" {
   sensitive   = true
 }
 
+variable "payments_database_name" {
+  description = "payments DB name"
+  type        = string
+}
+
 variable "warehouse_database_username" {
   description = "The password for the warehouse DB master"
   type        = string
@@ -135,4 +150,9 @@ variable "warehouse_database_password" {
   description = "The password for the warehouse DB master"
   type        = string
   sensitive   = true
+}
+
+variable "warehouse_database_name" {
+  description = "warehouse DB name"
+  type        = string
 }
