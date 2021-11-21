@@ -1,4 +1,4 @@
-curl -H 'Content-Type: application/json' debezium:8083/connectors --data '
+curl -H 'Content-Type: application/json' localhost:8083/connectors --data '
 {
   "name": "orders-connector",
   "config": {
