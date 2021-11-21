@@ -11,7 +11,7 @@ import javax.enterprise.context.ApplicationScoped
 class OrderValidationEventsResource(private val orderValidationsService: OrderValidationsService) {
 
     @Incoming("order-validation-in")
-    fun consumeOrderValidationEvents(orderValidationRecord: Record<String, OrderValidation>): Uni<Void> {
+    suspend fun consumeOrderValidationEvents(orderValidationRecord: Record<String, OrderValidation>) {
         val orderValidation = orderValidationRecord.value()
         return orderValidationsService.handleOrderValidationEvents(orderValidation)
     }

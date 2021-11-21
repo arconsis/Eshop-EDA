@@ -37,11 +37,6 @@ enum class OrderStatus {
     REFUNDED
 }
 
-fun Order.toOrderRecord(): Record<String, Order> = Record.of(
-    id.toString(),
-    this
-)
-
 fun Order.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
     aggregateType = AggregateType.ORDER,
     aggregateId = this.id,

@@ -1,5 +1,9 @@
 package com.arconsis.domain.ordersvalidations
 
+import com.arconsis.domain.outboxevents.AggregateType
+import com.arconsis.domain.outboxevents.CreateOutboxEvent
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.util.*
 
 data class OrderValidation(
@@ -14,3 +18,9 @@ enum class OrderValidationStatus {
     VALID,
     INVALID
 }
+
+fun OrderValidation.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
+    aggregateType = AggregateType.ORDER_VALIDATION,
+    aggregateId = this.orderId,
+    payload = objectMapper.convertValue(this, object : TypeReference<Map<String, Any>>() {})
+)

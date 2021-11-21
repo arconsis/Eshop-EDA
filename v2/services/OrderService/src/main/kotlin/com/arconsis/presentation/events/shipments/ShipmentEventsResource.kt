@@ -11,7 +11,7 @@ import javax.enterprise.context.ApplicationScoped
 class ShipmentEventsResource(private val shipmentsService: ShipmentsService) {
 
     @Incoming("shipments-in")
-    fun consumeShipmentEvents(shipmentRecord: Record<String, Shipment>): Uni<Void> {
+    suspend fun consumeShipmentEvents(shipmentRecord: Record<String, Shipment>) {
         val shipment = shipmentRecord.value()
         return shipmentsService.handleShipmentEvents(shipment)
     }

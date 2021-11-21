@@ -1,5 +1,6 @@
 CREATE TYPE aggregate_type AS ENUM (
-    'ORDER'
+    'SHIPMENT',
+    'ORDER_VALIDATION'
 );
 
 CREATE TABLE outbox_events

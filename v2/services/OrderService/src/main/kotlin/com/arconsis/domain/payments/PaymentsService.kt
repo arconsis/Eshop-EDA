@@ -5,7 +5,7 @@ import com.arconsis.data.outboxevents.OutboxEventsRepository
 import com.arconsis.domain.orders.OrderStatus
 import com.arconsis.domain.orders.toCreateOutboxEvent
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.smallrye.mutiny.Uni
+import io.smallrye.mutiny.coroutines.awaitSuspending
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
 
@@ -16,28 +16,18 @@ class PaymentsService(
     private val objectMapper: ObjectMapper,
 ) {
     @Transactional
-    fun handlePaymentEvents(payment: Payment): Uni<Void> {
-        return when (payment.status) {
+    suspend fun handlePaymentEvents(payment: Payment) {
+        when (payment.status) {
             PaymentStatus.SUCCESS -> {
-                ordersRepository.updateOrder(payment.orderId, OrderStatus.PAID)
-                    .flatMap { order ->
-                        val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
-                        outboxEventsRepository.createEvent(createOutboxEvent)
-                            .map {
-                                null
-                            }
-                    }
+                val order = ordersRepository.updateOrder(payment.orderId, OrderStatus.PAID).awaitSuspending()
+                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                outboxEventsRepository.createEvent(createOutboxEvent).awaitSuspending()
 
             }
             PaymentStatus.FAILED -> {
-                ordersRepository.updateOrder(payment.orderId, OrderStatus.PAYMENT_FAILED)
-                    .flatMap { order ->
-                        val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
-                        outboxEventsRepository.createEvent(createOutboxEvent)
-                            .map {
-                                null
-                            }
-                    }
+                val order = ordersRepository.updateOrder(payment.orderId, OrderStatus.PAYMENT_FAILED).awaitSuspending()
+                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                outboxEventsRepository.createEvent(createOutboxEvent).awaitSuspending()
             }
         }
     }

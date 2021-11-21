@@ -11,7 +11,7 @@ import javax.enterprise.context.ApplicationScoped
 class PaymentEventsResource(private val paymentsService: PaymentsService) {
 
     @Incoming("payments-in")
-    fun consumePaymentEvents(paymentRecord: Record<String, Payment>): Uni<Void> {
+    suspend fun consumePaymentEvents(paymentRecord: Record<String, Payment>) {
         val payment = paymentRecord.value()
         return paymentsService.handlePaymentEvents(payment)
     }

@@ -1,5 +1,10 @@
 package com.arconsis.domain.shipments
 
+import com.arconsis.domain.orders.Order
+import com.arconsis.domain.outboxevents.AggregateType
+import com.arconsis.domain.outboxevents.CreateOutboxEvent
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 import java.util.*
 

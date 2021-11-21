@@ -1,5 +1,9 @@
 package com.arconsis.domain.shipments
 
+import com.arconsis.domain.outboxevents.AggregateType
+import com.arconsis.domain.outboxevents.CreateOutboxEvent
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.reactive.messaging.kafka.Record
 import java.util.*
 
@@ -24,4 +28,10 @@ class CreateShipment(val orderId: UUID, val userId: UUID, val status: ShipmentSt
 fun Shipment.toShipmentRecord(): Record<String, Shipment> = Record.of(
     orderId.toString(),
     this
+)
+
+fun Shipment.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
+    aggregateType = AggregateType.SHIPMENT,
+    aggregateId = this.id,
+    payload = objectMapper.convertValue(this, object : TypeReference<Map<String, Any>>() {})
 )
