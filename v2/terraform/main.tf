@@ -22,7 +22,7 @@ provider "kubernetes" {
 # VPC Configuration
 ################################################################################
 module "networking" {
-  source                         = "../modules/network"
+  source                         = "./modules/network"
   create_vpc                     = var.create_vpc
   create_igw                     = var.create_igw
   single_nat_gateway             = var.single_nat_gateway
@@ -47,7 +47,7 @@ module "networking" {
 # SG Configuration
 ################################################################################
 module "private_vpc_sg" {
-  source                   = "../modules/security"
+  source                   = "./modules/security"
   create_vpc               = var.create_vpc
   create_sg                = true
   sg_name                  = "private-database-security-group"
@@ -70,7 +70,7 @@ module "private_vpc_sg" {
 ################################################################################
 # Orders Database
 module "orders_database" {
-  source               = "../modules/database"
+  source               = "./modules/database"
   database_identifier  = var.orders_database_name
   database_username    = var.orders_database_username
   database_password    = var.orders_database_password
@@ -80,7 +80,7 @@ module "orders_database" {
 }
 # Payments Database
 module "payments_database" {
-  source               = "../modules/database"
+  source               = "./modules/database"
   database_identifier  = var.payments_database_name
   database_username    = var.payments_database_username
   database_password    = var.payments_database_password
@@ -90,7 +90,7 @@ module "payments_database" {
 }
 # Warehouse Database
 module "warehouse_database" {
-  source               = "../modules/database"
+  source               = "./modules/database"
   database_identifier  = var.warehouse_database_name
   database_username    = var.warehouse_database_username
   database_password    = var.warehouse_database_password
@@ -100,7 +100,7 @@ module "warehouse_database" {
 }
 # Users Database
 module "users_database" {
-  source               = "../modules/database"
+  source               = "./modules/database"
   database_identifier  = var.users_database_name
   database_username    = var.users_database_username
   database_password    = var.users_database_password
