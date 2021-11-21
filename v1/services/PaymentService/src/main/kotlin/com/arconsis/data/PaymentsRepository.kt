@@ -20,18 +20,6 @@ class PaymentsRepository(
             }
     }
 
-    fun refundPayment(createPayment: CreatePayment): Uni<Payment> {
-        return paymentsRemoteStore.refundPayment(createPayment)
-            .flatMap { payment ->
-                if (payment == null) {
-                    throw Exception("Payment failed")
-                }
-                paymentsDataStore.createPayment(payment)
-            }
-            .onItem()
-            .failWith { _ -> throw Exception("Payment failed") }
-    }
-
     private fun Uni<Payment>.handleCreatePaymentError(payment: Payment) = retryWithBackoff()
         .onFailure()
         .recoverWithItem(payment)

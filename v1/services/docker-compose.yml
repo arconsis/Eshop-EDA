@@ -15,7 +15,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_DELETE_TOPIC_ENABLE: 'true'
-      KAFKA_CREATE_TOPICS: "Orders:1:1,Payments:1:1,Shipments:1:1,OrdersValidation:1:1"
+      KAFKA_CREATE_TOPICS: "Orders:1:1,Payments:1:1,Shipments:1:1,OrdersValidation:1:1,Users:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./testHelpers/kafka/server-jaas.conf:/opt/kafka/config/server-jaas.conf:ro,z
