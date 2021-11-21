@@ -70,43 +70,43 @@ module "private_vpc_sg" {
 ################################################################################
 # Orders Database
 module "orders_database" {
-  source                = "../modules/database"
-  database_identifier   = "orders-database"
-  database_username     = var.orders_database_username
-  database_password     = var.orders_database_password
-  subnet_ids            = module.networking.private_subnet_ids
-  security_group_ids    = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name  = "OrdersDatabaseMonitoringRole"
+  source               = "../modules/database"
+  database_identifier  = "orders-database"
+  database_username    = var.orders_database_username
+  database_password    = var.orders_database_password
+  subnet_ids           = module.networking.private_subnet_ids
+  security_group_ids   = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name = "OrdersDatabaseMonitoringRole"
 }
 # Payments Database
 module "payments_database" {
-  source                = "../modules/database"
-  database_identifier   = "payments-database"
-  database_username     = var.payments_database_username
-  database_password     = var.payments_database_password
-  subnet_ids            = module.networking.private_subnet_ids
-  security_group_ids    = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name  = "PaymentsDatabaseMonitoringRole"
+  source               = "../modules/database"
+  database_identifier  = "payments-database"
+  database_username    = var.payments_database_username
+  database_password    = var.payments_database_password
+  subnet_ids           = module.networking.private_subnet_ids
+  security_group_ids   = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name = "PaymentsDatabaseMonitoringRole"
 }
 # Warehouse Database
 module "warehouse_database" {
-  source                = "../modules/database"
-  database_identifier   = "warehouse-database"
-  database_username     = var.warehouse_database_username
-  database_password     = var.warehouse_database_password
-  subnet_ids            = module.networking.private_subnet_ids
-  security_group_ids    = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name  = "WarehouseDatabaseMonitoringRole"
+  source               = "../modules/database"
+  database_identifier  = "warehouse-database"
+  database_username    = var.warehouse_database_username
+  database_password    = var.warehouse_database_password
+  subnet_ids           = module.networking.private_subnet_ids
+  security_group_ids   = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name = "WarehouseDatabaseMonitoringRole"
 }
 # Users Database
 module "users_database" {
-  source                = "../modules/database"
-  database_identifier   = "users-database"
-  database_username     = var.users_database_username
-  database_password     = var.users_database_password
-  subnet_ids            = module.networking.private_subnet_ids
-  security_group_ids    = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name  = "UsersDatabaseMonitoringRole"
+  source               = "../modules/database"
+  database_identifier  = "users-database"
+  database_username    = var.users_database_username
+  database_password    = var.users_database_password
+  subnet_ids           = module.networking.private_subnet_ids
+  security_group_ids   = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name = "UsersDatabaseMonitoringRole"
 }
 
 module "eks" {
@@ -201,6 +201,18 @@ resource "aws_msk_cluster" "kafka" {
   }
 }
 
+resource "aws_msk_configuration" "kafka_configuration" {
+  kafka_versions = ["2.8.1"]
+  name           = "kafka{random_string.unique_configuration_identifier.result}"
+
+  server_properties = <<PROPERTIES
+min.insync.replicas = 1
+default.replication.factor = 1
+auto.create.topics.enable = true
+delete.topic.enable = true
+PROPERTIES
+}
+
 output "zookeeper_connect_string" {
   value = aws_msk_cluster.kafka.zookeeper_connect_string
 }
@@ -208,4 +220,42 @@ output "zookeeper_connect_string" {
 output "bootstrap_brokers_tls" {
   description = "TLS connection host:port pairs"
   value       = aws_msk_cluster.kafka.bootstrap_brokers_tls
+}
+
+resource "kubernetes_config_map" "debezium_configmap" {
+  metadata {
+    name : debezium-configmap
+    namespace : eshop-eda
+  }
+
+  data = {
+    GROUP_ID             = 1
+    #    TODO: Check the values where we used inventory for the moment
+    CONFIG_STORAGE_TOPIC = inventory_configs
+    OFFSET_STORAGE_TOPIC = inventory_offsets
+    STATUS_STORAGE_TOPIC = inventory_status
+    BOOTSTRAP_SERVERS    = aws_msk_cluster.kafka.bootstrap_brokers
+  }
+}
+
+data "template_file" "connector_initializer" {
+  template = file("../common/templates/debezium/connector.json.tpl")
+  #  TODO: Add the correct vars to create the json from the template file
+  vars     = {
+    #    database_hostname = aws_db_instance.debezium_db.address
+    #    database_user = var.db_username
+    #    database_password = var.db_password
+    #    database_name = var.database_name
+  }
+}
+
+resource "kubernetes_config_map" "bastion_configmap" {
+  metadata {
+    name : bastion-configmap
+    namespace : eshop-eda
+  }
+
+  data = {
+    CONNECTOR_JSON = jsonencode(replace(data.template_file.connector_initializer.rendered, "\n", " "))
+  }
 }
