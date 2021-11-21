@@ -11,13 +11,15 @@ import io.smallrye.mutiny.Uni
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
+import org.jboss.logging.Logger
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class PaymentsService(
     @Channel("orders-out") private val emitter: MutinyEmitter<Record<String, Order>>,
-    private val ordersRepository: OrdersRepository
+    private val ordersRepository: OrdersRepository,
+    private val logger: Logger
 ) {
     fun handlePaymentEvents(payment: Payment): Uni<Void> {
         return when (payment.status) {
@@ -42,15 +44,14 @@ class PaymentsService(
 
     private fun Uni<Order>.handleUpdateOrderErrors(orderId: UUID, orderStatus: OrderStatus) = retryWithBackoff()
         .onFailure()
-        .invoke { _ ->
+        .call { _ ->
             ordersRepository.getOrder(orderId).flatMap { order ->
                 sendOrderEvent(order.toOrderRecordWithStatus(status = orderStatus))
-                order.toUni()
             }
         }
 
     private fun sendOrderEvent(orderRecord: Record<String, Order>): Uni<Void> {
-        print { "Send order record $orderRecord" }
+        logger.info("Send order record ${orderRecord.value()}")
         return emitter.send(orderRecord)
     }
 }

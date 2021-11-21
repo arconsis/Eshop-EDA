@@ -15,11 +15,6 @@ class PaymentsRemoteStore {
         // The transactionId is created by external API service
         val payment = createPayment.toPayment(transactionId = UUID.randomUUID(), status = PaymentStatus.SUCCESS)
         return Uni.createFrom().item(payment).onItem().delayIt().by(Duration.ofMillis(5000))
-    }
-
-    fun refundPayment(createPayment: CreatePayment): Uni<Payment> {
-        // The transactionId is created by external API service
-        val payment = createPayment.toPayment(transactionId = UUID.randomUUID(), status = PaymentStatus.REFUNDED)
-        return Uni.createFrom().item(payment).onItem().delayIt().by(Duration.ofMillis(5000))
+        //return Uni.createFrom().failure(Exception("test"))
     }
 }

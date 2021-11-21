@@ -10,6 +10,7 @@ import io.smallrye.mutiny.Uni
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
+import org.jboss.logging.Logger
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
@@ -18,7 +19,8 @@ class OrdersService(
     @Channel("shipment-out") private val shipmentEmitter: MutinyEmitter<Record<String, Shipment>>,
     @Channel("order-validation-out") private val orderValidationEmitter: MutinyEmitter<Record<String, OrderValidation>>,
     private val shipmentsRepository: ShipmentsRepository,
-    private val inventoryRepository: InventoryRepository
+    private val inventoryRepository: InventoryRepository,
+    private val logger: Logger
 ) {
     fun handleOrderEvents(order: Order): Uni<Void> {
         return when (order.status) {
@@ -81,10 +83,10 @@ class OrdersService(
 
     private fun Uni<Shipment>.handleShipmentError(order: Order, shipmentId: UUID?) = retryWithBackoff()
         .onFailure()
-        .invoke { _ -> sendShipmentEvent(order.toFailedShipment(shipmentId).toShipmentRecord()) }
+        .call { _ -> sendShipmentEvent(order.toFailedShipment(shipmentId).toShipmentRecord()) }
 
     private fun sendShipmentEvent(shipmentRecord: Record<String, Shipment>): Uni<Void> {
-        print { "Send shipment record $shipmentRecord" }
+        logger.info("Send shipment record $shipmentRecord")
         return shipmentEmitter.send(shipmentRecord)
     }
 }
