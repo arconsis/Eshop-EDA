@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 services:
   zookeeper:
     image: wurstmeister/zookeeper:latest
@@ -19,6 +19,19 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./testHelpers/kafka/server-jaas.conf:/opt/kafka/config/server-jaas.conf:ro,z
+  debezium:
+    image: debezium/connect:1.7
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: connect_configs
+      OFFSET_STORAGE_TOPIC: connect_offsets
+      STATUS_STORAGE_TOPIC: connect_status
+    depends_on:
+      - kafka
+      - postgres
+    ports:
+      - "8083:8083"
   postgres:
     build:
       context: .
