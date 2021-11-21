@@ -20,14 +20,12 @@ then
   kubectl apply -f ./EmailService/stg-secret.yaml
   kubectl apply -f ./OrderService/stg-secret.yaml
   kubectl apply -f ./PaymentService/stg-secret.yaml
-  kubectl apply -f ./ShippingService/stg-secret.yaml
   kubectl apply -f ./UserService/stg-secret.yaml
   kubectl apply -f ./WarehouseService/stg-secret.yaml
 else
   kubectl apply -f ./EmailService/prod-secret.yaml
   kubectl apply -f ./OrderService/prod-secret.yaml
   kubectl apply -f ./PaymentService/prod-secret.yaml
-  kubectl apply -f ./ShippingService/prod-secret.yaml
   kubectl apply -f ./UserService/prod-secret.yaml
   kubectl apply -f ./WarehouseService/prod-secret.yaml
 fi
@@ -40,9 +38,6 @@ kubectl apply -f ./OrderService/service.yaml
 
 kubectl apply -f ./PaymentService/deployment.yaml
 kubectl apply -f ./PaymentService/service.yaml
-
-kubectl apply -f ./ShippingService/deployment.yaml
-kubectl apply -f ./ShippingService/service.yaml
 
 kubectl apply -f ./UserService/deployment.yaml
 kubectl apply -f ./UserService/service.yaml
