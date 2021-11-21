@@ -1,5 +1,9 @@
 package com.arconsis.domain.orders
 
+import com.arconsis.domain.outboxevents.AggregateType
+import com.arconsis.domain.outboxevents.CreateOutboxEvent
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.reactive.messaging.kafka.Record
 import java.util.*
 
@@ -36,4 +40,10 @@ enum class OrderStatus {
 fun Order.toOrderRecord(): Record<String, Order> = Record.of(
     id.toString(),
     this
+)
+
+fun Order.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
+    aggregateType = AggregateType.ORDER,
+    aggregateId = this.id,
+    payload = objectMapper.convertValue(this, object : TypeReference<Map<String, Any>>() {})
 )

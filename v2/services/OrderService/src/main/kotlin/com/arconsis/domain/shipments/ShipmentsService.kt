@@ -1,36 +1,42 @@
 package com.arconsis.domain.shipments
 
-import com.arconsis.data.OrdersRepository
-import com.arconsis.domain.orders.Order
+import com.arconsis.data.orders.OrdersRepository
+import com.arconsis.data.outboxevents.OutboxEventsRepository
 import com.arconsis.domain.orders.OrderStatus
-import com.arconsis.domain.orders.toOrderRecord
+import com.arconsis.domain.orders.toCreateOutboxEvent
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
-import io.smallrye.reactive.messaging.MutinyEmitter
-import io.smallrye.reactive.messaging.kafka.Record
-import org.eclipse.microprofile.reactive.messaging.Channel
-import org.eclipse.microprofile.reactive.messaging.Incoming
 import javax.enterprise.context.ApplicationScoped
+import javax.transaction.Transactional
 
 @ApplicationScoped
 class ShipmentsService(
-    @Channel("orders-out") private val emitter: MutinyEmitter<Record<String, Order>>,
     private val ordersRepository: OrdersRepository,
+    private val outboxEventsRepository: OutboxEventsRepository,
+    private val objectMapper: ObjectMapper,
 ) {
+    @Transactional
     fun handleShipmentEvents(shipment: Shipment): Uni<Void> {
         return when (shipment.status) {
             ShipmentStatus.SHIPPED -> {
                 ordersRepository.updateOrder(shipment.orderId, OrderStatus.COMPLETED)
                     .flatMap { order ->
-                        val orderRecord = order.toOrderRecord()
-                        emitter.send(orderRecord)
+                        val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                        outboxEventsRepository.createEvent(createOutboxEvent)
+                            .map {
+                                null
+                            }
                     }
 
             }
             ShipmentStatus.OUT_FOR_SHIPMENT -> {
-                ordersRepository.updateOrder(shipment.orderId, OrderStatus.OUT_FOR_SHIPMENT).onItem()
-                    .transformToUni { order ->
-                        val orderRecord = order.toOrderRecord()
-                        emitter.send(orderRecord)
+                ordersRepository.updateOrder(shipment.orderId, OrderStatus.OUT_FOR_SHIPMENT)
+                    .flatMap { order ->
+                        val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                        outboxEventsRepository.createEvent(createOutboxEvent)
+                            .map {
+                                null
+                            }
                     }
             }
             else -> return Uni.createFrom().voidItem()

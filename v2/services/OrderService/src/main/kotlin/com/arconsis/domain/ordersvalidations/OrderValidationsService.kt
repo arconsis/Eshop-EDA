@@ -1,28 +1,32 @@
 package com.arconsis.domain.ordersvalidations
 
-import com.arconsis.data.OrdersRepository
-import com.arconsis.domain.orders.Order
+import com.arconsis.data.orders.OrdersRepository
+import com.arconsis.data.outboxevents.OutboxEventsRepository
 import com.arconsis.domain.orders.OrderStatus
-import com.arconsis.domain.orders.toOrderRecord
+import com.arconsis.domain.orders.toCreateOutboxEvent
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
-import io.smallrye.reactive.messaging.MutinyEmitter
-import io.smallrye.reactive.messaging.kafka.Record
-import org.eclipse.microprofile.reactive.messaging.Channel
 import javax.enterprise.context.ApplicationScoped
+import javax.transaction.Transactional
 
 @ApplicationScoped
 class OrderValidationsService(
-    @Channel("orders-out") private val emitter: MutinyEmitter<Record<String, Order>>,
-    private val ordersRepository: OrdersRepository
+    private val ordersRepository: OrdersRepository,
+    private val outboxEventsRepository: OutboxEventsRepository,
+    private val objectMapper: ObjectMapper,
 ) {
 
+    @Transactional
     fun handleOrderValidationEvents(orderValidation: OrderValidation): Uni<Void> {
         return when (orderValidation.status) {
             OrderValidationStatus.VALID -> {
                 ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.VALID)
                     .flatMap { order ->
-                        val orderRecord = order.toOrderRecord()
-                        emitter.send(orderRecord)
+                        val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                        outboxEventsRepository.createEvent(createOutboxEvent)
+                            .map {
+                                null
+                            }
                     }
             }
             OrderValidationStatus.INVALID -> {

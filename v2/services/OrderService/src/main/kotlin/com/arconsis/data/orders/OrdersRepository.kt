@@ -1,4 +1,4 @@
-package com.arconsis.data
+package com.arconsis.data.orders
 
 import com.arconsis.domain.orders.CreateOrder
 import com.arconsis.domain.orders.Order
