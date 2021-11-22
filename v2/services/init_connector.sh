@@ -10,6 +10,8 @@ curl -H 'Content-Type: application/json' localhost:8083/connectors --data '
     "database.password": "secret",
     "database.dbname" : "orders-db",
     "database.server.name": "postgres",
-    "table.include.list": "public.orders"
+    "table.include.list": "public.orders",
+    "database.history.kafka.bootstrap.servers": "kafka:9092",
+    "database.history.kafka.topic": "schema-changes.orders"
   }
 }'

@@ -4,6 +4,7 @@ services:
     image: wurstmeister/zookeeper:latest
     ports:
       - "2181:2181"
+
   kafka:
     image: wurstmeister/kafka:latest
     ports:
@@ -22,8 +23,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./testHelpers/kafka/server-jaas.conf:/opt/kafka/config/server-jaas.conf:ro,z
+
   debezium:
-    image: debezium/connect:1.7
+    image: debezium/connect:1.8
     environment:
       BOOTSTRAP_SERVERS: kafka:9092
       GROUP_ID: 1
@@ -35,6 +37,7 @@ services:
       - postgres
     ports:
       - "8083:8083"
+
   postgres:
     build:
       context: .
