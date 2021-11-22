@@ -6,7 +6,9 @@ import com.arconsis.data.shipments.ShipmentsRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
 import org.hibernate.reactive.mutiny.Mutiny
+import javax.enterprise.context.ApplicationScoped
 
+@ApplicationScoped
 class ShipmentsService(
     private val shipmentsRepository: ShipmentsRepository,
     private val outboxEventsRepository: OutboxEventsRepository,
