@@ -16,6 +16,6 @@ data class User(
 
 fun User.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
     aggregateType = AggregateType.USER,
-    aggregateId = UUID.randomUUID(),
+    aggregateId = this.id,
     payload = objectMapper.convertValue(this, object : TypeReference<Map<String, Any>>() {})
 )

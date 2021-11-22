@@ -32,18 +32,22 @@ import javax.persistence.Table
 class OutboxEventEntity(
 	@Id
 	@GeneratedValue
+    // unique id of each message; can be used by consumers to detect any duplicate events
 	var id: UUID? = null,
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "aggregate_type", columnDefinition = "aggregate_type", nullable = false)
 	@Type(type = "pgsql_enum")
+    // the type of the aggregate root to which a given event is related
 	var aggregateType: AggregateType,
 
 	@Column(name = "aggregate_id", columnDefinition = "aggregate_id", nullable = false)
+    // this is the ID of the aggregate object affected by the update operation
 	var aggregateId: UUID,
 
 	@Column(name = "payload", columnDefinition = "payload", nullable = false)
 	@Type(type = "jsonb")
+    // a JSON representation of the actual event content
 	val payload: Map<String, Any> = hashMapOf(),
 
 	@CreationTimestamp

@@ -29,7 +29,7 @@ data class CreatePayment(
 
 fun Payment.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
     aggregateType = AggregateType.PAYMENT,
-    aggregateId = UUID.randomUUID(),
+    aggregateId = this.transactionId,
     payload = objectMapper.convertValue(this, object : TypeReference<Map<String, Any>>() {})
 )
 
