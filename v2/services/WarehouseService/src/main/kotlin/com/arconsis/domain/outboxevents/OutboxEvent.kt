@@ -1,22 +1,33 @@
 package com.arconsis.domain.outboxevents
 
-import io.vertx.core.json.JsonObject
 import java.util.*
 
 data class CreateOutboxEvent(
     val aggregateType: AggregateType,
     val aggregateId: UUID,
-    val payload: JsonObject,
+    val payload: String,
+    val type: String
 )
 
 data class OutboxEvent(
     val id: UUID,
     val aggregateType: AggregateType,
     val aggregateId: UUID,
-    val payload: JsonObject,
+    val type: OutboxEventType,
+    val payload: String,
 )
 
 enum class AggregateType {
     SHIPMENT,
     ORDER_VALIDATION,
+}
+
+// TODO: merge ShipmentStatus and OrderValidationStatus
+enum class OutboxEventType {
+    VALID,
+    INVALID,
+    PREPARING_SHIPMENT,
+    OUT_FOR_SHIPMENT,
+    SHIPPED,
+    CANCELLED,
 }

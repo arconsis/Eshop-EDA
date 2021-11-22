@@ -2,10 +2,8 @@ package com.arconsis.domain.shipments
 
 import com.arconsis.domain.outboxevents.AggregateType
 import com.arconsis.domain.outboxevents.CreateOutboxEvent
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.reactive.messaging.kafka.Record
-import io.vertx.core.json.JsonObject
 import java.util.*
 
 enum class ShipmentStatus {
@@ -34,11 +32,6 @@ fun Shipment.toShipmentRecord(): Record<String, Shipment> = Record.of(
 fun Shipment.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
     aggregateType = AggregateType.SHIPMENT,
     aggregateId = this.id,
-    payload = toJsonObject()
+    type = this.status.toString(),
+    payload = objectMapper.writeValueAsString(this)
 )
-
-private fun Shipment.toJsonObject() = JsonObject()
-    .put("id", id.toString())
-    .put("orderId", orderId.toString())
-    .put("userId", userId.toString())
-    .put("status", status)

@@ -5,6 +5,7 @@ import com.arconsis.data.PostgreSQLEnumType
 import com.arconsis.domain.outboxevents.AggregateType
 import com.arconsis.domain.outboxevents.CreateOutboxEvent
 import com.arconsis.domain.outboxevents.OutboxEvent
+import com.arconsis.domain.outboxevents.OutboxEventType
 import io.vertx.core.json.JsonObject
 import org.hibernate.annotations.*
 import java.time.Instant
@@ -15,51 +16,48 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "outbox_events")
-@TypeDefs(
-    TypeDef(
-        name = "pgsql_enum",
-        typeClass = PostgreSQLEnumType::class
-    ),
-    TypeDef(
-        name = "json",
-        typeClass = Json::class
-    ),
-)
 class OutboxEventEntity(
     @Id
-	@GeneratedValue
-	var id: UUID? = null,
+    @GeneratedValue
+    // unique id of each message; can be used by consumers to detect any duplicate events
+    var id: UUID? = null,
 
-    @Enumerated(EnumType.STRING)
-	@Column(name = "aggregate_type", columnDefinition = "aggregate_type", nullable = false)
-	@Type(type = "pgsql_enum")
-	var aggregateType: AggregateType,
+    @Column(name = "aggregate_type", columnDefinition = "aggregate_type", nullable = false)
+    // the type of the aggregate root to which a given event is related
+    var aggregateType: String,
 
     @Column(name = "aggregate_id", columnDefinition = "aggregate_id", nullable = false)
-	var aggregateId: UUID,
+    // this is the ID of the aggregate object affected by the update operation
+    var aggregateId: String,
 
-    @Type(type="json")
+    // a JSON String representation of the actual event content
     @Column(name = "payload", columnDefinition = "payload", nullable = false)
-	val payload: JsonObject,
+    val payload: String,
+
+    // type of the event. For example, “OrderCreated.”
+    @Column(name = "type", columnDefinition = "type", nullable = false)
+    val type: String,
 
     @CreationTimestamp
-	@Column(name = "created_at")
-	var createdAt: Instant? = null,
+    @Column(name = "created_at")
+    var createdAt: Instant? = null,
 
     @UpdateTimestamp
-	@Column(name = "updated_at")
-	var updatedAt: Instant? = null,
+    @Column(name = "updated_at")
+    var updatedAt: Instant? = null,
 )
 
 fun CreateOutboxEvent.toOutboxEventEntity() = OutboxEventEntity(
-	aggregateId = aggregateId,
-	aggregateType = aggregateType,
-	payload = payload
+    aggregateId = aggregateId.toString(),
+    aggregateType = aggregateType.name,
+    type = type,
+    payload = payload
 )
 
 fun OutboxEventEntity.toOutboxEvent() = OutboxEvent(
-	id = id!!,
-	aggregateId = aggregateId,
-	aggregateType = aggregateType,
-	payload = payload
+    id = id!!,
+    aggregateId = UUID.fromString(aggregateId),
+    aggregateType = AggregateType.valueOf(aggregateType),
+    type = OutboxEventType.valueOf(type),
+    payload = payload
 )

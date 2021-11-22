@@ -1,21 +1,25 @@
 package com.arconsis.domain.outboxevents
 
-import io.vertx.core.json.JsonObject
+import com.arconsis.domain.orders.OrderStatus
 import java.util.*
 
 data class CreateOutboxEvent(
     val aggregateType: AggregateType,
     val aggregateId: UUID,
-    val payload: JsonObject,
+    val payload: String,
+    val type: String
 )
 
 data class OutboxEvent(
     val id: UUID,
     val aggregateType: AggregateType,
     val aggregateId: UUID,
-    val payload: JsonObject,
+    val type: OutboxEventType,
+    val payload: String,
 )
 
 enum class AggregateType {
     ORDER,
 }
+
+typealias OutboxEventType = OrderStatus

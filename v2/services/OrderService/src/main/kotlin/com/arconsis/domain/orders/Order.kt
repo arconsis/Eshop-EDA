@@ -4,6 +4,7 @@ import com.arconsis.domain.outboxevents.AggregateType
 import com.arconsis.domain.outboxevents.CreateOutboxEvent
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import io.smallrye.reactive.messaging.kafka.Record
 import io.vertx.core.json.JsonObject
 import java.util.*
@@ -38,17 +39,9 @@ enum class OrderStatus {
     REFUNDED
 }
 
-private fun Order.toJsonObject() = JsonObject()
-    .put("id", id.toString())
-    .put("userId", userId.toString())
-    .put("amount", amount)
-    .put("currency", currency)
-    .put("productId", productId)
-    .put("quantity", quantity)
-    .put("status", status)
-
-fun Order.toCreateOutboxEvent(): CreateOutboxEvent = CreateOutboxEvent(
+fun Order.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
     aggregateType = AggregateType.ORDER,
     aggregateId = this.id,
-    payload = toJsonObject()
+    type = this.status.toString(),
+    payload = objectMapper.writeValueAsString(this)
 )

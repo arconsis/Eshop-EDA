@@ -2,9 +2,7 @@ package com.arconsis.domain.payments
 
 import com.arconsis.domain.outboxevents.AggregateType
 import com.arconsis.domain.outboxevents.CreateOutboxEvent
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.vertx.core.json.JsonObject
 import java.util.*
 
 data class Payment(
@@ -31,7 +29,8 @@ data class CreatePayment(
 fun Payment.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
     aggregateType = AggregateType.PAYMENT,
     aggregateId = this.transactionId,
-    payload = toJsonObject()
+    type = this.status.toString(),
+    payload = objectMapper.writeValueAsString(this)
 )
 
 fun CreatePayment.toPayment(transactionId: UUID, status: PaymentStatus) = Payment(
@@ -42,11 +41,3 @@ fun CreatePayment.toPayment(transactionId: UUID, status: PaymentStatus) = Paymen
     currency = currency,
     status = status,
 )
-
-private fun Payment.toJsonObject() = JsonObject()
-    .put("transactionId", transactionId.toString())
-    .put("orderId", orderId.toString())
-    .put("userId", userId.toString())
-    .put("amount", amount)
-    .put("currency", currency)
-    .put("status", status)

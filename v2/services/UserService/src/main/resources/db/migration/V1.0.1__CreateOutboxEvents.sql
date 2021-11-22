@@ -1,13 +1,10 @@
-CREATE TYPE aggregate_type AS ENUM (
-    'USER'
-);
-
 CREATE TABLE outbox_events
 (
-    id              UUID PRIMARY KEY,
-    aggregate_type  aggregate_type NOT NULL,
-    aggregate_id    UUID NOT NULL,
-    payload         JSONB NOT NULL,
-    created_at      TIMESTAMP,
-    updated_at      TIMESTAMP
+    id              uuid primary key,
+    aggregate_type  varchar(255) not null,
+    aggregate_id    varchar(255) not null,
+    type            varchar(255) not null,
+    payload         text not null,
+    created_at      timestamp,
+    updated_at      timestamp
 )

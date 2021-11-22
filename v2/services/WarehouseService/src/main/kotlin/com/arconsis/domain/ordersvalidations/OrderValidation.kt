@@ -2,9 +2,7 @@ package com.arconsis.domain.ordersvalidations
 
 import com.arconsis.domain.outboxevents.AggregateType
 import com.arconsis.domain.outboxevents.CreateOutboxEvent
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.vertx.core.json.JsonObject
 import java.util.*
 
 data class OrderValidation(
@@ -23,12 +21,6 @@ enum class OrderValidationStatus {
 fun OrderValidation.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
     aggregateType = AggregateType.ORDER_VALIDATION,
     aggregateId = this.orderId,
-    payload = toJsonObject()
+    type = this.status.toString(),
+    payload = objectMapper.writeValueAsString(this)
 )
-
-private fun OrderValidation.toJsonObject() = JsonObject()
-    .put("productId", productId)
-    .put("quantity", quantity)
-    .put("orderId", orderId.toString())
-    .put("userId", userId.toString())
-    .put("status", status)
