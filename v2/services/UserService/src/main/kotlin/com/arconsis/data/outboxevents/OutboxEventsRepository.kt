@@ -8,12 +8,10 @@ import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class OutboxEventsRepository(private val sessionFactory: Mutiny.SessionFactory) {
-    fun createEvent(createOutboxEvent: CreateOutboxEvent): Uni<OutboxEvent> {
+    
+    fun createEvent(createOutboxEvent: CreateOutboxEvent, session: Mutiny.Session): Uni<OutboxEvent> {
         val outboxEventEntity = createOutboxEvent.toOutboxEventEntity()
-
-        return sessionFactory.withTransaction { s, _ ->
-            s.persist(outboxEventEntity)
-                .map { outboxEventEntity.toOutboxEvent() }
-        }
+        return session.persist(outboxEventEntity)
+            .map { outboxEventEntity.toOutboxEvent() }
     }
 }

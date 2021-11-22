@@ -4,25 +4,27 @@ import com.arconsis.data.orders.OrdersRepository
 import com.arconsis.data.outboxevents.OutboxEventsRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
+import org.hibernate.reactive.mutiny.Mutiny
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
-import javax.transaction.Transactional
 
 @ApplicationScoped
 class OrdersService(
     private val ordersRepository: OrdersRepository,
     private val outboxEventsRepository: OutboxEventsRepository,
     private val objectMapper: ObjectMapper,
+    private val sessionFactory: Mutiny.SessionFactory
 ) {
-    @Transactional
     fun createOrder(createOrder: CreateOrder): Uni<Order> {
-        return ordersRepository.createOrder(createOrder)
-            .flatMap { order ->
-                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
-                outboxEventsRepository.createEvent(createOutboxEvent).map {
-                    order
+        return sessionFactory.withTransaction { session, _ ->
+            ordersRepository.createOrder(createOrder, session)
+                .flatMap { order ->
+                    val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                    outboxEventsRepository.createEvent(createOutboxEvent, session).map {
+                        order
+                    }
                 }
-            }
+        }
     }
 
     fun getOrder(orderId: UUID): Uni<Order> {

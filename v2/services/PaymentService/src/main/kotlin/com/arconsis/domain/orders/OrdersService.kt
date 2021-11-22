@@ -8,7 +8,6 @@ import com.arconsis.domain.payments.toCreateOutboxEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
 import javax.enterprise.context.ApplicationScoped
-import javax.transaction.Transactional
 
 @ApplicationScoped
 class OrdersService(
@@ -17,7 +16,6 @@ class OrdersService(
     private val objectMapper: ObjectMapper,
 ) {
 
-    @Transactional
     fun handleOrderEvents(order: Order): Uni<Void> {
         return when (order.status) {
             OrderStatus.VALID -> handleValidOrder(order)

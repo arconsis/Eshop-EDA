@@ -6,6 +6,7 @@ import com.arconsis.domain.orders.OrderStatus
 import com.arconsis.domain.orders.toCreateOutboxEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
+import org.hibernate.reactive.mutiny.Mutiny
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
 
@@ -14,9 +15,9 @@ class OrderValidationsService(
     private val ordersRepository: OrdersRepository,
     private val outboxEventsRepository: OutboxEventsRepository,
     private val objectMapper: ObjectMapper,
+    private val sessionFactory: Mutiny.SessionFactory
 ) {
 
-    @Transactional
     fun handleOrderValidationEvents(orderValidation: OrderValidation): Uni<Void> {
         return when (orderValidation.status) {
             OrderValidationStatus.VALID -> handleValidOrderValidation(orderValidation)
@@ -25,16 +26,18 @@ class OrderValidationsService(
     }
 
     private fun handleValidOrderValidation(orderValidation: OrderValidation): Uni<Void> {
-        return ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.VALID)
-            .flatMap { order ->
-                val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
-                outboxEventsRepository.createEvent(createOutboxEvent)
-            }
-            .map {
-                null
-            }
+        return sessionFactory.withTransaction { session, _ ->
+            ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.VALID, session)
+                .flatMap { order ->
+                    val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                    outboxEventsRepository.createEvent(createOutboxEvent, session)
+                }
+                .map {
+                    null
+                }
+        }
     }
 
     private fun handleValidOrderInvalidation(orderValidation: OrderValidation): Uni<Void> =
-        ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.OUT_OF_STOCK).replaceWithVoid()
+        ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.OUT_OF_STOCK, null).replaceWithVoid()
 }
