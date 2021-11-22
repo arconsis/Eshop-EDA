@@ -21,6 +21,6 @@ enum class OrderValidationStatus {
 
 fun OrderValidation.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
     aggregateType = AggregateType.ORDER_VALIDATION,
-    aggregateId = this.orderId,
+    aggregateId = UUID.randomUUID(),
     payload = objectMapper.convertValue(this, object : TypeReference<Map<String, Any>>() {})
 )

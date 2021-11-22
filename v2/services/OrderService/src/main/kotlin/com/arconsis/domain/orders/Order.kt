@@ -39,6 +39,6 @@ enum class OrderStatus {
 
 fun Order.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
     aggregateType = AggregateType.ORDER,
-    aggregateId = this.id,
+    aggregateId = UUID.randomUUID(),
     payload = objectMapper.convertValue(this, object : TypeReference<Map<String, Any>>() {})
 )
