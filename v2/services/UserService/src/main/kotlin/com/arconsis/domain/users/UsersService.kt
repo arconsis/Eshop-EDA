@@ -3,7 +3,6 @@ package com.arconsis.domain.users
 import com.arconsis.data.outboxevents.OutboxEventsRepository
 import com.arconsis.data.users.UsersRepository
 import com.arconsis.presentation.http.dto.UserCreate
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
 import org.hibernate.reactive.mutiny.Mutiny
 import java.util.*
@@ -13,7 +12,6 @@ import javax.enterprise.context.ApplicationScoped
 class UsersService(
     private val usersRepository: UsersRepository,
     private val outboxEventsRepository: OutboxEventsRepository,
-    private val objectMapper: ObjectMapper,
     private val sessionFactory: Mutiny.SessionFactory
 ) {
 
@@ -29,7 +27,7 @@ class UsersService(
     }
 
     private fun Uni<User>.createOutboxEvent(session: Mutiny.Session) = flatMap { user ->
-        val createOutboxEvent = user.toCreateOutboxEvent(objectMapper)
+        val createOutboxEvent = user.toCreateOutboxEvent()
         outboxEventsRepository.createEvent(createOutboxEvent, session).map {
             user
         }

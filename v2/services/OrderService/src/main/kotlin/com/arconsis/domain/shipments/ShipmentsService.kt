@@ -4,7 +4,6 @@ import com.arconsis.data.orders.OrdersRepository
 import com.arconsis.data.outboxevents.OutboxEventsRepository
 import com.arconsis.domain.orders.OrderStatus
 import com.arconsis.domain.orders.toCreateOutboxEvent
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
 import org.hibernate.reactive.mutiny.Mutiny
 import javax.enterprise.context.ApplicationScoped
@@ -13,7 +12,6 @@ import javax.enterprise.context.ApplicationScoped
 class ShipmentsService(
     private val ordersRepository: OrdersRepository,
     private val outboxEventsRepository: OutboxEventsRepository,
-    private val objectMapper: ObjectMapper,
     private val sessionFactory: Mutiny.SessionFactory
 ) {
     fun handleShipmentEvents(shipment: Shipment): Uni<Void> {
@@ -28,7 +26,7 @@ class ShipmentsService(
         return sessionFactory.withTransaction { session, _ ->
             ordersRepository.updateOrder(shipment.orderId, OrderStatus.COMPLETED, session)
                 .flatMap { order ->
-                    val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                    val createOutboxEvent = order.toCreateOutboxEvent()
                     outboxEventsRepository.createEvent(createOutboxEvent, session)
                 }
                 .map {
@@ -41,7 +39,7 @@ class ShipmentsService(
         return sessionFactory.withTransaction { session, _ ->
             ordersRepository.updateOrder(shipment.orderId, OrderStatus.OUT_FOR_SHIPMENT, session)
                 .flatMap { order ->
-                    val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                    val createOutboxEvent = order.toCreateOutboxEvent()
                     outboxEventsRepository.createEvent(createOutboxEvent, session)
                 }
                 .map {
