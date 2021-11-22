@@ -1,10 +1,8 @@
 package com.arconsis.domain.payments
 
+import com.arconsis.data.outboxevents.OutboxEventEntityEvent
 import com.arconsis.domain.outboxevents.AggregateType
-import com.arconsis.domain.outboxevents.CreateOutboxEvent
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.vertx.core.json.JsonObject
 import java.util.*
 
 data class Payment(
@@ -28,12 +26,6 @@ data class CreatePayment(
     val currency: String
 )
 
-fun Payment.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
-    aggregateType = AggregateType.PAYMENT,
-    aggregateId = this.transactionId,
-    payload = toJsonObject()
-)
-
 fun CreatePayment.toPayment(transactionId: UUID, status: PaymentStatus) = Payment(
     transactionId = transactionId,
     orderId = orderId,
@@ -43,10 +35,20 @@ fun CreatePayment.toPayment(transactionId: UUID, status: PaymentStatus) = Paymen
     status = status,
 )
 
-private fun Payment.toJsonObject() = JsonObject()
-    .put("transactionId", transactionId.toString())
-    .put("orderId", orderId.toString())
-    .put("userId", userId.toString())
-    .put("amount", amount)
-    .put("currency", currency)
-    .put("status", status)
+fun Payment.toOutboxEventEntityEvent(): OutboxEventEntityEvent {
+    val mapper = ObjectMapper()
+    val payload = mapper.createObjectNode()
+        .put("transactionId", transactionId.toString())
+        .put("orderId", orderId.toString())
+        .put("userId", userId.toString())
+        .put("amount", amount)
+        .put("currency", currency)
+        .put("status", status.name)
+
+    return OutboxEventEntityEvent(
+        aggregateId = transactionId,
+        aggregateType = AggregateType.PAYMENT,
+        type = status,
+        node = payload
+    )
+}

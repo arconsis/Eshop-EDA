@@ -1,13 +1,9 @@
-CREATE TYPE aggregate_type AS ENUM (
-    'PAYMENT'
-);
-
 CREATE TABLE outbox_events
 (
-    id              UUID PRIMARY KEY,
-    aggregate_type  aggregate_type NOT NULL,
-    aggregate_id    UUID NOT NULL,
-    payload         JSONB NOT NULL,
-    created_at      TIMESTAMP,
-    updated_at      TIMESTAMP
-)
+    id uuid PRIMARY KEY,
+    aggregatetype VARCHAR(75),
+    aggregateid VARCHAR(50) NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    timestamp TIMESTAMP NOT NULL,
+    payload varchar(4096) NOT NULL
+);

@@ -1,10 +1,8 @@
 package com.arconsis.domain.users
 
+import com.arconsis.data.outboxevents.OutboxEventEntityEvent
 import com.arconsis.domain.outboxevents.AggregateType
-import com.arconsis.domain.outboxevents.CreateOutboxEvent
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.vertx.core.json.JsonObject
 import java.util.*
 
 data class User(
@@ -15,14 +13,17 @@ data class User(
     val username: String,
 )
 
-private fun User.toJsonObject() = JsonObject()
-    .put("id", id.toString())
-    .put("firstName", firstName)
-    .put("email", email)
-    .put("username", username)
-
-fun User.toCreateOutboxEvent(): CreateOutboxEvent = CreateOutboxEvent(
-    aggregateType = AggregateType.USER,
-    aggregateId = this.id,
-    payload = toJsonObject()
-)
+fun User.toOutboxEventEntityEvent(): OutboxEventEntityEvent {
+    val mapper = ObjectMapper()
+    val payload = mapper.createObjectNode()
+        .put("id", id.toString())
+        .put("firstName", firstName)
+        .put("email", email)
+        .put("username", username)
+    return OutboxEventEntityEvent(
+        aggregateId = id,
+        aggregateType = AggregateType.USER,
+        type = "USER_CREATED",
+        node = payload
+    )
+}

@@ -12,7 +12,7 @@ import javax.enterprise.context.ApplicationScoped
 class UsersService(
     private val usersRepository: UsersRepository,
     private val outboxEventsRepository: OutboxEventsRepository,
-    private val sessionFactory: Mutiny.SessionFactory
+    private val sessionFactory: Mutiny.SessionFactory,
 ) {
 
     fun createUser(userCreate: UserCreate): Uni<User> {
@@ -27,9 +27,9 @@ class UsersService(
     }
 
     private fun Uni<User>.createOutboxEvent(session: Mutiny.Session) = flatMap { user ->
-        val createOutboxEvent = user.toCreateOutboxEvent()
-        outboxEventsRepository.createEvent(createOutboxEvent, session).map {
-            user
-        }
+        outboxEventsRepository.createEvent(user, session)
+            .map {
+                user
+            }
     }
 }

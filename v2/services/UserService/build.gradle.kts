@@ -31,6 +31,7 @@ dependencies {
     implementation("io.quarkus:quarkus-security-jpa")
     implementation("io.quarkus:quarkus-smallrye-health")
     implementation("io.quarkus:quarkus-kotlin")
+    implementation("io.debezium:debezium-quarkus-outbox:1.8.0.Alpha2")
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")

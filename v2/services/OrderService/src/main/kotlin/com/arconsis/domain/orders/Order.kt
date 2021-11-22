@@ -1,11 +1,8 @@
 package com.arconsis.domain.orders
 
+import com.arconsis.data.outboxevents.OutboxEventEntityEvent
 import com.arconsis.domain.outboxevents.AggregateType
-import com.arconsis.domain.outboxevents.CreateOutboxEvent
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.smallrye.reactive.messaging.kafka.Record
-import io.vertx.core.json.JsonObject
 import java.util.*
 
 data class CreateOrder(
@@ -38,17 +35,21 @@ enum class OrderStatus {
     REFUNDED
 }
 
-private fun Order.toJsonObject() = JsonObject()
-    .put("id", id.toString())
-    .put("userId", userId.toString())
-    .put("amount", amount)
-    .put("currency", currency)
-    .put("productId", productId)
-    .put("quantity", quantity)
-    .put("status", status)
 
-fun Order.toCreateOutboxEvent(): CreateOutboxEvent = CreateOutboxEvent(
-    aggregateType = AggregateType.ORDER,
-    aggregateId = this.id,
-    payload = toJsonObject()
-)
+fun Order.toOutboxEventEntityEvent(): OutboxEventEntityEvent {
+    val mapper = ObjectMapper()
+    val payload = mapper.createObjectNode()
+        .put("id", id.toString())
+        .put("userId", userId.toString())
+        .put("amount", amount)
+        .put("currency", currency)
+        .put("productId", productId)
+        .put("quantity", quantity)
+        .put("status", status.name)
+    return OutboxEventEntityEvent(
+        aggregateId = id,
+        aggregateType = AggregateType.ORDER,
+        type = status,
+        node = payload
+    )
+}

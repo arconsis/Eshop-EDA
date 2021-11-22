@@ -1,19 +1,22 @@
 package com.arconsis.data.outboxevents
 
-import com.arconsis.domain.outboxevents.CreateOutboxEvent
 import com.arconsis.domain.outboxevents.OutboxEvent
+import com.arconsis.domain.payments.Payment
+import com.arconsis.domain.payments.toOutboxEventEntityEvent
+import com.fasterxml.jackson.databind.JsonNode
+import io.debezium.outbox.quarkus.ExportedEvent
 import io.smallrye.mutiny.Uni
-import org.hibernate.reactive.mutiny.Mutiny
 import javax.enterprise.context.ApplicationScoped
+import javax.enterprise.event.Event
 
 @ApplicationScoped
-class OutboxEventsRepository(private val sessionFactory: Mutiny.SessionFactory) {
-    fun createEvent(createOutboxEvent: CreateOutboxEvent): Uni<OutboxEvent> {
-        val outboxEventEntity = createOutboxEvent.toOutboxEventEntity()
-
-        return sessionFactory.withTransaction { s, _ ->
-            s.persist(outboxEventEntity)
-                .map { outboxEventEntity.toOutboxEvent() }
-        }
+class OutboxEventsRepository(private val event: Event<ExportedEvent<String, JsonNode>>) {
+    fun createEvent(payment: Payment): Uni<OutboxEvent> {
+        return Uni.createFrom()
+            .completionStage(
+                event.fireAsync(payment.toOutboxEventEntityEvent())
+            ).map {
+                it.toOutboxEvent()
+            }
     }
 }

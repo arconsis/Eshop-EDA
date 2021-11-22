@@ -17,8 +17,7 @@ class OrdersService(
         return sessionFactory.withTransaction { session, _ ->
             ordersRepository.createOrder(createOrder, session)
                 .flatMap { order ->
-                    val createOutboxEvent = order.toCreateOutboxEvent()
-                    outboxEventsRepository.createEvent(createOutboxEvent, session).map {
+                    outboxEventsRepository.createEvent(order, session).map {
                         order
                     }
                 }

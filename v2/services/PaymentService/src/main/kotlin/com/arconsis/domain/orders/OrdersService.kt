@@ -4,7 +4,6 @@ import com.arconsis.data.outboxevents.OutboxEventsRepository
 import com.arconsis.data.payments.PaymentsRepository
 import com.arconsis.data.payments.toCreatePayment
 import com.arconsis.domain.payments.Payment
-import com.arconsis.domain.payments.toCreateOutboxEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
 import javax.enterprise.context.ApplicationScoped
@@ -32,7 +31,6 @@ class OrdersService(
     }
 
     private fun Uni<Payment>.createOutboxEvent() = flatMap { payment ->
-        val createOutboxEvent = payment.toCreateOutboxEvent(objectMapper)
-        outboxEventsRepository.createEvent(createOutboxEvent)
+        outboxEventsRepository.createEvent(payment)
     }
 }

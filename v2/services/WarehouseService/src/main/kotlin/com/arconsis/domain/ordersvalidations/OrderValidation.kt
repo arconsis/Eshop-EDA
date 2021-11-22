@@ -1,7 +1,9 @@
 package com.arconsis.domain.ordersvalidations
 
+import com.arconsis.data.outboxevents.OutboxEventEntityEvent
 import com.arconsis.domain.outboxevents.AggregateType
 import com.arconsis.domain.outboxevents.CreateOutboxEvent
+import com.arconsis.domain.shipments.Shipment
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.vertx.core.json.JsonObject
@@ -20,15 +22,19 @@ enum class OrderValidationStatus {
     INVALID
 }
 
-fun OrderValidation.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
-    aggregateType = AggregateType.ORDER_VALIDATION,
-    aggregateId = this.orderId,
-    payload = toJsonObject()
-)
+fun OrderValidation.toOutboxEventEntityEvent(): OutboxEventEntityEvent {
+    val mapper = ObjectMapper()
+    val payload = mapper.createObjectNode()
+        .put("productId", productId)
+        .put("quantity", quantity)
+        .put("orderId", orderId.toString())
+        .put("userId", userId.toString())
+        .put("status", status.name)
 
-private fun OrderValidation.toJsonObject() = JsonObject()
-    .put("productId", productId)
-    .put("quantity", quantity)
-    .put("orderId", orderId.toString())
-    .put("userId", userId.toString())
-    .put("status", status)
+    return OutboxEventEntityEvent(
+        aggregateId = orderId,
+        aggregateType = AggregateType.SHIPMENT,
+        type = status.name,
+        node = payload
+    )
+}
