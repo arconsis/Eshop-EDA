@@ -145,7 +145,7 @@ resource "aws_iam_policy" "worker_policy" {
   name        = "worker-policy"
   description = "Worker policy for the ALB Ingress"
 
-  policy = file("../common/templates/eks/iam-policy.json")
+  policy = file("./common/templates/eks/iam-policy.json")
 }
 
 provider "helm" {
@@ -224,15 +224,15 @@ output "bootstrap_brokers_tls" {
 
 resource "kubernetes_config_map" "debezium_configmap" {
   metadata {
-    name      = debezium-configmap
-    namespace = eshop-eda
+    name      = "debezium-configmap"
+    namespace = "eshop-eda"
   }
 
   data = {
-    GROUP_ID             = 1
-    CONFIG_STORAGE_TOPIC = connect_configs
-    OFFSET_STORAGE_TOPIC = connect_offsets
-    STATUS_STORAGE_TOPIC = connect_status
+    GROUP_ID             = "1"
+    CONFIG_STORAGE_TOPIC = "connect_configs"
+    OFFSET_STORAGE_TOPIC = "connect_offsets"
+    STATUS_STORAGE_TOPIC = "connect_status"
     BOOTSTRAP_SERVERS    = aws_msk_cluster.kafka.bootstrap_brokers
   }
 }
@@ -278,8 +278,8 @@ data "template_file" "payment_connector_initializer" {
 
 resource "kubernetes_config_map" "bastion_configmap" {
   metadata {
-    name      = bastion-configmap
-    namespace = eshop-eda
+    name      = "bastion-configmap"
+    namespace = "eshop-eda"
   }
 
   data = {
