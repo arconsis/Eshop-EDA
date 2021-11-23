@@ -238,7 +238,7 @@ resource "kubernetes_config_map" "debezium_configmap" {
 }
 
 data "template_file" "orders_connector_initializer" {
-  template = file("../common/templates/debezium/connector.json.tpl")
+  template = file("./common/templates/debezium/connector.json.tpl")
   vars     = {
     database_hostname  = module.orders_database.db_endpoint
     database_user      = var.orders_database_username
@@ -251,7 +251,7 @@ data "template_file" "orders_connector_initializer" {
 }
 
 data "template_file" "warehouse_connector_initializer" {
-  template = file("../common/templates/debezium/connector.json.tpl")
+  template = file("./common/templates/debezium/connector.json.tpl")
   vars     = {
     database_hostname  = module.warehouse_database.db_endpoint
     database_user      = var.warehouse_database_username
@@ -264,7 +264,7 @@ data "template_file" "warehouse_connector_initializer" {
 }
 
 data "template_file" "payment_connector_initializer" {
-  template = file("../common/templates/debezium/connector.json.tpl")
+  template = file("./common/templates/debezium/connector.json.tpl")
   vars     = {
     database_hostname  = module.payments_database.db_endpoint
     database_user      = var.payments_database_username
