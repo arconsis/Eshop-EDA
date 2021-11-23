@@ -7,8 +7,10 @@
     "database.port": "5432",
     "database.user": "${database_user}",
     "database.password": "${database_password}",
-    "database.dbname" : "inventory",
+    "database.dbname" : "${database_name}",
     "database.server.name": "${database_name}",
-    "table.whitelist": "public.inventory"
+    "table.include.list": "${table_include_list}",
+    "database.history.kafka.bootstrap.servers":"${bootstrap_servers}",
+    "database.history.kafka.topic": "${history_topic}"
   }
 }

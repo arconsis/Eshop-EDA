@@ -123,6 +123,16 @@ variable "orders_database_name" {
   type        = string
 }
 
+variable "orders_history_topic" {
+  description = "orders db changes topic"
+  type        = string
+}
+
+variable "orders_table_include_list" {
+  description = "list of tables that should be observed by debezium"
+  type        = list(string)
+}
+
 variable "payments_database_username" {
   description = "The password for the payments DB master"
   type        = string
@@ -133,6 +143,16 @@ variable "payments_database_password" {
   description = "The password for the payments DB master"
   type        = string
   sensitive   = true
+}
+
+variable "payments_history_topic" {
+  description = "payments db changes topic"
+  type        = string
+}
+
+variable "payments_table_include_list" {
+  description = "list of tables that should be observed by debezium"
+  type        = list(string)
 }
 
 variable "payments_database_name" {
@@ -155,4 +175,14 @@ variable "warehouse_database_password" {
 variable "warehouse_database_name" {
   description = "warehouse DB name"
   type        = string
+}
+
+variable "warehouse_history_topic" {
+  description = "orders db changes topic"
+  type        = string
+}
+
+variable "warehouse_table_include_list" {
+  description = "list of tables that should be observed by debezium"
+  type        = list(string)
 }
