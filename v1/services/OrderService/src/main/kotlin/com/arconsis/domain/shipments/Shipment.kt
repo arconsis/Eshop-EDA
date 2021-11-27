@@ -4,16 +4,18 @@ import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 import java.util.*
 
 data class Shipment(
-    val id: UUID,
+    val id: UUID?,
     val orderId: UUID,
     val userId: UUID,
     val status: ShipmentStatus,
 )
 
 enum class ShipmentStatus {
-    PREPARING,
+    PREPARING_SHIPMENT,
     OUT_FOR_SHIPMENT,
-    SHIPPED
+    SHIPPED,
+    CANCELLED,
+    FAILED,
 }
 
 val Shipment.isOutForShipment
