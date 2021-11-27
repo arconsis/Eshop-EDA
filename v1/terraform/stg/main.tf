@@ -199,6 +199,21 @@ resource "aws_msk_cluster" "kafka" {
       }
     }
   }
+
+  configuration_info {
+    arn      = "${aws_msk_configuration.mks_cluster_custom_configuration.arn}"
+    revision = "${aws_msk_configuration.mks_cluster_custom_configuration.latest_revision}"
+  }
+}
+
+resource "aws_msk_configuration" "mks_cluster_custom_configuration" {
+  kafka_versions = ["2.8.1"]
+  name           = "mks-custom-config"
+  server_properties = <<PROPERTIES
+auto.create.topics.enable = true
+delete.topic.enable = true
+num.partitions = 1
+PROPERTIES
 }
 
 output "zookeeper_connect_string" {
