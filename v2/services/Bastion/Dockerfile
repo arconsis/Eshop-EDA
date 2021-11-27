@@ -8,8 +8,8 @@ ENV GO111MODULE=on \
 WORKDIR /build
 
 COPY go.mod .
-# Enable when we add dependencies
-#COPY go.sum .
+COPY go.sum .
+
 RUN go mod download
 
 COPY . .

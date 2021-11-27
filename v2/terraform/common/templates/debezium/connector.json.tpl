@@ -11,6 +11,7 @@
     "database.server.name": "${database_name}",
     "table.include.list": "${table_include_list}",
     "database.history.kafka.bootstrap.servers":"${bootstrap_servers}",
-    "database.history.kafka.topic": "${history_topic}"
+    "database.history.kafka.topic": "${history_topic}",
+    "slot.name" : "${slot_name}"
   }
 }
