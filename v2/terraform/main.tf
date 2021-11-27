@@ -69,44 +69,14 @@ module "private_vpc_sg" {
 # Database Configuration
 ################################################################################
 # Orders Database
-module "orders_database" {
+module "eda_database" {
   source               = "./modules/database"
-  database_identifier  = var.orders_database_name
-  database_username    = var.orders_database_username
-  database_password    = var.orders_database_password
+  database_identifier  = var.eda_database_name
+  database_username    = var.eda_database_username
+  database_password    = var.eda_database_username
   subnet_ids           = module.networking.private_subnet_ids
   security_group_ids   = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name = "OrdersDatabaseMonitoringRole"
-}
-# Payments Database
-module "payments_database" {
-  source               = "./modules/database"
-  database_identifier  = var.payments_database_name
-  database_username    = var.payments_database_username
-  database_password    = var.payments_database_password
-  subnet_ids           = module.networking.private_subnet_ids
-  security_group_ids   = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name = "PaymentsDatabaseMonitoringRole"
-}
-# Warehouse Database
-module "warehouse_database" {
-  source               = "./modules/database"
-  database_identifier  = var.warehouse_database_name
-  database_username    = var.warehouse_database_username
-  database_password    = var.warehouse_database_password
-  subnet_ids           = module.networking.private_subnet_ids
-  security_group_ids   = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name = "WarehouseDatabaseMonitoringRole"
-}
-# Users Database
-module "users_database" {
-  source               = "./modules/database"
-  database_identifier  = var.users_database_name
-  database_username    = var.users_database_username
-  database_password    = var.users_database_password
-  subnet_ids           = module.networking.private_subnet_ids
-  security_group_ids   = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name = "UsersDatabaseMonitoringRole"
+  monitoring_role_name = "EdaDatabaseMonitoringRole"
 }
 
 module "eks" {
@@ -237,12 +207,25 @@ resource "kubernetes_config_map" "debezium_configmap" {
   }
 }
 
+data "template_file" "users_connector_initializer" {
+  template = file("./common/templates/debezium/connector.json.tpl")
+  vars     = {
+    database_hostname  = module.eda_database.db_endpoint
+    database_user      = var.eda_database_username
+    database_password  = var.eda_database_password
+    database_name      = var.users_database_name
+    bootstrap_servers  = aws_msk_cluster.kafka.bootstrap_brokers
+    history_topic      = var.users_history_topic
+    table_include_list = join(",", var.users_table_include_list)
+  }
+}
+
 data "template_file" "orders_connector_initializer" {
   template = file("./common/templates/debezium/connector.json.tpl")
   vars     = {
-    database_hostname  = module.orders_database.db_endpoint
-    database_user      = var.orders_database_username
-    database_password  = var.orders_database_password
+    database_hostname  = module.eda_database.db_endpoint
+    database_user      = var.eda_database_username
+    database_password  = var.eda_database_password
     database_name      = var.orders_database_name
     bootstrap_servers  = aws_msk_cluster.kafka.bootstrap_brokers
     history_topic      = var.orders_history_topic
@@ -253,9 +236,9 @@ data "template_file" "orders_connector_initializer" {
 data "template_file" "warehouse_connector_initializer" {
   template = file("./common/templates/debezium/connector.json.tpl")
   vars     = {
-    database_hostname  = module.warehouse_database.db_endpoint
-    database_user      = var.warehouse_database_username
-    database_password  = var.warehouse_database_password
+    database_hostname  = module.eda_database.db_endpoint
+    database_user      = var.eda_database_username
+    database_password  = var.eda_database_password
     database_name      = var.warehouse_database_name
     bootstrap_servers  = aws_msk_cluster.kafka.bootstrap_brokers
     history_topic      = var.warehouse_history_topic
@@ -266,9 +249,9 @@ data "template_file" "warehouse_connector_initializer" {
 data "template_file" "payment_connector_initializer" {
   template = file("./common/templates/debezium/connector.json.tpl")
   vars     = {
-    database_hostname  = module.payments_database.db_endpoint
-    database_user      = var.payments_database_username
-    database_password  = var.payments_database_password
+    database_hostname  = module.eda_database.db_endpoint
+    database_user      = var.eda_database_username
+    database_password  = var.eda_database_password
     database_name      = var.payments_database_name
     bootstrap_servers  = aws_msk_cluster.kafka.bootstrap_brokers
     history_topic      = var.payments_history_topic
@@ -283,6 +266,7 @@ resource "kubernetes_config_map" "bastion_configmap" {
   }
 
   data = {
+    USERS_CONNECTOR_JSON    = jsonencode(replace(data.template_file.users_connector_initializer.rendered, "\n", " "))
     ORDERS_CONNECTOR_JSON    = jsonencode(replace(data.template_file.orders_connector_initializer.rendered, "\n", " "))
     WAREHOUSE_CONNECTOR_JSON = jsonencode(replace(data.template_file.warehouse_connector_initializer.rendered, "\n", " "))
     PAYMENTS_CONNECTOR_JSON  = jsonencode(replace(data.template_file.payment_connector_initializer.rendered, "\n", " "))

@@ -6,7 +6,7 @@ services:
       - "5432:5432"
     restart: always
     environment:
-      POSTGRES_DB: user-db
+      POSTGRES_DB: users-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: secret
     volumes:

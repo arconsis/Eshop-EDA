@@ -1,4 +1,6 @@
 users_database_name          = "users-db"
+users_history_topic          = "schema-changes.users"
+users_table_include_list     = ["users"]
 orders_database_name         = "orders-db"
 orders_history_topic         = "schema-changes.orders"
 orders_table_include_list    = ["orders"]

@@ -17,15 +17,13 @@ import (
 const ordersConnectorJsonKey = "ORDERS_CONNECTOR_JSON"
 const warehouseConnectorJsonKey = "WAREHOUSE_CONNECTOR_JSON"
 const paymentsConnectorJsonKey = "PAYMENTS_CONNECTOR_JSON"
+const usersConnectorJsonKey = "USERS_CONNECTOR_JSON"
 const debeziumHostKey = "DEBEZIUM_HOST"
 const portKey = "PORT"
 const databaseUrlKey = "DATABASE_URL"
 const appEnvKey = "APP_ENV"
 
 var debeziumHost = ""
-var ordersConnectorJson = ""
-var warehouseConnectorJson = ""
-var paymentsConnectorJson = ""
 
 func main() {
 
@@ -37,9 +35,8 @@ func main() {
 	}
 
 	debeziumHost = os.Getenv(debeziumHostKey)
-	ordersConnectorJson = os.Getenv(ordersConnectorJsonKey)
-	warehouseConnectorJson = os.Getenv(warehouseConnectorJsonKey)
-	paymentsConnectorJson = os.Getenv(paymentsConnectorJsonKey)
+
+	connectors := []string{os.Getenv(ordersConnectorJsonKey), os.Getenv(warehouseConnectorJsonKey), os.Getenv(paymentsConnectorJsonKey), os.Getenv(usersConnectorJsonKey)}
 
 	r := chi.NewRouter()
 	r.Post("/createDatabases", func(w http.ResponseWriter, r *http.Request) {
@@ -48,7 +45,7 @@ func main() {
 	})
 
 	r.Post("/createConnectors", func(w http.ResponseWriter, r *http.Request) {
-		err := createConnectors()
+		err := createConnectors(connectors)
 		if err != nil {
 			log.Printf("Connectors creation failed: %v", err)
 			http.Error(w, http.StatusText(400), 400)
@@ -61,21 +58,17 @@ func main() {
 	http.ListenAndServe(port, r)
 }
 
-func createConnectors() error {
+func createConnectors(connectors []string) error {
 	var eg errgroup.Group
 
 	log.Println("createConnectors: Starting workers")
-	eg.Go(func() error {
-		return createConnector(ordersConnectorJson)
-	})
 
-	eg.Go(func() error {
-		return createConnector(warehouseConnectorJson)
-	})
-
-	eg.Go(func() error {
-		return createConnector(paymentsConnectorJson)
-	})
+	for _, c := range connectors {
+		connector := c
+		eg.Go(func() error {
+			return createConnector(connector)
+		})
+	}
 
 	log.Println("createConnectors: Waiting for workers to finish")
 	err := eg.Wait()
@@ -101,9 +94,9 @@ func createDatabases() {
 		log.Printf("Create warehouse-db failed: %v\n", err)
 	}
 
-	_, err = dbpool.Exec(context.Background(), "CREATE DATABASE \"user-db\" OWNER postgres")
+	_, err = dbpool.Exec(context.Background(), "CREATE DATABASE \"users-db\" OWNER postgres")
 	if err != nil {
-		log.Printf("Create user-db failed: %v\n", err)
+		log.Printf("Create users-db failed: %v\n", err)
 	}
 
 	_, err = dbpool.Exec(context.Background(), "CREATE DATABASE \"payments-db\" OWNER postgres")

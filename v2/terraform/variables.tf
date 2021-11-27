@@ -89,16 +89,21 @@ variable "environment" {
 ################################################################################
 # https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1
 # using environment variables
-variable "users_database_username" {
-  description = "The username for the users DB master"
+variable "eda_database_username" {
+  description = "The password for the eda DB master"
   type        = string
   sensitive   = true
 }
 
-variable "users_database_password" {
-  description = "The password for the users DB master"
+variable "eda_database_password" {
+  description = "The password for the eda DB master"
   type        = string
   sensitive   = true
+}
+
+variable "eda_database_name" {
+  description = "eda DB name"
+  type        = string
 }
 
 variable "users_database_name" {
@@ -106,16 +111,14 @@ variable "users_database_name" {
   type        = string
 }
 
-variable "orders_database_username" {
-  description = "The password for the orders DB master"
+variable "users_history_topic" {
+  description = "users db changes topic"
   type        = string
-  sensitive   = true
 }
 
-variable "orders_database_password" {
-  description = "The password for the orders DB master"
-  type        = string
-  sensitive   = true
+variable "users_table_include_list" {
+  description = "list of tables that should be observed by debezium"
+  type        = list(string)
 }
 
 variable "orders_database_name" {
@@ -133,18 +136,6 @@ variable "orders_table_include_list" {
   type        = list(string)
 }
 
-variable "payments_database_username" {
-  description = "The password for the payments DB master"
-  type        = string
-  sensitive   = true
-}
-
-variable "payments_database_password" {
-  description = "The password for the payments DB master"
-  type        = string
-  sensitive   = true
-}
-
 variable "payments_history_topic" {
   description = "payments db changes topic"
   type        = string
@@ -158,18 +149,6 @@ variable "payments_table_include_list" {
 variable "payments_database_name" {
   description = "payments DB name"
   type        = string
-}
-
-variable "warehouse_database_username" {
-  description = "The password for the warehouse DB master"
-  type        = string
-  sensitive   = true
-}
-
-variable "warehouse_database_password" {
-  description = "The password for the warehouse DB master"
-  type        = string
-  sensitive   = true
 }
 
 variable "warehouse_database_name" {
