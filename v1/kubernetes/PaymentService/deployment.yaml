@@ -22,6 +22,13 @@ spec:
         ports:
           - containerPort: 3000
             protocol: TCP
+        resources:
+          limits:
+            cpu: '500m'
+            memory: '1024Mi'
+          requests:
+            cpu: '500m'
+            memory: '1024Mi'
         envFrom:
         - secretRef:
             name: payments-service-secrets
