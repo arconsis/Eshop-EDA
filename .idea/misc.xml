@@ -2,6 +2,11 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/v1/services/EmailService" />
+    <file type="web" url="file://$PROJECT_DIR$/v1/services/OrderService" />
+    <file type="web" url="file://$PROJECT_DIR$/v1/services/PaymentService" />
+    <file type="web" url="file://$PROJECT_DIR$/v1/services/UserService" />
+    <file type="web" url="file://$PROJECT_DIR$/v1/services/WarehouseService" />
     <file type="web" url="file://$PROJECT_DIR$/v3/services/EmailService" />
     <file type="web" url="file://$PROJECT_DIR$/v3/services/OrderService" />
     <file type="web" url="file://$PROJECT_DIR$/v3/services/PaymentService" />

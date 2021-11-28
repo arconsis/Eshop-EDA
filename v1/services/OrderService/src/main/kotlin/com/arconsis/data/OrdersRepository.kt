@@ -43,4 +43,10 @@ class OrdersRepository(private val sessionFactory: Mutiny.SessionFactory) {
                 .map { orderEntity -> orderEntity.toOrder() }
         }
     }
+
+    fun getOrders(userId: UUID): List<Order> {
+        sessionFactory.withTransaction { s, _ ->
+            s.find()
+        }
+    }
 }

@@ -24,6 +24,13 @@ class OrdersResource(
     }
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun getOrders(@QueryParam("userId") userId: UUID): List<Order> {
+        return ordersService.getOrders(userId)
+    }
+
+    @GET
     @Path("/{orderId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

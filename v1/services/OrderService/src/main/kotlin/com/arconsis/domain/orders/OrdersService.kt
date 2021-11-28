@@ -26,4 +26,9 @@ class OrdersService(
     fun getOrder(orderId: UUID): Uni<Order> {
         return ordersRepository.getOrder(orderId)
     }
+
+    fun getOrders(userId: UUID): List<Order> {
+        return ordersRepository.getOrders(userId)
+    }
+
 }
