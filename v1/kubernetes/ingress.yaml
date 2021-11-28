@@ -18,21 +18,21 @@ spec:
               service:
                 name: order-service
                 port:
-                  number: 3000
+                  number: 8080
           - path: /inventory
             pathType: Prefix
             backend:
               service:
                 name: warehouse-service
                 port:
-                  number: 3000
+                  number: 8080
           - path: /shipments
             pathType: Prefix
             backend:
               service:
                 name: warehouse-service
                 port:
-                  number: 3000
+                  number: 8080
           - path: /users
             pathType: Prefix
             backend:
