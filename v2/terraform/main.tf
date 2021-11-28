@@ -77,6 +77,7 @@ module "eda_database" {
   subnet_ids           = module.networking.private_subnet_ids
   security_group_ids   = [module.private_vpc_sg.security_group_id]
   monitoring_role_name = "EdaDatabaseMonitoringRole"
+  database_parameters  = var.database_parameters
 }
 
 module "eks" {
@@ -266,7 +267,7 @@ resource "kubernetes_config_map" "bastion_configmap" {
   }
 
   data = {
-    USERS_CONNECTOR_JSON    = jsonencode(replace(data.template_file.users_connector_initializer.rendered, "\n", " "))
+    USERS_CONNECTOR_JSON     = jsonencode(replace(data.template_file.users_connector_initializer.rendered, "\n", " "))
     ORDERS_CONNECTOR_JSON    = jsonencode(replace(data.template_file.orders_connector_initializer.rendered, "\n", " "))
     WAREHOUSE_CONNECTOR_JSON = jsonencode(replace(data.template_file.warehouse_connector_initializer.rendered, "\n", " "))
     PAYMENTS_CONNECTOR_JSON  = jsonencode(replace(data.template_file.payment_connector_initializer.rendered, "\n", " "))

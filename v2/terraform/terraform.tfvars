@@ -10,3 +10,5 @@ warehouse_table_include_list = ["shipments", "inventory"]
 payments_database_name       = "orders-db"
 payments_history_topic       = "schema-changes.payments"
 payments_table_include_list  = ["payments"]
+
+database_parameters = [{ rds_replication = "1" }]

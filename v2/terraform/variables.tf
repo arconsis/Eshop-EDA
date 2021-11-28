@@ -165,3 +165,9 @@ variable "warehouse_table_include_list" {
   description = "list of tables that should be observed by debezium"
   type        = list(string)
 }
+
+variable "database_parameters" {
+  description = "DB parameters"
+  type        = list(map(string))
+  default     = []
+}
