@@ -193,21 +193,6 @@ output "bootstrap_brokers_tls" {
   value       = aws_msk_cluster.kafka.bootstrap_brokers_tls
 }
 
-resource "kubernetes_config_map" "debezium_configmap" {
-  metadata {
-    name      = "debezium-configmap"
-    namespace = "eshop-eda"
-  }
-
-  data = {
-    GROUP_ID             = "1"
-    CONFIG_STORAGE_TOPIC = "connect_configs"
-    OFFSET_STORAGE_TOPIC = "connect_offsets"
-    STATUS_STORAGE_TOPIC = "connect_status"
-    BOOTSTRAP_SERVERS    = aws_msk_cluster.kafka.bootstrap_brokers
-  }
-}
-
 data "template_file" "users_connector_initializer" {
   template = file("./common/templates/debezium/connector.json.tpl")
   vars     = {
@@ -260,16 +245,22 @@ data "template_file" "payment_connector_initializer" {
   }
 }
 
-resource "kubernetes_config_map" "bastion_configmap" {
-  metadata {
-    name      = "bastion-configmap"
-    namespace = "eshop-eda"
-  }
+output "bootstrap_servers" {
+  value = aws_msk_cluster.kafka.bootstrap_brokers
+}
 
-  data = {
-    USERS_CONNECTOR_JSON     = jsonencode(replace(data.template_file.users_connector_initializer.rendered, "\n", " "))
-    ORDERS_CONNECTOR_JSON    = jsonencode(replace(data.template_file.orders_connector_initializer.rendered, "\n", " "))
-    WAREHOUSE_CONNECTOR_JSON = jsonencode(replace(data.template_file.warehouse_connector_initializer.rendered, "\n", " "))
-    PAYMENTS_CONNECTOR_JSON  = jsonencode(replace(data.template_file.payment_connector_initializer.rendered, "\n", " "))
-  }
+output "users_connector_json" {
+  value = jsonencode(replace(data.template_file.users_connector_initializer.rendered, "\n", " "))
+}
+
+output "orders_connector_json" {
+  value = jsonencode(replace(data.template_file.orders_connector_initializer.rendered, "\n", " "))
+}
+
+output "warehouse_connector_json" {
+  value = jsonencode(replace(data.template_file.warehouse_connector_initializer.rendered, "\n", " "))
+}
+
+output "payments_connector_json" {
+  value = jsonencode(replace(data.template_file.payment_connector_initializer.rendered, "\n", " "))
 }

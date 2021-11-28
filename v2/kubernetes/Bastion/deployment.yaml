@@ -21,11 +21,11 @@ spec:
           image: eldimious/bastion-eda:latest
           resources:
             limits:
-              cpu: '600m'
+              cpu: '300m'
               memory: '512Mi'
             requests:
               cpu: '300m'
-              memory: '512Mi'
+              memory: '256Mi'
           envFrom:
             - configMapRef:
                 name: bastion-configmap

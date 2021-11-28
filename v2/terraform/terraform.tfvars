@@ -1,3 +1,4 @@
+eda_database_name            = "postgres"
 users_database_name          = "users-db"
 users_history_topic          = "schema-changes.users"
 users_table_include_list     = ["users"]
@@ -10,5 +11,10 @@ warehouse_table_include_list = ["shipments", "inventory"]
 payments_database_name       = "orders-db"
 payments_history_topic       = "schema-changes.payments"
 payments_table_include_list  = ["payments"]
+database_parameters          = [
+  {
+    name  = "rds_replication"
+    value = 1
+  }
+]
 
-database_parameters = [{ rds_replication = "1" }]
