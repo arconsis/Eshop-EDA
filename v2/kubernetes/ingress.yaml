@@ -19,13 +19,6 @@ spec:
                 name: order-service
                 port:
                   number: 3000
-          - path: /shipments
-            pathType: Prefix
-            backend:
-              service:
-                name: shipment-service
-                port:
-                  number: 3000
           - path: /inventory
             pathType: Prefix
             backend:
