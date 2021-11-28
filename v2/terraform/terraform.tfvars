@@ -13,8 +13,9 @@ payments_history_topic       = "schema-changes.payments"
 payments_table_include_list  = ["payments"]
 database_parameters          = [
   {
-    name  = "rds_replication"
+    name  = "rds.logical_replication"
     value = 1
+    apply_method = "pending-reboot"
   }
 ]
 
