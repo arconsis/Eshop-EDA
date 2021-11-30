@@ -32,3 +32,23 @@ output "cluster_name" {
   description = "Kubernetes Cluster Name"
   value       = var.cluster_name
 }
+
+output "bootstrap_servers" {
+  value = aws_msk_cluster.kafka.bootstrap_brokers
+}
+
+output "users_connector_json" {
+  value = jsonencode(replace(data.template_file.users_connector_initializer.rendered, "\n", " "))
+}
+
+output "orders_connector_json" {
+  value = jsonencode(replace(data.template_file.orders_connector_initializer.rendered, "\n", " "))
+}
+
+output "warehouse_connector_json" {
+  value = jsonencode(replace(data.template_file.warehouse_connector_initializer.rendered, "\n", " "))
+}
+
+output "payments_connector_json" {
+  value = jsonencode(replace(data.template_file.payment_connector_initializer.rendered, "\n", " "))
+}
