@@ -24,10 +24,10 @@ spec:
             name: email-service-secrets
         resources:
           limits:
-            cpu: '500m'
+            cpu: '200m'
             memory: '512Mi'
           requests:
-            cpu: '500m'
+            cpu: '200m'
             memory: '512Mi'
         ports:
           - containerPort: 3000
