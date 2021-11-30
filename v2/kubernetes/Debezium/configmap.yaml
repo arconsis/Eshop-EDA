@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: eshop-eda
+  name: bastion-configmap
+data:
+  USERS_CONNECTOR_JSON:
+  ORDERS_CONNECTOR_JSON:
+  WAREHOUSE_CONNECTOR_JSON:
+  PAYMENTS_CONNECTOR_JSON:
