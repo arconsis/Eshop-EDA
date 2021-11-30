@@ -20,15 +20,15 @@ spec:
         imagePullPolicy: Always
         image: eldimious/order-eda-v1:latest
         ports:
-          - containerPort: 3000
+          - containerPort: 8080
             protocol: TCP
         resources:
           limits:
-            cpu: '500m'
-            memory: '1024Mi'
+            cpu: '200m'
+            memory: '512Mi'
           requests:
-            cpu: '500m'
-            memory: '1024Mi'`
+            cpu: '200m'
+            memory: '512Mi'
         envFrom:
         - secretRef:
             name: orders-service-secrets
