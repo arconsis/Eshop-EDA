@@ -17,15 +17,15 @@ kubectl apply -f ./namespace.yaml
 
 cd ../services/EmailService
 sh deploy.sh
-cd ./OrderService
+cd ../OrderService
 sh deploy.sh
-cd ./PaymentService
+cd ../PaymentService
 sh deploy.sh
-cd ./UserService
+cd ../UserService
 sh deploy.sh
-cd ./WarehouseService
+cd ../WarehouseService
 sh deploy.sh
-cd ../kubernetes
+cd ../../kubernetes
 
 if [ "$environment" == "stg" ];
 then

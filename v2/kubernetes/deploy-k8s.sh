@@ -15,6 +15,18 @@ fi
 
 kubectl apply -f ./namespace.yaml
 
+cd ../services/EmailService
+sh deploy.sh
+cd ../OrderService
+sh deploy.sh
+cd ../PaymentService
+sh deploy.sh
+cd ../UserService
+sh deploy.sh
+cd ../WarehouseService
+sh deploy.sh
+cd ../../kubernetes
+
 if [ "$environment" == "stg" ];
 then
   kubectl apply -f ./EmailService/stg-secret.yaml

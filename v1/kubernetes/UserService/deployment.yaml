@@ -24,11 +24,11 @@ spec:
             protocol: TCP
         resources:
           limits:
-            cpu: '500m'
-            memory: '1024Mi'
+            cpu: '200m'
+            memory: '512Mi'
           requests:
-            cpu: '500m'
-            memory: '1024Mi'
+            cpu: '200m'
+            memory: '512Mi'
         envFrom:
         - secretRef:
             name: users-service-secrets
