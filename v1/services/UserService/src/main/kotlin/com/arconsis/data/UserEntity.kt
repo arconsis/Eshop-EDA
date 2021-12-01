@@ -1,12 +1,10 @@
 package com.arconsis.data
 
+import AddressEntity
 import io.quarkus.security.jpa.Password
 import java.time.Instant
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity(name = "users")
 class UserEntity(
@@ -34,4 +32,7 @@ class UserEntity(
 
     @Column(name = "updated_at")
     var updatedAt: Instant? = null,
+
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var addressEntities: MutableList<AddressEntity>? = null,
 )

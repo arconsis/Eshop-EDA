@@ -1,20 +1,20 @@
 package com.arconsis.presentation.http.dto
 
-import Address
-import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 
-data class UserCreate(
+data class AddressCreate(
     @field:NotBlank
     val firstName: String,
     @field:NotBlank
     val lastName: String,
     @field:NotBlank
-    @field:Email
-    val email: String,
+    val address: String,
     @field:NotBlank
-    val password: String,
+    val houseNumber: String,
     @field:NotBlank
-    val username: String,
-    val addresses: List<Address>? = null,
+    val postalCode: String,
+    @field:NotBlank
+    val city: String,
+    @field:NotBlank
+    val phone: String,
 )

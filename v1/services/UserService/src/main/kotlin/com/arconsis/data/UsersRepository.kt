@@ -25,8 +25,8 @@ class UsersRepository(private val entityManager: EntityManager) {
         return userEntity.toUser()
     }
 
-    fun getUser(userId: UUID): User {
-        val userEntity = entityManager.getReference(UserEntity::class.java, userId)
+    fun getUser(userId: UUID): User? {
+        val userEntity = entityManager.find(UserEntity::class.java, userId) ?: return null
         return userEntity.toUser()
     }
 }

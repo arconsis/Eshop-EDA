@@ -26,7 +26,7 @@ class UsersService(
     }
 
     @Transactional
-    fun getUser(userId: UUID): User {
+    fun getUser(userId: UUID): User? {
         return usersRepository.getUser(userId)
     }
 

@@ -1,5 +1,6 @@
 package com.arconsis.domain
 
+import Address
 import java.util.*
 
 data class User(
@@ -8,4 +9,5 @@ data class User(
     val lastName: String,
     val email: String,
     val username: String,
+    val addresses: MutableList<Address>?,
 )
