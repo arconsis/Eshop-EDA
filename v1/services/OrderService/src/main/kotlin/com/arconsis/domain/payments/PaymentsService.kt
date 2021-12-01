@@ -23,7 +23,7 @@ class PaymentsService(
 ) {
     fun handlePaymentEvents(payment: Payment): Uni<Void> {
         return when (payment.status) {
-            PaymentStatus.SUCCESS -> {
+            PaymentStatus.SUCCEED -> {
                 ordersRepository.updateOrder(payment.orderId, OrderStatus.PAID)
                     .handleUpdateOrderErrors(payment.orderId, OrderStatus.PAID)
                     .flatMap { order ->
