@@ -6,7 +6,7 @@ data class CreateOutboxEvent(
     val aggregateType: AggregateType,
     val aggregateId: UUID,
     val payload: String,
-    val type: String
+    val type: OutboxEventType
 )
 
 data class OutboxEvent(
@@ -22,12 +22,11 @@ enum class AggregateType {
     ORDER_VALIDATION,
 }
 
-// TODO: merge ShipmentStatus and OrderValidationStatus
 enum class OutboxEventType {
-    VALIDATED,
-    INVALID,
-    PREPARING_SHIPMENT,
-    SHIPPED,
-    DELIVERED,
-    CANCELLED,
+    ORDER_VALIDATED,
+    ORDER_INVALID,
+    SHIPMENT_PREPARING_SHIPMENT,
+    SHIPMENT_SHIPPED,
+    SHIPMENT_DELIVERED,
+    SHIPMENT_CANCELLED,
 }
