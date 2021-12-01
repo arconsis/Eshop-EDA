@@ -22,7 +22,7 @@ class ShipmentsService(
 ) {
     fun handleShipmentEvents(shipment: Shipment): Uni<Void> {
         return when (shipment.status) {
-            ShipmentStatus.SHIPPED -> {
+            ShipmentStatus.DELIVERED -> {
                 ordersRepository.updateOrder(shipment.orderId, OrderStatus.COMPLETED)
                     .handleUpdateOrderErrors(shipment.orderId, OrderStatus.COMPLETED)
                     .flatMap { order ->
@@ -30,9 +30,9 @@ class ShipmentsService(
                         emitter.send(orderRecord)
                     }
             }
-            ShipmentStatus.OUT_FOR_SHIPMENT -> {
-                ordersRepository.updateOrder(shipment.orderId, OrderStatus.OUT_FOR_SHIPMENT)
-                    .handleUpdateOrderErrors(shipment.orderId, OrderStatus.OUT_FOR_SHIPMENT)
+            ShipmentStatus.SHIPPED -> {
+                ordersRepository.updateOrder(shipment.orderId, OrderStatus.SHIPPED)
+                    .handleUpdateOrderErrors(shipment.orderId, OrderStatus.SHIPPED)
                     .flatMap { order ->
                         val orderRecord = order.toOrderRecord()
                         emitter.send(orderRecord)

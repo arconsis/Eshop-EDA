@@ -23,9 +23,9 @@ class OrderValidationsService(
 
     fun handleOrderValidationEvents(orderValidation: OrderValidation): Uni<Void> {
         return when (orderValidation.status) {
-            OrderValidationStatus.VALID -> {
-                ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.VALID)
-                    .handleUpdateOrderErrors(orderValidation.orderId, OrderStatus.VALID)
+            OrderValidationStatus.VALIDATED -> {
+                ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.VALIDATED)
+                    .handleUpdateOrderErrors(orderValidation.orderId, OrderStatus.VALIDATED)
                     .flatMap { order ->
                         val orderRecord = order.toOrderRecord()
                         sendOrderEvent(orderRecord)

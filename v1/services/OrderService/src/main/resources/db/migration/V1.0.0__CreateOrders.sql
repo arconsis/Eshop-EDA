@@ -1,9 +1,9 @@
 CREATE TYPE order_status AS ENUM (
-    'PENDING',
-    'VALID',
+    'REQUESTED',
+    'VALIDATED',
     'OUT_OF_STOCK',
     'PAID',
-    'OUT_FOR_SHIPMENT',
+    'SHIPPED',
     'COMPLETED',
     'PAYMENT_FAILED',
     'CANCELLED',

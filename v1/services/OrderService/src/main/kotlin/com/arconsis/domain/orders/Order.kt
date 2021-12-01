@@ -22,11 +22,11 @@ data class Order(
 )
 
 enum class OrderStatus {
-    PENDING,
-    VALID,
+    REQUESTED,
+    VALIDATED,
     OUT_OF_STOCK,
     PAID,
-    OUT_FOR_SHIPMENT,
+    SHIPPED,
     COMPLETED,
     PAYMENT_FAILED,
     CANCELLED,
