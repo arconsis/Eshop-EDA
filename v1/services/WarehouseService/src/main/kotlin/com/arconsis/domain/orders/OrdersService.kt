@@ -24,7 +24,7 @@ class OrdersService(
 ) {
     fun handleOrderEvents(order: Order): Uni<Void> {
         return when (order.status) {
-            OrderStatus.PENDING -> handleOrderPending(order)
+            OrderStatus.REQUESTED -> handleOrderPending(order)
             OrderStatus.PAID -> handleOrderPaid(order)
             OrderStatus.PAYMENT_FAILED -> handleOrderPaymentFailed(order)
             else -> Uni.createFrom().voidItem()
@@ -39,7 +39,7 @@ class OrdersService(
                     quantity = order.quantity,
                     orderId = order.id,
                     userId = order.userId,
-                    status = if (stockUpdated) OrderValidationStatus.VALID else OrderValidationStatus.INVALID
+                    status = if (stockUpdated) OrderValidationStatus.VALIDATED else OrderValidationStatus.INVALID
                 )
                 orderValidationEmitter.send(Record.of(order.id.toString(), orderValidation))
             }
@@ -75,7 +75,7 @@ class OrdersService(
         shipmentsRepository.updateShipment(
             UpdateShipment(
                 shipment.id,
-                ShipmentStatus.OUT_FOR_SHIPMENT
+                ShipmentStatus.SHIPPED
             )
         )
             .handleShipmentError(order, shipment.id)

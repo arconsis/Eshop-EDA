@@ -13,7 +13,7 @@ import javax.enterprise.context.ApplicationScoped
 class PaymentsRemoteStore {
     fun createPayment(createPayment: CreatePayment): Uni<Payment> {
         // The transactionId is created by external API service
-        val payment = createPayment.toPayment(transactionId = UUID.randomUUID(), status = PaymentStatus.SUCCESS)
+        val payment = createPayment.toPayment(transactionId = UUID.randomUUID(), status = PaymentStatus.SUCCEED)
         return Uni.createFrom().item(payment).onItem().delayIt().by(Duration.ofMillis(5000))
         //return Uni.createFrom().failure(Exception("test"))
     }

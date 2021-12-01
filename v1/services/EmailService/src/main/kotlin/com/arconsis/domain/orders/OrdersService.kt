@@ -15,7 +15,7 @@ class OrdersService(
     fun handleOrderEvents(order: Order) {
         when (order.status) {
             OrderStatus.PAID -> handlePaidOrders(order)
-            OrderStatus.OUT_FOR_SHIPMENT -> handleOutForShipmentOrders(order)
+            OrderStatus.SHIPPED -> handleOutForShipmentOrders(order)
             else -> return
         }
     }
