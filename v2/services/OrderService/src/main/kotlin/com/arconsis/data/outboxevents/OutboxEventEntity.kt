@@ -46,7 +46,7 @@ class OutboxEventEntity(
 fun CreateOutboxEvent.toOutboxEventEntity() = OutboxEventEntity(
     aggregateId = aggregateId.toString(),
     aggregateType = aggregateType.name,
-    type = type,
+    type = type.toString(),
     payload = payload
 )
 
