@@ -23,6 +23,7 @@ dependencies {
     implementation("io.quarkus:quarkus-smallrye-reactive-messaging-kotlin")
     implementation("io.quarkus:quarkus-hibernate-reactive")
     implementation("io.quarkus:quarkus-reactive-pg-client")
+    implementation("io.quarkus:quarkus-jdbc-postgresql")
     implementation("io.quarkus:quarkus-flyway")
     implementation("io.quarkus:quarkus-smallrye-health")
     implementation("io.quarkus:quarkus-arc")
