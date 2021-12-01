@@ -1,5 +1,5 @@
 CREATE TYPE payment_status AS ENUM (
-    'SUCCESS',
+    'SUCCEED',
     'FAILED',
     'REFUNDED'
 );

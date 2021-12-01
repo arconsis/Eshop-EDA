@@ -12,13 +12,13 @@ data class Shipment(
 
 enum class ShipmentStatus {
     PREPARING_SHIPMENT,
-    OUT_FOR_SHIPMENT,
     SHIPPED,
+    DELIVERED,
     CANCELLED,
     FAILED,
 }
 
 val Shipment.isOutForShipment
-    get() = status == ShipmentStatus.OUT_FOR_SHIPMENT
+    get() = status == ShipmentStatus.SHIPPED
 
 class ShipmentDeserializer : ObjectMapperDeserializer<Shipment>(Shipment::class.java)
