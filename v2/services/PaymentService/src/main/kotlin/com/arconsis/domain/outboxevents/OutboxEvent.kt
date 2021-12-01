@@ -1,13 +1,12 @@
 package com.arconsis.domain.outboxevents
 
-import com.arconsis.domain.payments.PaymentStatus
 import java.util.*
 
 data class CreateOutboxEvent(
     val aggregateType: AggregateType,
     val aggregateId: UUID,
     val payload: String,
-    val type: String
+    val type: OutboxEventType
 )
 
 data class OutboxEvent(
@@ -22,4 +21,7 @@ enum class AggregateType {
     PAYMENT,
 }
 
-typealias OutboxEventType = PaymentStatus
+enum class OutboxEventType {
+    PAYMENT_SUCCEED,
+    PAYMENT_FAILED,
+}
