@@ -18,7 +18,7 @@ class OrdersService(
 
     fun handleOrderEvents(order: Order): Uni<Void> {
         return when (order.status) {
-            OrderStatus.VALID -> handleValidOrder(order)
+            OrderStatus.VALIDATED -> handleValidOrder(order)
             else -> Uni.createFrom().voidItem()
         }
     }

@@ -8,8 +8,8 @@ import java.util.*
 
 enum class ShipmentStatus {
     PREPARING_SHIPMENT,
-    OUT_FOR_SHIPMENT,
     SHIPPED,
+    DELIVERED,
     CANCELLED,
 }
 

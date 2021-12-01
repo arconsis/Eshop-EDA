@@ -15,7 +15,7 @@ data class Payment(
 )
 
 enum class PaymentStatus {
-    SUCCESS,
+    SUCCEED,
     FAILED,
 }
 

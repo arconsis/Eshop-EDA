@@ -19,14 +19,14 @@ class OrderValidationsService(
 
     fun handleOrderValidationEvents(orderValidation: OrderValidation): Uni<Void> {
         return when (orderValidation.status) {
-            OrderValidationStatus.VALID -> handleValidOrderValidation(orderValidation)
+            OrderValidationStatus.VALIDATED -> handleValidOrderValidation(orderValidation)
             OrderValidationStatus.INVALID -> handleValidOrderInvalidation(orderValidation)
         }
     }
 
     private fun handleValidOrderValidation(orderValidation: OrderValidation): Uni<Void> {
         return sessionFactory.withTransaction { session, _ ->
-            ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.VALID, session)
+            ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.VALIDATED, session)
                 .flatMap { order ->
                     val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
                     outboxEventsRepository.createEvent(createOutboxEvent, session)

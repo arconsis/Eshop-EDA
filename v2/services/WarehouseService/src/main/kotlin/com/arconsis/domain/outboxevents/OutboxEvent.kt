@@ -24,10 +24,10 @@ enum class AggregateType {
 
 // TODO: merge ShipmentStatus and OrderValidationStatus
 enum class OutboxEventType {
-    VALID,
+    VALIDATED,
     INVALID,
     PREPARING_SHIPMENT,
-    OUT_FOR_SHIPMENT,
     SHIPPED,
+    DELIVERED,
     CANCELLED,
 }

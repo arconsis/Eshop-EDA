@@ -18,7 +18,7 @@ class OrdersRepository(private val sessionFactory: Mutiny.SessionFactory) {
     }
 
     fun createOrder(createOrder: CreateOrder, session: Mutiny.Session): Uni<Order> {
-        val orderEntity = createOrder.toOrderEntity(OrderStatus.PENDING)
+        val orderEntity = createOrder.toOrderEntity(OrderStatus.REQUESTED)
         return session.persist(orderEntity)
             .map { orderEntity.toOrder() }
     }

@@ -18,13 +18,13 @@ class ShipmentsService(
 ) {
     fun handleShipmentEvents(shipment: Shipment): Uni<Void> {
         return when (shipment.status) {
-            ShipmentStatus.SHIPPED -> handleShippedShipment(shipment)
-            ShipmentStatus.OUT_FOR_SHIPMENT -> handleOutForShipment(shipment)
+            ShipmentStatus.DELIVERED -> handleDeliveredShipment(shipment)
+            ShipmentStatus.SHIPPED -> handleOutForShipment(shipment)
             else -> return Uni.createFrom().voidItem()
         }
     }
 
-    private fun handleShippedShipment(shipment: Shipment): Uni<Void> {
+    private fun handleDeliveredShipment(shipment: Shipment): Uni<Void> {
         return sessionFactory.withTransaction { session, _ ->
             ordersRepository.updateOrder(shipment.orderId, OrderStatus.COMPLETED, session)
                 .flatMap { order ->
@@ -39,7 +39,7 @@ class ShipmentsService(
 
     private fun handleOutForShipment(shipment: Shipment): Uni<Void> {
         return sessionFactory.withTransaction { session, _ ->
-            ordersRepository.updateOrder(shipment.orderId, OrderStatus.OUT_FOR_SHIPMENT, session)
+            ordersRepository.updateOrder(shipment.orderId, OrderStatus.SHIPPED, session)
                 .flatMap { order ->
                     val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
                     outboxEventsRepository.createEvent(createOutboxEvent, session)

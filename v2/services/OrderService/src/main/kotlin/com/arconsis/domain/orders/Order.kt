@@ -2,11 +2,7 @@ package com.arconsis.domain.orders
 
 import com.arconsis.domain.outboxevents.AggregateType
 import com.arconsis.domain.outboxevents.CreateOutboxEvent
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.ObjectNode
-import io.smallrye.reactive.messaging.kafka.Record
-import io.vertx.core.json.JsonObject
 import java.util.*
 
 data class CreateOrder(
@@ -28,11 +24,11 @@ data class Order(
 )
 
 enum class OrderStatus {
-    PENDING,
-    VALID,
+    REQUESTED,
+    VALIDATED,
     OUT_OF_STOCK,
     PAID,
-    OUT_FOR_SHIPMENT,
+    SHIPPED,
     COMPLETED,
     PAYMENT_FAILED,
     CANCELLED,

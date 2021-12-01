@@ -18,7 +18,7 @@ class PaymentsService(
 ) {
     fun handlePaymentEvents(payment: Payment): Uni<Void> {
         return when (payment.status) {
-            PaymentStatus.SUCCESS -> handleSucceedPayment(payment)
+            PaymentStatus.SUCCEED -> handleSucceedPayment(payment)
             PaymentStatus.FAILED -> handleFailedPayment(payment)
         }
     }
