@@ -6,10 +6,10 @@ import AddressEntity
 fun AddressEntity.toAddress(): Address {
     return Address(
         id = this.id!!,
-        firstName = this.firstName,
-        lastName = this.lastName,
+        name = this.name,
         address = this.address,
         houseNumber = this.houseNumber,
+        countryCode = this.countryCode,
         postalCode = this.postalCode,
         city = this.city,
         phone = this.phone,

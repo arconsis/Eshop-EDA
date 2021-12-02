@@ -1,7 +1,7 @@
 package com.arconsis.data
 
 import com.arconsis.domain.User
-import com.arconsis.presentation.http.dto.UserCreate
+import com.arconsis.presentation.http.dto.CreateUser
 import io.quarkus.elytron.security.common.BcryptUtil
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
@@ -10,14 +10,14 @@ import javax.persistence.EntityManager
 @ApplicationScoped
 class UsersRepository(private val entityManager: EntityManager) {
 
-    fun createUser(userCreate: UserCreate): User {
-        val password = BcryptUtil.bcryptHash(userCreate.password)
+    fun createUser(createUser: CreateUser): User {
+        val password = BcryptUtil.bcryptHash(createUser.password)
         val userEntity = UserEntity(
-            firstName = userCreate.firstName,
-            lastName = userCreate.lastName,
-            email = userCreate.email,
+            firstName = createUser.firstName,
+            lastName = createUser.lastName,
+            email = createUser.email,
             password = password,
-            username = userCreate.username,
+            username = createUser.username,
         )
         entityManager.persist(userEntity)
         entityManager.flush()

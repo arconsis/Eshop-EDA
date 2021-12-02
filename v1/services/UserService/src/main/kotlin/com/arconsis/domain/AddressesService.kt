@@ -2,7 +2,7 @@ package com.arconsis.domain
 
 import Address
 import com.arconsis.data.AddressesRepository
-import com.arconsis.presentation.http.dto.AddressCreate
+import com.arconsis.presentation.http.dto.CreateAddress
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
@@ -11,12 +11,12 @@ import javax.transaction.Transactional
 class AddressesService(private val addressesRepository: AddressesRepository) {
 
     @Transactional
-    fun getAddresses(userId: UUID): List<Address> {
+    fun getAddresses(userId: UUID): List<Address>? {
         return addressesRepository.getAddresses(userId)
     }
 
     @Transactional
-    fun createAddress(addressCreate: AddressCreate, userId: UUID): Address {
-        return addressesRepository.createAddress(addressCreate, userId)
+    fun createAddress(createAddress: CreateAddress, userId: UUID): Address {
+        return addressesRepository.createAddress(createAddress, userId)
     }
 }

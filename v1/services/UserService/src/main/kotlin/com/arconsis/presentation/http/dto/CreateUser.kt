@@ -4,7 +4,7 @@ import Address
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 
-data class UserCreate(
+data class CreateUser(
     @field:NotBlank
     val firstName: String,
     @field:NotBlank
@@ -16,5 +16,5 @@ data class UserCreate(
     val password: String,
     @field:NotBlank
     val username: String,
-    val addresses: List<Address>? = null,
+    val addresses: List<Address>? = emptyList(),
 )

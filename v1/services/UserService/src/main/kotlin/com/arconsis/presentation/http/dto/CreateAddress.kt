@@ -1,16 +1,18 @@
 package com.arconsis.presentation.http.dto
 
+import CountryCode
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
-data class AddressCreate(
+data class CreateAddress(
     @field:NotBlank
-    val firstName: String,
-    @field:NotBlank
-    val lastName: String,
+    val name: String,
     @field:NotBlank
     val address: String,
     @field:NotBlank
     val houseNumber: String,
+    @field:NotNull
+    val countryCode: CountryCode,
     @field:NotBlank
     val postalCode: String,
     @field:NotBlank

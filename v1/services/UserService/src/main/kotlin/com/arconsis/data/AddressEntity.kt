@@ -7,14 +7,14 @@ class AddressEntity(
     @Id
     @GeneratedValue
     var id: UUID? = null,
-    @Column(name = "first_name")
-    var firstName: String,
-    @Column(name = "last_name")
-    var lastName: String,
+    @Column
+    var name: String,
     @Column
     var address: String,
     @Column(name = "house_number")
     var houseNumber: String,
+    @Column(name = "country_code")
+    var countryCode: CountryCode,
     @Column(name = "postal_code")
     var postalCode: String,
     @Column
