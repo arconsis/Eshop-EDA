@@ -15,7 +15,9 @@ fi
 
 kubectl apply -f ./namespace.yaml
 
-cd ../services/EmailService
+cd ../services/Bastion
+sh deploy.sh
+cd ../EmailService
 sh deploy.sh
 cd ../OrderService
 sh deploy.sh
