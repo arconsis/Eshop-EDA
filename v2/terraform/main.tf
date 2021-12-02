@@ -68,7 +68,7 @@ module "private_vpc_sg" {
 ################################################################################
 # Database Configuration
 ################################################################################
-# Orders Database
+# Eda Database
 module "eda_database" {
   source               = "./modules/database"
   database_identifier  = var.eda_database_name

@@ -22,7 +22,7 @@ provider "kubernetes" {
 # VPC Configuration
 ################################################################################
 module "networking" {
-  source                         = "../modules/network"
+  source                         = "./modules/network"
   create_vpc                     = var.create_vpc
   create_igw                     = var.create_igw
   single_nat_gateway             = var.single_nat_gateway
@@ -47,7 +47,7 @@ module "networking" {
 # SG Configuration
 ################################################################################
 module "private_vpc_sg" {
-  source                   = "../modules/security"
+  source                   = "./modules/security"
   create_vpc               = var.create_vpc
   create_sg                = true
   sg_name                  = "private-database-security-group"
@@ -68,45 +68,16 @@ module "private_vpc_sg" {
 ################################################################################
 # Database Configuration
 ################################################################################
-# Orders Database
-module "orders_database" {
-  source                = "../modules/database"
-  database_identifier   = "orders-database"
-  database_username     = var.orders_database_username
-  database_password     = var.orders_database_password
-  subnet_ids            = module.networking.private_subnet_ids
-  security_group_ids    = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name  = "OrdersDatabaseMonitoringRole"
-}
-# Payments Database
-module "payments_database" {
-  source                = "../modules/database"
-  database_identifier   = "payments-database"
-  database_username     = var.payments_database_username
-  database_password     = var.payments_database_password
-  subnet_ids            = module.networking.private_subnet_ids
-  security_group_ids    = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name  = "PaymentsDatabaseMonitoringRole"
-}
-# Warehouse Database
-module "warehouse_database" {
-  source                = "../modules/database"
-  database_identifier   = "warehouse-database"
-  database_username     = var.warehouse_database_username
-  database_password     = var.warehouse_database_password
-  subnet_ids            = module.networking.private_subnet_ids
-  security_group_ids    = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name  = "WarehouseDatabaseMonitoringRole"
-}
-# Users Database
-module "users_database" {
-  source                = "../modules/database"
-  database_identifier   = "users-database"
-  database_username     = var.users_database_username
-  database_password     = var.users_database_password
-  subnet_ids            = module.networking.private_subnet_ids
-  security_group_ids    = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name  = "UsersDatabaseMonitoringRole"
+# Eda Database
+module "eda_database" {
+  source               = "./modules/database"
+  database_identifier  = var.eda_database_name
+  database_username    = var.eda_database_username
+  database_password    = var.eda_database_username
+  subnet_ids           = module.networking.private_subnet_ids
+  security_group_ids   = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name = "EdaDatabaseMonitoringRole"
+  database_parameters  = var.database_parameters
 }
 
 module "eks" {
@@ -202,14 +173,14 @@ resource "aws_msk_cluster" "kafka" {
   }
 
   configuration_info {
-    arn      = "${aws_msk_configuration.mks_cluster_custom_configuration.arn}"
-    revision = "${aws_msk_configuration.mks_cluster_custom_configuration.latest_revision}"
+    arn      = aws_msk_configuration.mks_cluster_custom_configuration.arn
+    revision = aws_msk_configuration.mks_cluster_custom_configuration.latest_revision
   }
 }
 
 resource "aws_msk_configuration" "mks_cluster_custom_configuration" {
-  kafka_versions = ["2.8.1"]
-  name           = "mks-custom-config"
+  kafka_versions    = ["2.8.1"]
+  name              = "mks-custom-config"
   server_properties = <<PROPERTIES
 auto.create.topics.enable = true
 delete.topic.enable = true
