@@ -88,7 +88,8 @@ module "eks" {
   subnets = module.networking.private_subnet_ids
   vpc_id  = module.networking.vpc_id
 
-  # node_groups are aws eks managed nodes whereas worker_groups are self managed nodes. Among many one advantage of worker_groups is that you can use your custom AMI for the nodes.
+  # node_groups are aws eks managed nodes whereas worker_groups are self managed nodes.
+  # Among many one advantage of worker_groups is that you can use your custom AMI for the nodes.
   # https://github.com/terraform-aws-modules/terraform-aws-eks/issues/895
   worker_groups = [
     {
@@ -117,7 +118,7 @@ resource "aws_iam_policy" "worker_policy" {
   name        = "worker-policy"
   description = "Worker policy for the ALB Ingress"
 
-  policy = file("../common/templates/eks/iam-policy.json")
+  policy = file("./common/templates/eks/iam-policy.json")
 }
 
 provider "helm" {
