@@ -11,7 +11,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "outbox_events")
+@Table(name = "warehouse_outbox_events")
 class OutboxEventEntity(
     @Id
     @GeneratedValue

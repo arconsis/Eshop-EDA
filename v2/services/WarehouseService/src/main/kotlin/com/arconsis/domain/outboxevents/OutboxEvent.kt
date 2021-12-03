@@ -18,12 +18,21 @@ data class OutboxEvent(
 )
 
 enum class AggregateType {
+    ORDER,
     SHIPMENT,
     ORDER_VALIDATION,
 }
 
 enum class OutboxEventType {
+    ORDER_REQUESTED,
     ORDER_VALIDATED,
+    ORDER_OUT_OF_STOCK,
+    ORDER_PAID,
+    ORDER_SHIPPED,
+    ORDER_COMPLETED,
+    ORDER_PAYMENT_FAILED,
+    ORDER_CANCELLED,
+    ORDER_REFUNDED,
     ORDER_INVALID,
     SHIPMENT_PREPARING_SHIPMENT,
     SHIPMENT_SHIPPED,

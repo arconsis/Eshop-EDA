@@ -1,21 +1,17 @@
 package com.arconsis.data.outboxevents
 
-import com.arconsis.data.Json
-import com.arconsis.data.PostgreSQLEnumType
 import com.arconsis.domain.outboxevents.AggregateType
 import com.arconsis.domain.outboxevents.CreateOutboxEvent
 import com.arconsis.domain.outboxevents.OutboxEvent
 import com.arconsis.domain.outboxevents.OutboxEventType
-import io.vertx.core.json.JsonObject
-import org.hibernate.annotations.*
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 import java.time.Instant
 import java.util.*
 import javax.persistence.*
-import javax.persistence.Entity
-import javax.persistence.Table
 
 @Entity
-@Table(name = "outbox_events")
+@Table(name = "payments_outbox_events")
 class OutboxEventEntity(
     @Id
     @GeneratedValue

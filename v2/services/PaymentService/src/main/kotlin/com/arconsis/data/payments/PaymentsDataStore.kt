@@ -6,13 +6,12 @@ import org.hibernate.reactive.mutiny.Mutiny
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class PaymentsDataStore(private val sessionFactory: Mutiny.SessionFactory) {
-
-    fun createPayment(payment: Payment): Uni<Payment> {
+class PaymentsDataStore {
+    fun createPayment(payment: Payment, session: Mutiny.Session): Uni<Payment> {
         val paymentEntity = payment.toPaymentEntity()
-        return sessionFactory.withTransaction { s, _ ->
-            s.persist(paymentEntity)
-                .map { paymentEntity.toPayment() }
-        }
+        return session.persist(paymentEntity)
+            .map {
+                paymentEntity.toPayment()
+            }
     }
 }

@@ -1,4 +1,4 @@
-CREATE TABLE outbox_events
+CREATE TABLE warehouse_outbox_events
 (
     id              uuid primary key,
     aggregate_type  varchar(255) not null,

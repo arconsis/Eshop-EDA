@@ -7,7 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import java.util.*
 
 data class Payment(
-    val transactionId: UUID,
+    val id: UUID?,
+    val transactionId: UUID?,
     val orderId: UUID,
     val userId: UUID,
     val amount: Double,
@@ -29,7 +30,7 @@ data class CreatePayment(
 
 fun Payment.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
     aggregateType = AggregateType.PAYMENT,
-    aggregateId = this.transactionId,
+    aggregateId = this.id!!,
     type = this.status.toOutboxEventType(),
     payload = objectMapper.writeValueAsString(this)
 )
@@ -40,6 +41,7 @@ private fun PaymentStatus.toOutboxEventType(): OutboxEventType = when (this) {
 }
 
 fun CreatePayment.toPayment(transactionId: UUID, status: PaymentStatus) = Payment(
+    id = null,
     transactionId = transactionId,
     orderId = orderId,
     userId = userId,
