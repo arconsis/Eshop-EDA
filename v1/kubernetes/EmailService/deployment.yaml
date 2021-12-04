@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: email-backend
+  name: email-app
   labels:
-    app: email-backend
+    app: email-app
   namespace: eshop-eda
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: email-backend
+      name: email-app
   template:
     metadata:
       labels:
-        name: email-backend
+        name: email-app
     spec:
       containers:
-      - name: email-api
+      - name: email-eda
         imagePullPolicy: Always
         image: eldimious/email-eda-v1:latest
         envFrom:

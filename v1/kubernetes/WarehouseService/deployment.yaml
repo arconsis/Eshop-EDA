@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: warehouse-backend
+  name: warehouse-app
   labels:
-    app: warehouse-backend
+    app: warehouse-app
   namespace: eshop-eda
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: warehouse-backend
+      name: warehouse-app
   template:
     metadata:
       labels:
-        name: warehouse-backend
+        name: warehouse-app
     spec:
       containers:
-      - name: warehouse-api
+      - name: warehouse-eda
         imagePullPolicy: Always
         image: eldimious/warehouse-eda-v1:latest
         ports:
