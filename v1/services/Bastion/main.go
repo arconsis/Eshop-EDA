@@ -65,7 +65,7 @@ func createDatabases() {
 		fmt.Printf("Create payments-db failed: %v\n", err)
 	}
 
-	if err != nil {
+	if err == nil {
 		fmt.Println("Create databases succeeded")
 	}
 }
