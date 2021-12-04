@@ -12,7 +12,7 @@ data class OrderValidation(
 )
 
 enum class OrderValidationStatus {
-    VALID,
+    VALIDATED,
     INVALID
 }
 

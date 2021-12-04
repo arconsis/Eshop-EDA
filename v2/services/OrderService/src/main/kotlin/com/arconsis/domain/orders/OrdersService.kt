@@ -1,26 +1,30 @@
 package com.arconsis.domain.orders
 
-import com.arconsis.data.OrdersRepository
+import com.arconsis.data.orders.OrdersRepository
+import com.arconsis.data.outboxevents.OutboxEventsRepository
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
-import io.smallrye.reactive.messaging.MutinyEmitter
-import io.smallrye.reactive.messaging.kafka.Record
-import org.eclipse.microprofile.reactive.messaging.Channel
+import org.hibernate.reactive.mutiny.Mutiny
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class OrdersService(
-    @Channel("orders-out") private val emitter: MutinyEmitter<Record<String, Order>>,
     private val ordersRepository: OrdersRepository,
+    private val outboxEventsRepository: OutboxEventsRepository,
+    private val sessionFactory: Mutiny.SessionFactory,
+    private val objectMapper: ObjectMapper,
 ) {
     fun createOrder(createOrder: CreateOrder): Uni<Order> {
-        return ordersRepository.createOrder(createOrder)
-            .flatMap { order ->
-                val orderRecord = order.toOrderRecord()
-                emitter.send(orderRecord).map {
-                    order
+        return sessionFactory.withTransaction { session, _ ->
+            ordersRepository.createOrder(createOrder, session)
+                .flatMap { order ->
+                    val createOutboxEvent = order.toCreateOutboxEvent(objectMapper)
+                    outboxEventsRepository.createEvent(createOutboxEvent, session).map {
+                        order
+                    }
                 }
-            }
+        }
     }
 
     fun getOrder(orderId: UUID): Uni<Order> {

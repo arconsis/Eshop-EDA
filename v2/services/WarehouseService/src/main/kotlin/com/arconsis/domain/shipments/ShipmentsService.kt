@@ -1,19 +1,31 @@
 package com.arconsis.domain.shipments
 
+import com.arconsis.data.common.toUni
+import com.arconsis.data.outboxevents.OutboxEventsRepository
 import com.arconsis.data.shipments.ShipmentsRepository
-import io.smallrye.mutiny.coroutines.awaitSuspending
-import io.smallrye.reactive.messaging.MutinyEmitter
-import io.smallrye.reactive.messaging.kafka.Record
-import org.eclipse.microprofile.reactive.messaging.Channel
+import com.fasterxml.jackson.databind.ObjectMapper
+import io.smallrye.mutiny.Uni
+import org.hibernate.reactive.mutiny.Mutiny
+import javax.enterprise.context.ApplicationScoped
 
+@ApplicationScoped
 class ShipmentsService(
-    @Channel("shipment-out") private val emitter: MutinyEmitter<Record<String, Shipment>>,
     private val shipmentsRepository: ShipmentsRepository,
+    private val outboxEventsRepository: OutboxEventsRepository,
+    private val objectMapper: ObjectMapper,
+    private val sessionFactory: Mutiny.SessionFactory
 ) {
-
-    suspend fun updateShipment(updateShipment: UpdateShipment): Shipment {
-        val shipment = this.shipmentsRepository.updateShipment(updateShipment).awaitSuspending()
-        emitter.send(shipment.toShipmentRecord()).awaitSuspending()
-        return shipment
+    fun updateShipment(updateShipment: UpdateShipment): Uni<Shipment> {
+        return sessionFactory.withTransaction { session, _ ->
+            shipmentsRepository.updateShipment(updateShipment, session)
+                .flatMap { shipment ->
+                    val createOutboxEvent = shipment.toCreateOutboxEvent(objectMapper)
+                    outboxEventsRepository.createEvent(createOutboxEvent, session)
+                    shipment.toUni()
+                }
+                .map {
+                    it
+                }
+        }
     }
 }

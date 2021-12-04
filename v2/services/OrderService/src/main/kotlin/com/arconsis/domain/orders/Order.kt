@@ -1,6 +1,9 @@
 package com.arconsis.domain.orders
 
-import io.smallrye.reactive.messaging.kafka.Record
+import com.arconsis.domain.outboxevents.AggregateType
+import com.arconsis.domain.outboxevents.CreateOutboxEvent
+import com.arconsis.domain.outboxevents.OutboxEventType
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.util.*
 
 data class CreateOrder(
@@ -22,18 +25,32 @@ data class Order(
 )
 
 enum class OrderStatus {
-    PENDING,
-    VALID,
+    REQUESTED,
+    VALIDATED,
     OUT_OF_STOCK,
     PAID,
-    OUT_FOR_SHIPMENT,
+    SHIPPED,
     COMPLETED,
     PAYMENT_FAILED,
     CANCELLED,
     REFUNDED
 }
 
-fun Order.toOrderRecord(): Record<String, Order> = Record.of(
-    id.toString(),
-    this
+fun Order.toCreateOutboxEvent(objectMapper: ObjectMapper): CreateOutboxEvent = CreateOutboxEvent(
+    aggregateType = AggregateType.ORDER,
+    aggregateId = this.id,
+    type = this.status.toOutboxEventType(),
+    payload = objectMapper.writeValueAsString(this)
 )
+
+private fun OrderStatus.toOutboxEventType(): OutboxEventType = when(this) {
+    OrderStatus.REQUESTED -> OutboxEventType.ORDER_REQUESTED
+    OrderStatus.VALIDATED -> OutboxEventType.ORDER_VALIDATED
+    OrderStatus.OUT_OF_STOCK -> OutboxEventType.ORDER_OUT_OF_STOCK
+    OrderStatus.PAID -> OutboxEventType.ORDER_PAID
+    OrderStatus.SHIPPED -> OutboxEventType.ORDER_SHIPPED
+    OrderStatus.COMPLETED -> OutboxEventType.ORDER_COMPLETED
+    OrderStatus.PAYMENT_FAILED -> OutboxEventType.ORDER_PAYMENT_FAILED
+    OrderStatus.CANCELLED -> OutboxEventType.ORDER_CANCELLED
+    OrderStatus.REFUNDED -> OutboxEventType.ORDER_REFUNDED
+}

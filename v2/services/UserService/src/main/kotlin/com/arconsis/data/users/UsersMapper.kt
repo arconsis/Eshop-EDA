@@ -1,6 +1,6 @@
-package com.arconsis.data
+package com.arconsis.data.users
 
-import com.arconsis.domain.User
+import com.arconsis.domain.users.User
 
 fun UserEntity.toUser(): User {
     return User(

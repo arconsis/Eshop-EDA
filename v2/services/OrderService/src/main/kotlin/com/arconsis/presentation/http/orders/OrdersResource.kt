@@ -27,7 +27,7 @@ class OrdersResource(
     @Path("/{orderId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun getOrder(@PathParam("orderId") orderId: UUID): Uni<Order> {
+    suspend fun getOrder(@PathParam("orderId") orderId: UUID): Uni<Order> {
         return ordersService.getOrder(orderId)
     }
 }
