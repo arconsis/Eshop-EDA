@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Incoming
+import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -19,16 +20,17 @@ class OrderValidationEventsResource(
 
     @Incoming("warehouse-in")
     fun consumeWarehouseEvents(warehouseEventsDto: Record<String, WarehouseEventDto>): Uni<Void> {
-        val orderValidationEventDto = warehouseEventsDto.value()
-        val outboxEvent = orderValidationEventDto.payload.currentValue.toOutboxEvent()
+        val orderValidationEventsDto = warehouseEventsDto.value()
+        val outboxEvent = orderValidationEventsDto.payload.currentValue.toOutboxEvent()
         if (outboxEvent.aggregateType != AggregateType.ORDER_VALIDATION) {
             return Uni.createFrom().voidItem()
         }
+        val eventId = UUID.fromString(orderValidationEventsDto.payload.currentValue.id)
         val orderValidation = objectMapper.readValue(
             outboxEvent.payload,
             OrderValidation::class.java
         )
-        return orderValidationsService.handleOrderValidationEvents(orderValidation)
+        return orderValidationsService.handleOrderValidationEvents(eventId, orderValidation)
             .onFailure()
             .recoverWithNull()
     }

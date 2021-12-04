@@ -8,7 +8,7 @@ import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 import java.util.*
 
 data class WarehouseEventDto(
-    val payload: WarehouseEventDtoPayload
+    @JsonProperty("payload") val payload: WarehouseEventDtoPayload
 )
 
 data class WarehouseEventDtoPayload(

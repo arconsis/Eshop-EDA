@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Incoming
+import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -16,8 +17,9 @@ class OrderEventsResource(
     @Incoming("orders-in")
     fun consumeOrderEvents(orderRecord: Record<String, OrderEventDto>): Uni<Void> {
         val orderEventDto = orderRecord.value()
-        val order = objectMapper.readValue(orderEventDto.orderEventDtoPayload.currentValue.toOutboxEvent().payload, Order::class.java)
-        return ordersService.handleOrderEvents(order)
+        val eventId = UUID.fromString(orderEventDto.payload.currentValue.id)
+        val order = objectMapper.readValue(orderEventDto.payload.currentValue.toOutboxEvent().payload, Order::class.java)
+        return ordersService.handleOrderEvents(eventId, order)
             .onFailure()
             .recoverWithNull()
     }

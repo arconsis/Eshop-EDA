@@ -9,7 +9,7 @@ import java.time.Instant
 import java.util.*
 
 data class OrderEventDto(
-    @JsonProperty("payload") val orderEventDtoPayload: OrderEventDtoPayload
+    @JsonProperty("payload") val payload: OrderEventDtoPayload
 )
 
 data class OrderEventDtoPayload(

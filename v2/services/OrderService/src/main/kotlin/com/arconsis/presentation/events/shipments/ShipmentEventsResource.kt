@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Incoming
+import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -23,11 +24,12 @@ class ShipmentEventsResource(
         if (outboxEvent.aggregateType != AggregateType.SHIPMENT) {
             return Uni.createFrom().voidItem()
         }
+        val eventId = UUID.fromString(shipmentEventDto.payload.currentValue.id)
         val shipment = objectMapper.readValue(
             outboxEvent.payload,
             Shipment::class.java
         )
-        return shipmentsService.handleShipmentEvents(shipment)
+        return shipmentsService.handleShipmentEvents(eventId, shipment)
             .onFailure()
             .recoverWithNull()
     }
