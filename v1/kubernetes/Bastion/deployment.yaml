@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
         - name: bastion-eda
-          imagePullPolicy: IfNotPresent
-          image: eldimious/bastion-eda:latest
+          imagePullPolicy: Always
+          image: akoufa/bastion-eda-v1:latest
           resources:
             limits:
               cpu: '300m'
@@ -27,7 +27,5 @@ spec:
               cpu: '300m'
               memory: '256Mi'
           envFrom:
-            - configMapRef:
-                name: bastion-configmap
             - secretRef:
-                name: bastion-secret
+                name: bastion-secrets

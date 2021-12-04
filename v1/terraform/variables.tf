@@ -1,6 +1,11 @@
 ################################################################################
 # General AWS Configuration
 ################################################################################
+variable "aws_profile" {
+  description = "The AWS profile name"
+  default     = "arconsis"
+}
+
 variable "aws_region" {
   description = "The AWS region things are created in"
   default     = "us-west-2"

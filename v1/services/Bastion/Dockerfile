@@ -14,14 +14,15 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o main .
+RUN go build -o bastion .
 
 WORKDIR /dist
 
-RUN cp /build/main .
+RUN cp /build/bastion .
 
-FROM scratch
+# For go we could use scratch but need a shell so we use alpine instead
+FROM alpine:3.14
 
-COPY --from=builder /dist/main /
+COPY --from=builder /dist/bastion /usr/bin
 
-ENTRYPOINT ["/main"]
+ENTRYPOINT ["sleep", "infinity"]

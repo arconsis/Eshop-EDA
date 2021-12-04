@@ -1,5 +1,5 @@
 echo "Please enter the environment (stg OR prod): "
-read environment
+read -r environment
 
 if [ "$environment" != "stg" ] && [ "$environment" != "prod" ]; then
   echo "Select a valid environment"
