@@ -1,10 +1,10 @@
 CREATE TABLE payments_outbox_events
 (
-    id              uuid primary key,
-    aggregate_type  varchar(255) not null,
-    aggregate_id    varchar(255) not null,
-    type            varchar(255) not null,
-    payload         text not null,
-    created_at      timestamp,
-    updated_at      timestamp
+    id              UUID PRIMARY KEY,
+    aggregate_type  VARCHAR(255) NOT NULL,
+    aggregate_id    VARCHAR(255) NOT NULL,
+    type            VARCHAR(255) NOT NULL,
+    payload         TEXT NOT NULL,
+    created_at      TIMESTAMP,
+    updated_at      TIMESTAMP
 )
