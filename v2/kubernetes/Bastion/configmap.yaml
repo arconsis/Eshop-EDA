@@ -2,10 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: eshop-eda
-  name: debezium-configmap
+  name: bastion-configmap
 data:
-  GROUP_ID: 1
-  CONFIG_STORAGE_TOPIC: connect_configs
-  OFFSET_STORAGE_TOPIC: connect_offsets
-  STATUS_STORAGE_TOPIC: connect_status
-  BOOTSTRAP_SERVERS: # Add value here
+  USERS_CONNECTOR_JSON:
+  ORDERS_CONNECTOR_JSON:
+  WAREHOUSE_CONNECTOR_JSON:
+  PAYMENTS_CONNECTOR_JSON:
