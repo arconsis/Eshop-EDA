@@ -14,9 +14,9 @@ class OrderEventsResource(
     private val objectMapper: ObjectMapper
 ) {
     @Incoming("order-in")
-    fun consumeOrderEvents(orderRecord: Record<String, OrderEventsDto>): Uni<Void> {
+    fun consumeOrderEvents(orderRecord: Record<String, OrderEventDto>): Uni<Void> {
         val orderEventDto = orderRecord.value()
-        val order = objectMapper.readValue(orderEventDto.payload.after.toOutboxEvent().payload, Order::class.java)
+        val order = objectMapper.readValue(orderEventDto.orderEventDtoPayload.currentValue.toOutboxEvent().payload, Order::class.java)
         return ordersService.handleOrderEvents(order)
             .onFailure()
             .recoverWithNull()

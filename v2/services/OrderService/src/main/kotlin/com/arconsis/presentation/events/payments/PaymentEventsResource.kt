@@ -14,10 +14,10 @@ class PaymentEventsResource(
     private val objectMapper: ObjectMapper
 ) {
     @Incoming("payments-in")
-    fun consumePaymentEvents(paymentRecord: Record<String, PaymentEventsDto>): Uni<Void> {
+    fun consumePaymentEvents(paymentRecord: Record<String, PaymentEventDto>): Uni<Void> {
         val paymentEventDto = paymentRecord.value()
         val payment = objectMapper.readValue(
-            paymentEventDto.payload.after.toOutboxEvent().payload,
+            paymentEventDto.payload.currentValue.toOutboxEvent().payload,
             Payment::class.java
         )
         return paymentsService.handlePaymentEvents(payment)

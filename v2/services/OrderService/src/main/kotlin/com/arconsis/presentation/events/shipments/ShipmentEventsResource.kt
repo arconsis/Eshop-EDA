@@ -3,7 +3,7 @@ package com.arconsis.presentation.events.shipments
 import com.arconsis.domain.outboxevents.AggregateType
 import com.arconsis.domain.shipments.Shipment
 import com.arconsis.domain.shipments.ShipmentsService
-import com.arconsis.presentation.events.common.WarehouseEventsDto
+import com.arconsis.presentation.events.common.WarehouseEventDto
 import com.arconsis.presentation.events.common.toOutboxEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
@@ -17,9 +17,9 @@ class ShipmentEventsResource(
     private val objectMapper: ObjectMapper
 ) {
     @Incoming("warehouse-in")
-    fun consumeShipmentEvents(shipmentRecord: Record<String, WarehouseEventsDto>): Uni<Void> {
-        val shipmentEventDto = shipmentRecord.value()
-        val outboxEvent = shipmentEventDto.payload.after.toOutboxEvent()
+    fun consumeWarehouseEvents(warehouseEventsDto: Record<String, WarehouseEventDto>): Uni<Void> {
+        val shipmentEventDto = warehouseEventsDto.value()
+        val outboxEvent = shipmentEventDto.payload.currentValue.toOutboxEvent()
         if (outboxEvent.aggregateType != AggregateType.SHIPMENT) {
             return Uni.createFrom().voidItem()
         }

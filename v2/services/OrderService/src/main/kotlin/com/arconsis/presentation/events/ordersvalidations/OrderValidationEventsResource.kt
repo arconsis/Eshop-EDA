@@ -3,7 +3,7 @@ package com.arconsis.presentation.events.ordersvalidations
 import com.arconsis.domain.ordersvalidations.OrderValidation
 import com.arconsis.domain.ordersvalidations.OrderValidationsService
 import com.arconsis.domain.outboxevents.AggregateType
-import com.arconsis.presentation.events.common.WarehouseEventsDto
+import com.arconsis.presentation.events.common.WarehouseEventDto
 import com.arconsis.presentation.events.common.toOutboxEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
@@ -18,9 +18,9 @@ class OrderValidationEventsResource(
 ) {
 
     @Incoming("warehouse-in")
-    fun consumeOrderValidationEvents(orderValidationRecord: Record<String, WarehouseEventsDto>): Uni<Void> {
-        val orderValidationEventDto = orderValidationRecord.value()
-        val outboxEvent = orderValidationEventDto.payload.after.toOutboxEvent()
+    fun consumeWarehouseEvents(warehouseEventsDto: Record<String, WarehouseEventDto>): Uni<Void> {
+        val orderValidationEventDto = warehouseEventsDto.value()
+        val outboxEvent = orderValidationEventDto.payload.currentValue.toOutboxEvent()
         if (outboxEvent.aggregateType != AggregateType.ORDER_VALIDATION) {
             return Uni.createFrom().voidItem()
         }
