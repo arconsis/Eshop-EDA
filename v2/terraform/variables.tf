@@ -121,6 +121,11 @@ variable "users_table_include_list" {
   type        = list(string)
 }
 
+variable "email_database_name" {
+  description = "email DB name"
+  type        = string
+}
+
 variable "orders_database_name" {
   description = "orders DB name"
   type        = string

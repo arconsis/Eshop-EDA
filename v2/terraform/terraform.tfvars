@@ -11,6 +11,7 @@ warehouse_table_include_list = ["shipments", "inventory"]
 payments_database_name       = "orders-db"
 payments_history_topic       = "schema-changes.payments"
 payments_table_include_list  = ["payments"]
+email_database_name          = "email-db"
 database_parameters          = [
   {
     name  = "rds.logical_replication"
