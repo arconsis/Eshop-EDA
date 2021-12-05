@@ -17,7 +17,7 @@ const appEnvKey = "APP_ENV"
 
 func main() {
 
-	if os.Getenv(appEnvKey) != "development" {
+	if os.Getenv(appEnvKey) == "development" {
 		err := godotenv.Load()
 		if err != nil {
 			log.Fatal("Error loading .env file")
