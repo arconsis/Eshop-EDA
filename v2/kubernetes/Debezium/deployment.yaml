@@ -29,6 +29,24 @@ spec:
             requests:
               cpu: '300m'
               memory: '2048Mi'
-          envFrom:
-            - configMapRef:
-                name: debezium-configmap
+          env:
+            - name: GROUP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: eda-configmap
+                  key: GROUP_ID
+            - name: CONFIG_STORAGE_TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  name: eda-configmap
+                  key: CONFIG_STORAGE_TOPIC
+            - name: OFFSET_STORAGE_TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  name: eda-configmap
+                  key: OFFSET_STORAGE_TOPIC
+            - name: STATUS_STORAGE_TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  name: eda-configmap
+                  key: STATUS_STORAGE_TOPIC
