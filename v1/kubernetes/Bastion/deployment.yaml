@@ -19,6 +19,9 @@ spec:
         - name: bastion-eda
           imagePullPolicy: Always
           image: akoufa/bastion-eda-v1:latest
+          ports:
+            - containerPort: 3000
+              protocol: TCP
           resources:
             limits:
               cpu: '300m'

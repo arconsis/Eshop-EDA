@@ -31,6 +31,7 @@ func main() {
 	})
 
 	port := fmt.Sprintf(":%v", os.Getenv(portKey))
+	log.Printf("Listeing on port: %v\n", port)
 	http.ListenAndServe(port, r)
 }
 
