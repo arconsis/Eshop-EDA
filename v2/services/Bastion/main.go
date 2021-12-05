@@ -103,6 +103,11 @@ func createDatabases() {
 	if err != nil {
 		log.Printf("Create payments-db failed: %v\n", err)
 	}
+
+	_, err = dbpool.Exec(context.Background(), "CREATE DATABASE \"email-db\" OWNER postgres")
+    if err != nil {
+    	log.Printf("Create email-db failed: %v\n", err)
+    }
 }
 
 func createConnector(json string) error {

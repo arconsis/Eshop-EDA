@@ -1,5 +1,6 @@
 package com.arconsis.data.email
 
+import io.smallrye.mutiny.Uni
 import org.eclipse.microprofile.rest.client.inject.RestClient
 import javax.enterprise.context.ApplicationScoped
 
@@ -7,18 +8,17 @@ import javax.enterprise.context.ApplicationScoped
 class EmailRepository(
     @RestClient val emailApi: EmailApi
 ) {
-    fun sendEmail(emailDto: EmailDto) {
-        try {
-            emailApi.sendEmail(
-                senderEmail = emailDto.senderEmail,
-                receiverEmail = emailDto.receiverEmail,
-                subject = emailDto.subject,
-                text = emailDto.text
-            ).await().indefinitely()
-        } catch (e: Exception) {
-            return
+    fun sendEmail(emailDto: EmailDto): Uni<Boolean> = emailApi.sendEmail(
+        senderEmail = emailDto.senderEmail,
+        receiverEmail = emailDto.receiverEmail,
+        subject = emailDto.subject,
+        text = emailDto.text
+    )
+        .map {
+            true
         }
-    }
+        .onFailure()
+        .recoverWithItem(false)
 }
 
 data class EmailDto(
