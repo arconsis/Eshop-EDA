@@ -25,7 +25,7 @@ func main() {
 	}
 
 	r := chi.NewRouter()
-	r.Post("/createDatabases", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/bastion/createDatabases", func(w http.ResponseWriter, r *http.Request) {
 		createDatabases()
 		w.Write([]byte(fmt.Sprint("Databases created")))
 	})

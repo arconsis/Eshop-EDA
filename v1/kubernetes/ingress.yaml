@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: backend-ingress
+  name: eda-ingress
   namespace: eshop-eda
   annotations:
     kubernetes.io/ingress.class: nginx
