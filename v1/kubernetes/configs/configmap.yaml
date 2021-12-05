@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: eshop-eda
+  name: eda-configmap
+data:
+  BASTION_PORT: "3000"
+  KAFKA_BROKERS: ""
+  USERS_SERVICE_URL: ""
+  QUARKUS_MAILGUN_DOMAIN_NAME: ""
+  POSTGRES_PORT: "5432"
+  POSTGRES_HOST: ""

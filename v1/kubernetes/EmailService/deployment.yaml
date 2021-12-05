@@ -19,9 +19,9 @@ spec:
       - name: email-eda
         imagePullPolicy: Always
         image: eldimious/email-eda-v1:latest
-        envFrom:
-        - secretRef:
-            name: email-app-secrets
+        ports:
+          - containerPort: 8080
+            protocol: TCP
         resources:
           limits:
             cpu: '200m'
@@ -29,6 +29,24 @@ spec:
           requests:
             cpu: '200m'
             memory: '512Mi'
-        ports:
-          - containerPort: 3000
-            protocol: TCP       
+        env:
+          - name: USERS_SERVICE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: USERS_SERVICE_URL
+          - name: KAFKA_BROKERS
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: KAFKA_BROKERS
+          - name: QUARKUS_MAILGUN_DOMAIN_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: QUARKUS_MAILGUN_DOMAIN_NAME
+          - name: QUARKUS_MAILGUN_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: eda-secrets
+                key: QUARKUS_MAILGUN_API_KEY

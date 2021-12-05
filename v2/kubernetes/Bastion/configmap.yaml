@@ -4,6 +4,7 @@ metadata:
   namespace: eshop-eda
   name: bastion-configmap
 data:
+  PORT:
   USERS_CONNECTOR_JSON:
   ORDERS_CONNECTOR_JSON:
   WAREHOUSE_CONNECTOR_JSON:

@@ -29,7 +29,35 @@ spec:
           requests:
             cpu: '200m'
             memory: '512Mi'
-        envFrom:
-        - secretRef:
-            name: warehouse-app-secrets
+        env:
+          - name: POSTGRES_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: POSTGRES_HOST
+          - name: POSTGRES_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: POSTGRES_PORT
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: POSTGRES_DB
+          - name: KAFKA_BROKERS
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: KAFKA_BROKERS
+          - name: POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: POSTGRES_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: eda-secrets
+                key: POSTGRES_PASSWORD
             

@@ -26,6 +26,14 @@ spec:
             requests:
               cpu: '300m'
               memory: '256Mi'
-          envFrom:
-            - secretRef:
-                name: bastion-app-secrets
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: eda-configmap
+                  key: BASTION_PORT
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: eda-secrets
+                  key: DATABASE_URL
