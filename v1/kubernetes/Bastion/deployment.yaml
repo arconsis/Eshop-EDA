@@ -28,4 +28,4 @@ spec:
               memory: '256Mi'
           envFrom:
             - secretRef:
-                name: bastion-secrets
+                name: bastion-app-secrets

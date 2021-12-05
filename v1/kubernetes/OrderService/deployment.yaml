@@ -31,5 +31,5 @@ spec:
             memory: '512Mi'
         envFrom:
         - secretRef:
-            name: orders-service-secrets
+            name: orders-app-secrets
             

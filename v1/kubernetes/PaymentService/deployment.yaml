@@ -31,5 +31,5 @@ spec:
             memory: '512Mi'
         envFrom:
         - secretRef:
-            name: payments-service-secrets
+            name: payments-app-secrets
             

@@ -31,5 +31,5 @@ spec:
             memory: '512Mi'
         envFrom:
         - secretRef:
-            name: users-service-secrets
+            name: users-app-secrets
             

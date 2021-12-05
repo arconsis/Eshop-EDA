@@ -21,7 +21,7 @@ spec:
         image: eldimious/email-eda-v1:latest
         envFrom:
         - secretRef:
-            name: email-service-secrets
+            name: email-app-secrets
         resources:
           limits:
             cpu: '200m'
