@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bastion-deployment
+  name: bastion-app
   labels:
     app: bastion
   namespace: eshop-eda
@@ -17,8 +17,11 @@ spec:
     spec:
       containers:
         - name: bastion-eda
-          imagePullPolicy: IfNotPresent
-          image: eldimious/bastion-eda:latest
+          imagePullPolicy: Always
+          image: akoufa/bastion-eda-v1:latest
+          ports:
+            - containerPort: 3000
+              protocol: TCP
           resources:
             limits:
               cpu: '300m'
@@ -26,8 +29,14 @@ spec:
             requests:
               cpu: '300m'
               memory: '256Mi'
-          envFrom:
-            - configMapRef:
-                name: bastion-configmap
-            - secretRef:
-                name: bastion-secret
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: eda-configmap
+                  key: BASTION_PORT
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: eda-secrets
+                  key: DATABASE_URL

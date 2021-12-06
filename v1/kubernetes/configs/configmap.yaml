@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: eshop-eda
+  name: eda-configmap
+data:
+  BASTION_PORT: "3000"
+  KAFKA_BROKERS: ""
+  USERS_SERVICE_URL: "http://user-service:8080"
+  QUARKUS_MAILGUN_DOMAIN_NAME: ""
+  POSTGRES_PORT: "5432"
+  POSTGRES_HOST: ""
+  ORDERS_POSTGRES_DB: "orders-db"
+  USERS_POSTGRES_DB: "users-db"
+  PAYMENTS_POSTGRES_DB: "payments-db"
+  WAREHOUSE_POSTGRES_DB: "warehouse-db"

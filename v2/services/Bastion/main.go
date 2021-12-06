@@ -27,7 +27,7 @@ var debeziumHost = ""
 
 func main() {
 
-	if os.Getenv(appEnvKey) != "production" {
+	if os.Getenv(appEnvKey) == "development" {
 		err := godotenv.Load()
 		if err != nil {
 			log.Fatal("Error loading .env file")

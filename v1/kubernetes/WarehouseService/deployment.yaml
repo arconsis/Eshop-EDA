@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: warehouse-backend
+  name: warehouse-app
   labels:
-    app: warehouse-backend
+    app: warehouse-app
   namespace: eshop-eda
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: warehouse-backend
+      name: warehouse-app
   template:
     metadata:
       labels:
-        name: warehouse-backend
+        name: warehouse-app
     spec:
       containers:
-      - name: warehouse-api
+      - name: warehouse-eda
         imagePullPolicy: Always
         image: eldimious/warehouse-eda-v1:latest
         ports:
@@ -29,7 +29,35 @@ spec:
           requests:
             cpu: '200m'
             memory: '512Mi'
-        envFrom:
-        - secretRef:
-            name: warehouse-service-secrets
+        env:
+          - name: POSTGRES_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: POSTGRES_HOST
+          - name: POSTGRES_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: POSTGRES_PORT
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: WAREHOUSE_POSTGRES_DB
+          - name: KAFKA_BROKERS
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: KAFKA_BROKERS
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: eda-secrets
+                key: POSTGRES_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: eda-secrets
+                key: POSTGRES_PASSWORD
             

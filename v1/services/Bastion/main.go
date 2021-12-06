@@ -17,7 +17,7 @@ const appEnvKey = "APP_ENV"
 
 func main() {
 
-	if os.Getenv(appEnvKey) != "production" {
+	if os.Getenv(appEnvKey) == "development" {
 		err := godotenv.Load()
 		if err != nil {
 			log.Fatal("Error loading .env file")
@@ -25,12 +25,13 @@ func main() {
 	}
 
 	r := chi.NewRouter()
-	r.Post("/createDatabases", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/bastion/createDatabases", func(w http.ResponseWriter, r *http.Request) {
 		createDatabases()
 		w.Write([]byte(fmt.Sprint("Databases created")))
 	})
 
 	port := fmt.Sprintf(":%v", os.Getenv(portKey))
+	log.Printf("Listeing on port: %v\n", port)
 	http.ListenAndServe(port, r)
 }
 
