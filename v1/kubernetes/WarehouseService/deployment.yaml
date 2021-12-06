@@ -44,7 +44,7 @@ spec:
             valueFrom:
               configMapKeyRef:
                 name: eda-configmap
-                key: POSTGRES_DB
+                key: WAREHOUSE_POSTGRES_DB
           - name: KAFKA_BROKERS
             valueFrom:
               configMapKeyRef:
@@ -52,8 +52,8 @@ spec:
                 key: KAFKA_BROKERS
           - name: POSTGRES_USER
             valueFrom:
-              configMapKeyRef:
-                name: eda-configmap
+              secretKeyRef:
+                name: eda-secrets
                 key: POSTGRES_USER
           - name: POSTGRES_PASSWORD
             valueFrom:
