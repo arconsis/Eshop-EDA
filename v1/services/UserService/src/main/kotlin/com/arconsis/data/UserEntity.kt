@@ -34,5 +34,5 @@ class UserEntity(
     var updatedAt: Instant? = null,
 
     @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var addressEntities: MutableList<AddressEntity>? = null,
+    var addressEntities: MutableList<AddressEntity> = mutableListOf()
 )

@@ -11,7 +11,7 @@ import javax.transaction.Transactional
 class AddressesService(private val addressesRepository: AddressesRepository) {
 
     @Transactional
-    fun getAddresses(userId: UUID): List<Address>? {
+    fun getAddresses(userId: UUID): List<Address> {
         return addressesRepository.getAddresses(userId)
     }
 

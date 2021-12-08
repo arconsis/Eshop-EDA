@@ -28,11 +28,11 @@ class AddressesRepository(private val entityManager: EntityManager) {
         return addressEntity.toAddress()
     }
 
-    fun getAddresses(userId: UUID): List<Address>? {
-        val userEntity = entityManager.getReference(UserEntity::class.java, userId) ?: return null
-        val listOfAddressEntities = userEntity.addressEntities
+    fun getAddresses(userId: UUID): List<Address> {
+        val listOfAddressEntities = entityManager.createNamedQuery("list_user_addresses", AddressEntity::class.java)
+            .setParameter("user_id", userId ).resultList
 
-        return listOfAddressEntities?.map { addressEntity -> addressEntity.toAddress() }
+        return listOfAddressEntities.map { addressEntity -> addressEntity.toAddress() }
     }
 
 }

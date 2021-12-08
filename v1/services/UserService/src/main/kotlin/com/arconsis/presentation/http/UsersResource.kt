@@ -41,7 +41,7 @@ class UsersResource(private val usersService: UsersService, private val addresse
     @Path("/{userId}/addresses")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun getAddresses(@PathParam("userId") userId: UUID): List<Address>? {
+    fun getAddresses(@PathParam("userId") userId: UUID): List<Address> {
         return addressesService.getAddresses(userId)
     }
 
