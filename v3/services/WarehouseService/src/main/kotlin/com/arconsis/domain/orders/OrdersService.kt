@@ -7,11 +7,13 @@ import com.arconsis.domain.shipments.Shipment
 import com.arconsis.domain.shipments.ShipmentStatus
 import com.arconsis.domain.shipments.toShipmentEvent
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde
+import io.smallrye.mutiny.Uni
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.kstream.Branched
 import org.apache.kafka.streams.kstream.BranchedKStream
 import org.apache.kafka.streams.kstream.KStream
 import org.apache.kafka.streams.kstream.Produced
+import java.time.Duration
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -44,7 +46,8 @@ class OrdersService {
 
     private fun KStream<String, Order>.handlePaidOrder(shipmentTopicSerde: ObjectMapperSerde<Shipment>) =
         mapValues { order ->
-            // TODO: add some latency to simulate remote call with some courier
+            // added some latency to simulate remote call with some courier
+            Uni.createFrom().voidItem().onItem().delayIt().by(Duration.ofMillis(5000)).await().indefinitely()
             val event = order.toShipmentEvent(ShipmentStatus.SHIPPED)
             event.value
         }.to(Topics.SHIPMENTS.topicName, Produced.with(Serdes.String(), shipmentTopicSerde))
