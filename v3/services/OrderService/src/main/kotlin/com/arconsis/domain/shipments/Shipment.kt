@@ -10,10 +10,12 @@ data class Shipment(
 )
 
 enum class ShipmentStatus {
-    PREPERING,
-    OUT_FOR_SHIPMENT,
-    SHIPPED
+    PREPARING_SHIPMENT,
+    SHIPPED,
+    DELIVERED,
+    CANCELLED,
+    FAILED
 }
 
 val Shipment.isOutForShipment
-    get() = status == ShipmentStatus.OUT_FOR_SHIPMENT
+    get() = status == ShipmentStatus.SHIPPED

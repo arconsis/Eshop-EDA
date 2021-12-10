@@ -1,11 +1,12 @@
 package com.arconsis.domain.orders
 
+import com.arconsis.domain.payments.CreatePayment
 import java.util.*
 
 data class Order(
     val userId: UUID,
     val orderId: UUID,
-    val amount: String,
+    val amount: Double,
     val currency: String,
     val productId: String,
     val quantity: Int,
@@ -13,16 +14,24 @@ data class Order(
 )
 
 enum class OrderStatus {
-    PENDING,
-    VALID,
+    REQUESTED,
+    VALIDATED,
     OUT_OF_STOCK,
     PAID,
-    OUT_FOR_SHIPMENT,
+    SHIPPED,
     COMPLETED,
     PAYMENT_FAILED,
     CANCELLED,
-    REFUNDED
+    REFUNDED,
+    SHIPMENT_FAILED
 }
 
 val Order.isValidated
-    get() = status == OrderStatus.VALID
+    get() = status == OrderStatus.VALIDATED
+
+fun Order.toCreatePayment() = CreatePayment(
+    userId = userId,
+    orderId = orderId,
+    amount = amount,
+    currency = currency,
+)

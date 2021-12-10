@@ -6,15 +6,16 @@ data class Payment(
     val transactionId: UUID,
     val orderId: UUID,
     val userId: UUID,
-    val amount: String,
+    val amount: Double,
     val currency: String,
     val status: PaymentStatus,
 )
 
 enum class PaymentStatus {
-    SUCCESS,
+    SUCCEED,
     FAILED,
+    REFUNDED
 }
 
 val Payment.isSuccess
-    get() = status == PaymentStatus.SUCCESS
+    get() = status == PaymentStatus.SUCCEED
