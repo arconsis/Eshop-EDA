@@ -3,7 +3,7 @@ package com.arconsis.domain
 import com.arconsis.data.UserEvent
 import com.arconsis.data.UsersRepository
 import com.arconsis.data.toUserEvent
-import com.arconsis.presentation.http.dto.UserCreate
+import com.arconsis.presentation.http.dto.CreateUser
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
 import org.eclipse.microprofile.reactive.messaging.Emitter
@@ -18,15 +18,15 @@ class UsersService(
 ) {
 
     @Transactional
-    fun createUser(userCreate: UserCreate): User {
-        val user = usersRepository.createUser(userCreate)
+    fun createUser(createUser: CreateUser): User {
+        val user = usersRepository.createUser(createUser)
         val event = user.toUserEvent()
         sendUserEvent(event)
         return user
     }
 
     @Transactional
-    fun getUser(userId: UUID): User {
+    fun getUser(userId: UUID): User? {
         return usersRepository.getUser(userId)
     }
 
