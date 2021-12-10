@@ -1,8 +1,8 @@
-package com.arconsis.http.orders
+package com.arconsis.presentation.http.orders
 
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.orders.OrdersService
-import com.arconsis.http.orders.dto.OrderCreateDto
+import com.arconsis.presentation.http.orders.dto.OrderCreateDto
 import javax.enterprise.context.ApplicationScoped
 import javax.ws.rs.Consumes
 import javax.ws.rs.POST

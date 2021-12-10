@@ -6,12 +6,29 @@ data class Payment(
     val transactionId: UUID,
     val orderId: UUID,
     val userId: UUID,
-    val amount: String,
+    val amount: Double,
     val currency: String,
     val status: PaymentStatus,
 )
 
 enum class PaymentStatus {
-    SUCCESS,
+    SUCCEED,
     FAILED,
+    REFUNDED
 }
+
+data class CreatePayment(
+    val orderId: UUID,
+    val userId: UUID,
+    val amount: Double,
+    val currency: String,
+)
+
+fun CreatePayment.toPayment(transactionId: UUID, status: PaymentStatus) = Payment(
+    transactionId = transactionId,
+    orderId = orderId,
+    userId = userId,
+    amount = amount,
+    currency = currency,
+    status = status,
+)

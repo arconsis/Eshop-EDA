@@ -1,4 +1,4 @@
-package com.arconsis.domain.ordersValidations
+package com.arconsis.domain.ordervalidations
 
 import java.util.*
 
@@ -14,6 +14,3 @@ enum class OrderValidationType {
     VALIDATED,
     INVALID,
 }
-
-val OrderValidation.isValidated
-    get() = type == OrderValidationType.VALIDATED

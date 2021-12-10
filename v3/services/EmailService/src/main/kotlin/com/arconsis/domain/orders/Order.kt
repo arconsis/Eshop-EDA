@@ -5,7 +5,7 @@ import java.util.*
 data class Order(
     val userId: UUID,
     val orderId: UUID,
-    val amount: String,
+    val amount: Double,
     val currency: String,
     val productId: String,
     val quantity: Int,
@@ -13,19 +13,20 @@ data class Order(
 )
 
 enum class OrderStatus {
-    PENDING,
-    VALID,
+    REQUESTED,
+    VALIDATED,
     OUT_OF_STOCK,
     PAID,
-    OUT_FOR_SHIPMENT,
+    SHIPPED,
     COMPLETED,
     PAYMENT_FAILED,
     CANCELLED,
-    REFUNDED
+    REFUNDED,
+    SHIPMENT_FAILED
 }
 
 val Order.isOutForShipment
-    get() = status == OrderStatus.OUT_FOR_SHIPMENT
+    get() = status == OrderStatus.SHIPPED
 
 val Order.isPaid
     get() = status == OrderStatus.PAID
