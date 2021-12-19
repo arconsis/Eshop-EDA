@@ -14,3 +14,14 @@ enum class OrderValidationType {
     VALIDATED,
     INVALID,
 }
+
+fun OrderValidation.toOrderValidationEvent() = OrderValidationEvent(
+    key = userId.toString(),
+    value = OrderValidation(
+        type = type,
+        productId = productId,
+        quantity = quantity,
+        orderId = orderId,
+        userId = userId
+    )
+)

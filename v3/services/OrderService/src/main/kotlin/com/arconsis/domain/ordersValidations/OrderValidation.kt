@@ -17,3 +17,6 @@ enum class OrderValidationType {
 
 val OrderValidation.isValidated
     get() = type == OrderValidationType.VALIDATED
+
+val OrderValidation.isInvalid
+    get() = type == OrderValidationType.INVALID

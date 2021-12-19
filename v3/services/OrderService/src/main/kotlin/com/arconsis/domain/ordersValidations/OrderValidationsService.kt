@@ -17,14 +17,19 @@ class OrderValidationsService {
         ordersTable: KTable<String, Order>,
         orderSerde: ObjectMapperSerde<Order>
     ) = stream.filter { _, orderValidation ->
-        orderValidation.isValidated
+        orderValidation.isValidated || orderValidation.isInvalid
     }
-        .join(ordersTable) { _, order ->
-            order
+        .join(ordersTable) { orderValidation, order ->
+            val updatedOrder = order.copy(status = orderValidation.type.toOrderStatus())
+            updatedOrder
         }
-        .mapValues { orderValidation ->
-            val order = orderValidation.copy(status = OrderStatus.VALIDATED)
+        .mapValues { order ->
             order
         }
         .to(Topics.ORDERS.topicName, Produced.with(Serdes.String(), orderSerde))
+
+    private fun OrderValidationType.toOrderStatus(): OrderStatus = when (this) {
+        OrderValidationType.VALIDATED -> OrderStatus.VALIDATED
+        OrderValidationType.INVALID -> OrderStatus.OUT_OF_STOCK
+    }
 }
