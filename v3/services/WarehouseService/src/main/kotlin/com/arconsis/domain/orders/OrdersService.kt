@@ -17,7 +17,6 @@ class OrdersService {
     fun handleOrderEvents(
         stream: KStream<String, Order>,
         inventoryTable: KTable<String, Inventory>,
-        //reservedStock: StoreBuilder<KeyValueStore<String, Int>>
     ): BranchedKStream<String, Order> = stream.split()
         .branch(
             { _, order -> order.isRequested },
