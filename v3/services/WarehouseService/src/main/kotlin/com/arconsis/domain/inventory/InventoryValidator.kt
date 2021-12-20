@@ -12,7 +12,7 @@ import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class InventoryValidator : Transformer<String, Pair<Order, Inventory>, KeyValue<String, OrderValidation>> {
-    private var reservedStocksStore: KeyValueStore<String, Int>? = null
+    private lateinit var reservedStocksStore: KeyValueStore<String, Int>
 
     override fun init(context: ProcessorContext) {
         reservedStocksStore = context.getStateStore(LocalStores.RESERVED_STOCK.storeName)
@@ -20,11 +20,11 @@ class InventoryValidator : Transformer<String, Pair<Order, Inventory>, KeyValue<
 
     override fun transform(key: String, orderAndStock: Pair<Order, Inventory>): KeyValue<String, OrderValidation> {
         //Process each order/inventory pair one at a time
-        val order = orderAndStock.first
-        val warehouseStockCount = orderAndStock.second.stock
+        val (order, warehouseStock) = orderAndStock
+        val warehouseStockCount = warehouseStock.stock
 
         //Look up locally 'reserved' stock from our state store
-        var reserved = reservedStocksStore!![order.productId]
+        var reserved = this.reservedStocksStore[order.productId]
         if (reserved == null) {
             reserved = 0
         }
@@ -32,7 +32,7 @@ class InventoryValidator : Transformer<String, Pair<Order, Inventory>, KeyValue<
         //If there is enough stock available (considering both warehouse inventory and reserved stock) validate the order
         val orderValidation = if (warehouseStockCount - reserved - order.quantity >= 0) {
             //reserve the stock by adding it to the 'reserved' store
-            reservedStocksStore!!.put(order.productId, reserved + order.quantity)
+            reservedStocksStore.put(order.productId, reserved + order.quantity)
             //validate the order
             OrderValidation(
                 type = OrderValidationType.VALIDATED,

@@ -57,7 +57,7 @@ class OrdersService {
 
     private fun KStream<String, Order>.handlePaidOrder() = mapValues { order ->
         // added some latency to simulate remote call with some courier
-        Uni.createFrom().voidItem().onItem().delayIt().by(Duration.ofMillis(5000)).await().indefinitely()
+        Uni.createFrom().voidItem().onItem().delayIt().by(Duration.ofSeconds(5)).await().indefinitely()
         val event = order.toShipmentEvent(ShipmentStatus.SHIPPED)
         event.value
     }.to(Topics.SHIPMENTS.topicName, Produced.with(Serdes.String(), shipmentTopicSerde))
