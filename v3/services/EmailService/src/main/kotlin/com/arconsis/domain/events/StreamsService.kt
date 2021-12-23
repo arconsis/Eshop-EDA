@@ -12,6 +12,7 @@ import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
+import org.apache.kafka.streams.kstream.Joined
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.inject.Produces
@@ -34,12 +35,17 @@ class StreamsService(
                 Topics.ORDERS.topicName,
                 Consumed.with(Serdes.String(), orderTopicSerde)
             )
+            .selectKey { _, order ->
+                order.userId.toString()
+            }
             .filter { _, order ->
                 order.isOutForShipment || order.isPaid
             }
-            .join(usersTable) { order, customer ->
-                Pair(order, customer)
-            }
+            .join(
+                usersTable,
+                { order, customer -> Pair(order, customer) },
+                Joined.with(Serdes.String(), orderTopicSerde, userTopicSerde)
+            )
             .peek { _, (order, customer) ->
                 when (order.isPaid) {
                     true -> emailRepository.sendEmail(

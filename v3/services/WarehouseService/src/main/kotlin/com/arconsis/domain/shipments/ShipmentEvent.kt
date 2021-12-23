@@ -9,7 +9,7 @@ data class ShipmentEvent(
 )
 
 fun Order.toShipmentEvent(status: ShipmentStatus) = ShipmentEvent(
-    key = userId.toString(),
+    key = orderId.toString(),
     value = Shipment(
         orderId = orderId,
         shipmentId = UUID.randomUUID(),
