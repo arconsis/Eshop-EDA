@@ -41,9 +41,6 @@ class StreamsService(
             .filter { _, order ->
                 order.isOutForShipment || order.isPaid
             }
-//            .join(usersTable) { order, customer ->
-//                Pair(order, customer)
-//            }
             .join(
                 usersTable,
                 { order, customer -> Pair(order, customer) },
