@@ -11,7 +11,7 @@ import org.apache.kafka.streams.state.KeyValueStore
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class InventoryValidator : Transformer<String, Pair<Order, Inventory>, KeyValue<String, OrderValidation>> {
+class ReserveStockValidator : Transformer<String, Pair<Order, Inventory>, KeyValue<String, OrderValidation>> {
     private lateinit var reservedStocksStore: KeyValueStore<String, Int>
 
     override fun init(context: ProcessorContext) {

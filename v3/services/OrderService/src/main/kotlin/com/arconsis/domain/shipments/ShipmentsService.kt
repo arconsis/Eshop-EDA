@@ -17,13 +17,19 @@ class ShipmentsService {
         stream: KStream<String, Shipment>,
         ordersTable: KTable<String, Order>,
         orderSerde: ObjectMapperSerde<Order>
-    ) = stream.filter { _, shipment -> shipment.isOutForShipment }
-        .join(ordersTable) { _, order ->
-            order
+    ) = stream.filter { _, shipment -> shipment.isOutForShipment || shipment.isDelivered || shipment.failed }
+        .join(ordersTable) { shipment, order ->
+            val updatedOrder = order.copy(status = shipment.status.toOrderStatus())
+            updatedOrder
         }
-        .map { _, orderValidation ->
-            val outForShipmentOrder = orderValidation.copy(status = OrderStatus.SHIPPED)
-            KeyValue.pair(outForShipmentOrder.userId.toString(), outForShipmentOrder)
+        .map { _, order ->
+            KeyValue.pair(order.userId.toString(), order)
         }
         .to(Topics.ORDERS.topicName, Produced.with(Serdes.String(), orderSerde))
+
+    private fun ShipmentStatus.toOrderStatus(): OrderStatus = when (this) {
+        ShipmentStatus.DELIVERED -> OrderStatus.COMPLETED
+        ShipmentStatus.SHIPPED -> OrderStatus.SHIPPED
+        ShipmentStatus.FAILED -> OrderStatus.SHIPMENT_FAILED
+    }
 }

@@ -34,6 +34,9 @@ val Order.isRequested
 val Order.isPaid
     get() = status == OrderStatus.PAID
 
+val Order.isPaymentFailed
+    get() = status == OrderStatus.PAYMENT_FAILED
+
 fun Order.toOrderValidationEvent(type: OrderValidationType) = OrderValidationEvent(
     key = userId.toString(),
     value = OrderValidation(
