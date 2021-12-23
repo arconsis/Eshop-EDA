@@ -29,7 +29,7 @@ class IncreaseStockValidator : Transformer<String, Pair<Order, Inventory>, KeyVa
         reservedStocksStore.put(order.productId, reserved - order.quantity)
 
         return KeyValue.pair(
-            order.userId.toString(), Inventory(
+            order.orderId.toString(), Inventory(
                 id = inventory.id,
                 productId = inventory.productId,
                 stock = this.reservedStocksStore[order.productId]

@@ -25,7 +25,7 @@ class OrderValidationsService {
             updatedOrder
         }
         .map { _, order ->
-            KeyValue.pair(order.userId.toString(), order)
+            KeyValue.pair(order.orderId.toString(), order)
         }
         .to(Topics.ORDERS.topicName, Produced.with(Serdes.String(), orderSerde))
 

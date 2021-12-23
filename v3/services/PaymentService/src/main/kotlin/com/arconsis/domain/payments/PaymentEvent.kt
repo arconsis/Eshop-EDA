@@ -9,7 +9,7 @@ data class PaymentEvent(
 )
 
 fun Order.toPaymentEvent(status: PaymentStatus) = PaymentEvent(
-    key = userId.toString(),
+    key = orderId.toString(),
     value = Payment(
         transactionId = UUID.randomUUID(),
         orderId = this.orderId,
