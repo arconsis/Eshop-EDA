@@ -10,9 +10,16 @@ data class Shipment(
 )
 
 enum class ShipmentStatus {
-    PREPARING_SHIPMENT,
     SHIPPED,
     DELIVERED,
-    CANCELLED,
     FAILED
 }
+
+val Shipment.isOutForShipment
+    get() = status == ShipmentStatus.SHIPPED
+
+val Shipment.isDelivered
+    get() = status == ShipmentStatus.DELIVERED
+
+val Shipment.failed
+    get() = status == ShipmentStatus.FAILED

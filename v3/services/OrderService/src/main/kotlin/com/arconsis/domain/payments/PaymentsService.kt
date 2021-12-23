@@ -17,13 +17,19 @@ class PaymentsService {
         stream: KStream<String, Payment>,
         ordersTable: KTable<String, Order>,
         orderSerde: ObjectMapperSerde<Order>
-    ) = stream.filter { _, payment -> payment.isSuccess }
-        .join(ordersTable) { _, order ->
-            order
+    ) = stream
+        .join(ordersTable) { payment, order ->
+            val updatedOrder = order.copy(status = payment.status.toOrderStatus())
+            updatedOrder
         }
-        .map { _, orderValidation ->
-            val paidOrder = orderValidation.copy(status = OrderStatus.PAID)
-            KeyValue.pair(paidOrder.userId.toString(), paidOrder)
+        .map { _, order ->
+            KeyValue.pair(order.userId.toString(), order)
         }
         .to(Topics.ORDERS.topicName, Produced.with(Serdes.String(), orderSerde))
+
+    private fun PaymentStatus.toOrderStatus(): OrderStatus = when (this) {
+        PaymentStatus.SUCCEED -> OrderStatus.PAID
+        PaymentStatus.FAILED -> OrderStatus.PAYMENT_FAILED
+        PaymentStatus.REFUNDED -> OrderStatus.REFUNDED
+    }
 }

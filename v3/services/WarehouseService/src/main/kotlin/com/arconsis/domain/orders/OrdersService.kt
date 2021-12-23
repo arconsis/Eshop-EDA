@@ -1,8 +1,9 @@
 package com.arconsis.domain.orders
 
 import com.arconsis.common.*
+import com.arconsis.domain.inventory.IncreaseStockValidator
 import com.arconsis.domain.inventory.Inventory
-import com.arconsis.domain.inventory.InventoryValidator
+import com.arconsis.domain.inventory.ReserveStockValidator
 import com.arconsis.domain.ordervalidations.toOrderValidationEvent
 import com.arconsis.domain.shipments.ShipmentStatus
 import com.arconsis.domain.shipments.toShipmentEvent
@@ -30,6 +31,12 @@ class OrdersService {
                 it.handlePaidOrder()
             }
         )
+        .branch(
+            { _, order -> order.isPaymentFailed },
+            Branched.withConsumer {
+                it.handleFailedPaymentOrder(inventoryTable)
+            }
+        )
 
 
     private fun KStream<String, Order>.handlePendingOrder(
@@ -37,7 +44,7 @@ class OrdersService {
     ) = selectKey { _, order ->
         order.productId
     }
-//        // Join Orders to Inventory so we can compare each order to its corresponding stock value
+        // Join Orders to Inventory so we can compare each order to its corresponding stock value
         .join(
             inventoryTable,
             { order, inventory -> Pair(order, inventory) },
@@ -45,7 +52,7 @@ class OrdersService {
         )
         // Validate the order based on how much stock we have both in the warehouse and locally 'reserved' stock
         .transform(
-            { InventoryValidator() },
+            { ReserveStockValidator() },
             LocalStores.RESERVED_STOCK.storeName
         )
         //Push the result into the Order Validations topic
@@ -61,4 +68,21 @@ class OrdersService {
         val event = order.toShipmentEvent(ShipmentStatus.SHIPPED)
         event.value
     }.to(Topics.SHIPMENTS.topicName, Produced.with(Serdes.String(), shipmentTopicSerde))
+
+    private fun KStream<String, Order>.handleFailedPaymentOrder(
+        inventoryTable: KTable<String, Inventory>
+    ) = selectKey { _, order ->
+        order.productId
+    }
+        // Join Orders to Inventory so we can compare each order to its corresponding stock value
+        .join(
+            inventoryTable,
+            { order, inventory -> Pair(order, inventory) },
+            Joined.with(Serdes.String(), orderTopicSerde, inventoryTopicSerde)
+        )
+        // Validate the order based on how much stock we have both in the warehouse and locally 'reserved' stock
+        .transform(
+            { IncreaseStockValidator() },
+            LocalStores.RESERVED_STOCK.storeName
+        )
 }
