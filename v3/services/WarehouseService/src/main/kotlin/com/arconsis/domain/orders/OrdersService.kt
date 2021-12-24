@@ -14,75 +14,77 @@ import java.time.Duration
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class OrdersService {
-    fun handleOrderEvents(
-        stream: KStream<String, Order>,
-        inventoryTable: KTable<String, Inventory>,
-    ): BranchedKStream<String, Order> = stream.split()
-        .branch(
-            { _, order -> order.isRequested },
-            Branched.withConsumer {
-                it.handlePendingOrder(inventoryTable)
-            }
-        )
-        .branch(
-            { _, order -> order.isPaid },
-            Branched.withConsumer {
-                it.handlePaidOrder()
-            }
-        )
-        .branch(
-            { _, order -> order.isPaymentFailed },
-            Branched.withConsumer {
-                it.handleFailedPaymentOrder(inventoryTable)
-            }
-        )
+class OrdersService(val inventoryTable: KTable<String, Inventory>) {
 
-
-    private fun KStream<String, Order>.handlePendingOrder(
-        inventoryTable: KTable<String, Inventory>
-    ) = selectKey { _, order ->
-        order.productId
+    fun handleOrderEvents(stream: KStream<String, Order>): BranchedKStream<String, Order> {
+        return stream.split()
+            .branch(
+                { _, order -> order.isRequested },
+                Branched.withConsumer {
+                    it.handlePendingOrder()
+                }
+            )
+            .branch(
+                { _, order -> order.isPaid },
+                Branched.withConsumer {
+                    it.handlePaidOrder()
+                }
+            )
+            .branch(
+                { _, order -> order.isPaymentFailed },
+                Branched.withConsumer {
+                    it.handleFailedPaymentOrder()
+                }
+            )
     }
-        // Join Orders to Inventory so we can compare each order to its corresponding stock value
-        .join(
-            inventoryTable,
-            { order, inventory -> Pair(order, inventory) },
-            Joined.with(Serdes.String(), orderTopicSerde, inventoryTopicSerde)
-        )
-        // Validate the order based on how much stock we have both in the warehouse and locally 'reserved' stock
-        .transform(
-            { ReserveStockValidator() },
-            LocalStores.RESERVED_STOCK.storeName
-        )
-        //Push the result into the Order Validations topic
-        .mapValues { _, orderValidation ->
-            val event = orderValidation.toOrderValidationEvent()
-            event.value
+
+
+    private fun KStream<String, Order>.handlePendingOrder() {
+        return selectKey { _, order ->
+            order.productId
         }
-        .to(Topics.ORDERS_VALIDATIONS.topicName, Produced.with(Serdes.String(), orderValidationSerde))
-
-    private fun KStream<String, Order>.handlePaidOrder() = mapValues { order ->
-        // added some latency to simulate remote call with some courier
-        Uni.createFrom().voidItem().onItem().delayIt().by(Duration.ofSeconds(5)).await().indefinitely()
-        val event = order.toShipmentEvent(ShipmentStatus.SHIPPED)
-        event.value
-    }.to(Topics.SHIPMENTS.topicName, Produced.with(Serdes.String(), shipmentTopicSerde))
-
-    private fun KStream<String, Order>.handleFailedPaymentOrder(
-        inventoryTable: KTable<String, Inventory>
-    ) = selectKey { _, order ->
-        order.productId
+            // Join Orders to Inventory so we can compare each order to its corresponding stock value
+            .join(
+                inventoryTable,
+                { order, inventory -> Pair(order, inventory) },
+                Joined.with(Serdes.String(), orderTopicSerde, inventoryTopicSerde)
+            )
+            // Validate the order based on how much stock we have both in the warehouse and locally 'reserved' stock
+            .transform(
+                { ReserveStockValidator() },
+                LocalStores.RESERVED_STOCK.storeName
+            )
+            //Push the result into the Order Validations topic
+            .mapValues { _, orderValidation ->
+                val event = orderValidation.toOrderValidationEvent()
+                event.value
+            }
+            .to(Topics.ORDERS_VALIDATIONS.topicName, Produced.with(Serdes.String(), orderValidationSerde))
     }
-        // Join Orders to Inventory so we can compare each order to its corresponding stock value
-        .join(
-            inventoryTable,
-            { order, inventory -> Pair(order, inventory) },
-            Joined.with(Serdes.String(), orderTopicSerde, inventoryTopicSerde)
-        )
-        // Validate the order based on how much stock we have both in the warehouse and locally 'reserved' stock
-        .transform(
-            { IncreaseStockValidator() },
-            LocalStores.RESERVED_STOCK.storeName
-        )
+
+    private fun KStream<String, Order>.handlePaidOrder() {
+        return mapValues { order ->
+            // added some latency to simulate remote call with some courier
+            Uni.createFrom().voidItem().onItem().delayIt().by(Duration.ofSeconds(5)).await().indefinitely()
+            val event = order.toShipmentEvent(ShipmentStatus.SHIPPED)
+            event.value
+        }.to(Topics.SHIPMENTS.topicName, Produced.with(Serdes.String(), shipmentTopicSerde))
+    }
+
+    private fun KStream<String, Order>.handleFailedPaymentOrder(): KStream<String, Inventory> {
+        return selectKey { _, order ->
+            order.productId
+        }
+            // Join Orders to Inventory so we can compare each order to its corresponding stock value
+            .join(
+                inventoryTable,
+                { order, inventory -> Pair(order, inventory) },
+                Joined.with(Serdes.String(), orderTopicSerde, inventoryTopicSerde)
+            )
+            // Validate the order based on how much stock we have both in the warehouse and locally 'reserved' stock
+            .transform(
+                { IncreaseStockValidator() },
+                LocalStores.RESERVED_STOCK.storeName
+            )
+    }
 }
