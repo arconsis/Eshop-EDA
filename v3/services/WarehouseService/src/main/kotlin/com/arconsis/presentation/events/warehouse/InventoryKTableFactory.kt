@@ -13,10 +13,10 @@ import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.inject.Produces
 
 @ApplicationScoped
-class WarehouseEventsResource {
+class InventoryKTableFactory {
 
     @Produces
-    fun consumeWarehouseEvents(builder: StreamsBuilder): KTable<String, Inventory> {
+    fun createInventoryKTable(builder: StreamsBuilder): KTable<String, Inventory> {
         val changelogConfig: HashMap<String, String> = HashMap()
         val reservedStockStoreBuilder = Stores
             .keyValueStoreBuilder(

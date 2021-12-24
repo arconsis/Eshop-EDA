@@ -12,6 +12,7 @@ import javax.enterprise.context.ApplicationScoped
 class OrderEventsResource(
     private val ordersService: OrdersService
 ) {
+
     fun consumeOrderEvents(builder: StreamsBuilder) {
         val ordersStream = builder
             .stream(
