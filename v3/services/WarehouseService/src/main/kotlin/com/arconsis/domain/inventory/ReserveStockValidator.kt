@@ -51,7 +51,7 @@ class ReserveStockValidator : Transformer<String, Pair<Order, Inventory>, KeyVal
                 quantity = order.quantity
             )
         }
-        return KeyValue.pair(orderValidation.userId.toString(), orderValidation)
+        return KeyValue.pair(orderValidation.orderId.toString(), orderValidation)
     }
 
     override fun close() {}

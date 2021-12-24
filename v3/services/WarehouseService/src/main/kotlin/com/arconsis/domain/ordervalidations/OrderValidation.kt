@@ -16,7 +16,7 @@ enum class OrderValidationType {
 }
 
 fun OrderValidation.toOrderValidationEvent() = OrderValidationEvent(
-    key = userId.toString(),
+    key = orderId.toString(),
     value = OrderValidation(
         type = type,
         productId = productId,

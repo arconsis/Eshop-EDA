@@ -6,6 +6,6 @@ data class OrderRequestEvent(
 )
 
 fun Order.toOrderRequestEvent() = OrderRequestEvent(
-    key = userId.toString(),
+    key = orderId.toString(),
     value = this
 )
