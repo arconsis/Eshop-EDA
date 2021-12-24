@@ -1,6 +1,5 @@
 package com.arconsis.domain.orders
 
-import com.arconsis.presentation.http.orders.dto.OrderCreateDto
 import java.util.*
 
 data class Order(
@@ -11,6 +10,14 @@ data class Order(
     val productId: String,
     val quantity: Int,
     val status: OrderStatus,
+)
+
+data class CreateOrder(
+    val userId: UUID,
+    val amount: Double,
+    val currency: String,
+    val productId: String,
+    val quantity: Int,
 )
 
 enum class OrderStatus {
@@ -26,7 +33,7 @@ enum class OrderStatus {
     SHIPMENT_FAILED
 }
 
-fun OrderCreateDto.toPendingOrder() = Order(
+fun CreateOrder.toPendingOrder() = Order(
     userId = userId,
     orderId = UUID.randomUUID(),
     amount = amount,

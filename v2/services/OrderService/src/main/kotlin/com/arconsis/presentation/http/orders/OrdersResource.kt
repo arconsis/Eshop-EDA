@@ -1,8 +1,9 @@
 package com.arconsis.presentation.http.orders
 
-import com.arconsis.domain.orders.CreateOrder
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.orders.OrdersService
+import com.arconsis.presentation.http.orders.dto.CreateOrderDto
+import com.arconsis.presentation.http.orders.dto.toCreateOrder
 import io.smallrye.mutiny.Uni
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
@@ -19,8 +20,8 @@ class OrdersResource(
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun createOrder(createOrder: CreateOrder, uriInfo: UriInfo): Uni<Order> {
-        return ordersService.createOrder(createOrder)
+    fun createOrder(createOrder: CreateOrderDto, uriInfo: UriInfo): Uni<Order> {
+        return ordersService.createOrder(createOrder.toCreateOrder())
     }
 
     @GET
