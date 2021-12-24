@@ -1,4 +1,4 @@
-package com.arconsis.presentation.events.warehouse
+package com.arconsis.presentation.events
 
 import com.arconsis.common.LocalStores
 import com.arconsis.common.Topics
