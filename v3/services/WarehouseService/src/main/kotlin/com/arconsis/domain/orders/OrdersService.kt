@@ -40,7 +40,7 @@ class OrdersService(val inventoryTable: KTable<String, Inventory>) {
 
 
     private fun KStream<String, Order>.handlePendingOrder() {
-        return selectKey { _, order ->
+        selectKey { _, order ->
             order.productId
         }
             // Join Orders to Inventory so we can compare each order to its corresponding stock value
@@ -63,7 +63,7 @@ class OrdersService(val inventoryTable: KTable<String, Inventory>) {
     }
 
     private fun KStream<String, Order>.handlePaidOrder() {
-        return mapValues { order ->
+        mapValues { order ->
             // added some latency to simulate remote call with some courier
             Uni.createFrom().voidItem().onItem().delayIt().by(Duration.ofSeconds(5)).await().indefinitely()
             val event = order.toShipmentEvent(ShipmentStatus.SHIPPED)

@@ -22,11 +22,12 @@ class IncreaseStockValidator : Transformer<String, Pair<Order, Inventory>, KeyVa
         val (order, inventory) = orderAndStock
 
         //Look up locally 'reserved' stock from our state store
-        var reserved = this.reservedStocksStore[order.productId]
-        if (reserved == null) {
-            reserved = 0
+        val reserved = this.reservedStocksStore[order.productId]
+        if (reserved != null) {
+            var updatedReserved = reserved - order.quantity
+            updatedReserved = if (updatedReserved < 0) 0 else updatedReserved
+            reservedStocksStore.put(order.productId, updatedReserved)
         }
-        reservedStocksStore.put(order.productId, reserved - order.quantity)
 
         return KeyValue.pair(
             order.orderId.toString(), Inventory(
