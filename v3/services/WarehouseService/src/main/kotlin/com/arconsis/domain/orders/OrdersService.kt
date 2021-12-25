@@ -81,7 +81,7 @@ class OrdersService(val inventoryTable: KTable<String, Inventory>) {
                 { order, inventory -> Pair(order, inventory) },
                 Joined.with(Serdes.String(), orderTopicSerde, inventoryTopicSerde)
             )
-            // Validate the order based on how much stock we have both in the warehouse and locally 'reserved' stock
+            // Cancel the stock reservation
             .transform(
                 { IncreaseStockValidator() },
                 LocalStores.RESERVED_STOCK.storeName
