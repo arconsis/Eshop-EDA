@@ -11,6 +11,20 @@ import javax.persistence.*
         query = """ select a from addresses a
                     where a.userEntity.id = :user_id
                         """
+    ),
+    NamedQuery(
+        name = "get_billing_address",
+        query = """ select a from addresses a
+                    where a.userEntity.id = :user_id and a.isBilling = true
+                        """
+    ),
+    NamedQuery(
+        name = "delete_billing_address",
+        query = """ update addresses a 
+                    set a.isBilling  = case a.isBilling
+                    when true then false else false end
+                    where a.userEntity.id = :user_id
+                        """
     )
 )
 @Entity(name = "addresses")
@@ -46,8 +60,19 @@ class AddressEntity(
     @Column
     var phone: String,
 
+    @Column(name = "is_billing")
+    var isBilling: Boolean = false,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     var userEntity: UserEntity,
 )
+
+fun setBillingAddress(addressEntity: AddressEntity): AddressEntity {
+    addressEntity.isBilling = true
+    return addressEntity
+}
+
+
+
 
