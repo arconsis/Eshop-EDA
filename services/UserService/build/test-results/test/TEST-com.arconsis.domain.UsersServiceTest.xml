@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.arconsis.domain.UsersServiceTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2021-10-17T09:18:03" hostname="192.168.1.4" time="0.815">
-  <properties/>
-  <testcase name="shouldCreateUser()" classname="com.arconsis.domain.UsersServiceTest" time="0.809"/>
-  <testcase name="shouldReturnSpecificUser()" classname="com.arconsis.domain.UsersServiceTest" time="0.003"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
