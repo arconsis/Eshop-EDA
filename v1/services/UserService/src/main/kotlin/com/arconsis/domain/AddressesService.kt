@@ -3,7 +3,6 @@ package com.arconsis.domain
 import Address
 import com.arconsis.data.AddressesRepository
 import com.arconsis.presentation.http.dto.CreateAddress
-import com.arconsis.presentation.http.dto.CreateBillingAddress
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
@@ -27,8 +26,8 @@ class AddressesService(private val addressesRepository: AddressesRepository) {
     }
 
     @Transactional
-    fun createBillingAddress(createBillingAddress: CreateBillingAddress): Address {
-        return addressesRepository.createBillingAddress(createBillingAddress)
+    fun createBillingAddress(userId: UUID, addressId: UUID): Address {
+        return addressesRepository.createBillingAddress(userId,addressId)
     }
 
     @Transactional

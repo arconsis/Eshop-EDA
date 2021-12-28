@@ -36,3 +36,7 @@ class UserEntity(
     @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.ALL], orphanRemoval = true)
     var addressEntities: MutableList<AddressEntity> = mutableListOf()
 )
+
+fun setAllBillingFlagsFalse(userEntity: UserEntity) {
+    userEntity.addressEntities.map { addressEntity -> addressEntity.isBilling = false }
+}

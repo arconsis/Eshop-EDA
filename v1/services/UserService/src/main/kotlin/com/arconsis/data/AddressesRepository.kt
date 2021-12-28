@@ -3,11 +3,11 @@ package com.arconsis.data
 import Address
 import AddressEntity
 import com.arconsis.presentation.http.dto.CreateAddress
-import com.arconsis.presentation.http.dto.CreateBillingAddress
 import setBillingAddress
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.persistence.EntityManager
+import javax.ws.rs.NotFoundException
 
 @ApplicationScoped
 class AddressesRepository(private val entityManager: EntityManager) {
@@ -31,16 +31,18 @@ class AddressesRepository(private val entityManager: EntityManager) {
     }
 
     fun getAddresses(userId: UUID): List<Address> {
-        val listOfAddressEntities = entityManager.createNamedQuery("list_user_addresses", AddressEntity::class.java)
-            .setParameter("user_id", userId).resultList
+        val listOfAddressEntities =
+            entityManager.createNamedQuery(AddressEntity.LIST_USER_ADDRESSES, AddressEntity::class.java)
+                .setParameter("user_id", userId).resultList
 
         return listOfAddressEntities.map { addressEntity -> addressEntity.toAddress() }
     }
 
-    fun createBillingAddress(createBillingAddress: CreateBillingAddress): Address {
-        val addressEntity = entityManager.getReference(AddressEntity::class.java, createBillingAddress.addressId)
+    fun createBillingAddress(userId: UUID, addressId: UUID): Address {
+        val userEntity = entityManager.getReference(UserEntity::class.java, userId)
+        setAllBillingFlagsFalse(userEntity)
+        val addressEntity = entityManager.getReference(AddressEntity::class.java, addressId)
         setBillingAddress(addressEntity)
-
         entityManager.persist(addressEntity)
         entityManager.flush()
 
@@ -48,14 +50,19 @@ class AddressesRepository(private val entityManager: EntityManager) {
     }
 
     fun getBillingAddress(userId: UUID): Address {
-        val billingAddressEntity = entityManager.createNamedQuery("get_billing_address", AddressEntity::class.java)
-            .setParameter("user_id", userId).singleResult
+        val billingAddressEntity =
+            try {
+                entityManager.createNamedQuery(AddressEntity.GET_BILLING_ADDRESS, AddressEntity::class.java)
+                    .setParameter("user_id", userId).singleResult
+            } catch (e: Exception) {
+                throw NotFoundException("Billing address for user with id: $userId not found")
+            }
         return billingAddressEntity.toAddress()
     }
 
     fun deleteBillingAddress(userId: UUID, addressId: UUID): Boolean {
-        val numOfexecutedUpdates = entityManager.createNamedQuery("delete_billing_address", AddressEntity::class.java)
+        val numOfExecutedUpdates = entityManager.createNamedQuery(AddressEntity.DELETE_BILLING_ADDRESS)
             .setParameter("user_id", userId).executeUpdate()
-        return numOfexecutedUpdates != 0
+        return numOfExecutedUpdates != 0
     }
 }

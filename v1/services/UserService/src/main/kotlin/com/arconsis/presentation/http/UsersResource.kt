@@ -5,7 +5,6 @@ import com.arconsis.domain.AddressesService
 import com.arconsis.domain.User
 import com.arconsis.domain.UsersService
 import com.arconsis.presentation.http.dto.CreateAddress
-import com.arconsis.presentation.http.dto.CreateBillingAddress
 import com.arconsis.presentation.http.dto.CreateUser
 import io.smallrye.common.annotation.Blocking
 import java.util.*
@@ -70,19 +69,19 @@ class UsersResource(private val usersService: UsersService, private val addresse
 
     @Blocking
     @POST
-    @Path("/{userId}/address/billing")
+    @Path("/{userId}/address/{addressId}/billing")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun createBillingAddress(@Valid createBillingAddress: CreateBillingAddress): Address {
-        return addressesService.createBillingAddress(createBillingAddress)
+    fun createBillingAddress(@PathParam("userId") userId: UUID, @PathParam("addressId") addressId: UUID): Address {
+        return addressesService.createBillingAddress(userId,addressId)
     }
 
     @Blocking
     @DELETE
-    @Path("/{userId}/address/billing")
+    @Path("/{userId}/address/{addressId}/billing")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun deleteBillingAddresses(@PathParam("userId") userId: UUID ,@QueryParam("addressId") addressId: UUID) {
+    fun deleteBillingAddresses(@PathParam("userId") userId: UUID, @PathParam("addressId") addressId: UUID) {
         val deleted = addressesService.deleteBillingAddress(userId,addressId)
         if (!deleted) {
             throw NotFoundException("Billing address with userId: $userId and addressId: $addressId doesn't exist")
