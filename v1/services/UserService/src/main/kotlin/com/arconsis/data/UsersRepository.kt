@@ -3,13 +3,9 @@ package com.arconsis.data
 import com.arconsis.domain.User
 import com.arconsis.presentation.http.dto.CreateUser
 import io.quarkus.elytron.security.common.BcryptUtil
-import java.io.IOException
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.persistence.EntityManager
-import javax.ws.rs.ClientErrorException
-import javax.ws.rs.NotFoundException
-import javax.ws.rs.core.Response
 
 @ApplicationScoped
 class UsersRepository(private val entityManager: EntityManager) {
@@ -30,7 +26,13 @@ class UsersRepository(private val entityManager: EntityManager) {
     }
 
     fun getUser(userId: UUID): User? {
-        val userEntity = entityManager.find(UserEntity::class.java, userId) ?: throw ClientErrorException(Response.Status.NOT_FOUND)
+        val userEntity =
+            try {
+                entityManager.find(UserEntity::class.java, userId)
+            } catch (e: Exception) {
+                return null
+            }
+
         return userEntity.toUser()
     }
 }

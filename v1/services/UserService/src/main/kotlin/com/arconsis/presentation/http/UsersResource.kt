@@ -24,7 +24,7 @@ class UsersResource(private val usersService: UsersService, private val addresse
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     fun getUser(@PathParam("userId") userId: UUID): User? {
-        return usersService.getUser(userId)
+        return usersService.getUser(userId) ?: throw NotFoundException("User with id: $userId not found")
     }
 
     @Blocking
@@ -63,8 +63,9 @@ class UsersResource(private val usersService: UsersService, private val addresse
     @Path("/{userId}/address/billing")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun getBillingAddress(@PathParam("userId") userId: UUID): Address {
+    fun getBillingAddress(@PathParam("userId") userId: UUID): Address? {
         return addressesService.getBillingAddress(userId)
+            ?: throw NotFoundException("Billing address for user with id: $userId not found")
     }
 
     @Blocking
@@ -73,7 +74,7 @@ class UsersResource(private val usersService: UsersService, private val addresse
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     fun createBillingAddress(@PathParam("userId") userId: UUID, @PathParam("addressId") addressId: UUID): Address {
-        return addressesService.createBillingAddress(userId,addressId)
+        return addressesService.createBillingAddress(userId, addressId)
     }
 
     @Blocking
@@ -82,10 +83,9 @@ class UsersResource(private val usersService: UsersService, private val addresse
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     fun deleteBillingAddresses(@PathParam("userId") userId: UUID, @PathParam("addressId") addressId: UUID) {
-        val deleted = addressesService.deleteBillingAddress(userId,addressId)
+        val deleted = addressesService.deleteBillingAddress(userId, addressId)
         if (!deleted) {
             throw NotFoundException("Billing address with userId: $userId and addressId: $addressId doesn't exist")
         }
     }
-
 }

@@ -1,6 +1,5 @@
 package com.arconsis.domain
 
-import Address
 import java.util.*
 
 data class User(

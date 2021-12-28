@@ -12,7 +12,7 @@ data class Address(
     val isBilling: Boolean = false,
 )
 
-enum class CountryCode{
+enum class CountryCode {
     DE,
     GR,
     UK,

@@ -2,12 +2,12 @@ package com.arconsis.data
 
 import Address
 import AddressEntity
+import com.arconsis.data.common.USER_ID
 import com.arconsis.presentation.http.dto.CreateAddress
-import setBillingAddress
+import setAsBillingAddress
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.persistence.EntityManager
-import javax.ws.rs.NotFoundException
 
 @ApplicationScoped
 class AddressesRepository(private val entityManager: EntityManager) {
@@ -40,22 +40,22 @@ class AddressesRepository(private val entityManager: EntityManager) {
 
     fun createBillingAddress(userId: UUID, addressId: UUID): Address {
         val userEntity = entityManager.getReference(UserEntity::class.java, userId)
-        setAllBillingFlagsFalse(userEntity)
+        userEntity.setAllBillingFlagsFalse()
         val addressEntity = entityManager.getReference(AddressEntity::class.java, addressId)
-        setBillingAddress(addressEntity)
+        addressEntity.setAsBillingAddress()
         entityManager.persist(addressEntity)
         entityManager.flush()
 
         return addressEntity.toAddress()
     }
 
-    fun getBillingAddress(userId: UUID): Address {
+    fun getBillingAddress(userId: UUID): Address? {
         val billingAddressEntity =
             try {
                 entityManager.createNamedQuery(AddressEntity.GET_BILLING_ADDRESS, AddressEntity::class.java)
-                    .setParameter("user_id", userId).singleResult
+                    .setParameter(USER_ID, userId).singleResult
             } catch (e: Exception) {
-                throw NotFoundException("Billing address for user with id: $userId not found")
+                return null
             }
         return billingAddressEntity.toAddress()
     }

@@ -21,13 +21,13 @@ class AddressesService(private val addressesRepository: AddressesRepository) {
     }
 
     @Transactional
-    fun getBillingAddress(userId: UUID): Address {
+    fun getBillingAddress(userId: UUID): Address? {
         return addressesRepository.getBillingAddress(userId)
     }
 
     @Transactional
     fun createBillingAddress(userId: UUID, addressId: UUID): Address {
-        return addressesRepository.createBillingAddress(userId,addressId)
+        return addressesRepository.createBillingAddress(userId, addressId)
     }
 
     @Transactional

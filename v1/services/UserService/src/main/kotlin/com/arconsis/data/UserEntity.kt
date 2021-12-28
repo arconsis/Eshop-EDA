@@ -37,6 +37,6 @@ class UserEntity(
     var addressEntities: MutableList<AddressEntity> = mutableListOf()
 )
 
-fun setAllBillingFlagsFalse(userEntity: UserEntity) {
-    userEntity.addressEntities.map { addressEntity -> addressEntity.isBilling = false }
+fun UserEntity.setAllBillingFlagsFalse() {
+    this.addressEntities.map { addressEntity -> addressEntity.isBilling = false }
 }
