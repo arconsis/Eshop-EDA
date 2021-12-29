@@ -9,9 +9,10 @@ data class Address(
     val postalCode: String,
     val city: String,
     val phone: String,
+    val isBilling: Boolean = false,
 )
 
-enum class CountryCode{
+enum class CountryCode {
     DE,
     GR,
     UK,

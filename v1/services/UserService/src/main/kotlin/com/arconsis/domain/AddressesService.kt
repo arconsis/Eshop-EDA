@@ -19,4 +19,19 @@ class AddressesService(private val addressesRepository: AddressesRepository) {
     fun createAddress(createAddress: CreateAddress, userId: UUID): Address {
         return addressesRepository.createAddress(createAddress, userId)
     }
+
+    @Transactional
+    fun getBillingAddress(userId: UUID): Address? {
+        return addressesRepository.getBillingAddress(userId)
+    }
+
+    @Transactional
+    fun createBillingAddress(userId: UUID, addressId: UUID): Address {
+        return addressesRepository.createBillingAddress(userId, addressId)
+    }
+
+    @Transactional
+    fun deleteBillingAddress(userId: UUID, addressId: UUID): Boolean {
+        return addressesRepository.deleteBillingAddress(userId, addressId)
+    }
 }

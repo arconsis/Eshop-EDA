@@ -1,5 +1,6 @@
 import com.arconsis.data.PostgreSQLEnumType
 import com.arconsis.data.UserEntity
+import com.arconsis.data.common.USER_ID
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
 import java.util.*
@@ -7,9 +8,23 @@ import javax.persistence.*
 
 @NamedQueries(
     NamedQuery(
-        name = "list_user_addresses",
+        name = AddressEntity.LIST_USER_ADDRESSES,
         query = """ select a from addresses a
-                    where a.userEntity.id = :user_id
+                    where a.userEntity.id = :$USER_ID
+                        """
+    ),
+    NamedQuery(
+        name = AddressEntity.GET_BILLING_ADDRESS,
+        query = """ select a from addresses a
+                    where a.userEntity.id = :$USER_ID and a.isBilling = true
+                        """
+    ),
+    NamedQuery(
+        name = AddressEntity.DELETE_BILLING_ADDRESS,
+        query = """ update addresses a 
+                    set a.isBilling  = case a.isBilling
+                    when true then false else false end
+                    where a.userEntity.id = :$USER_ID
                         """
     )
 )
@@ -46,8 +61,20 @@ class AddressEntity(
     @Column
     var phone: String,
 
+    @Column(name = "is_billing")
+    var isBilling: Boolean = false,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     var userEntity: UserEntity,
-)
+) {
+    companion object {
+        const val LIST_USER_ADDRESSES = "list_user_addresses"
+        const val GET_BILLING_ADDRESS = "get_billing_address"
+        const val DELETE_BILLING_ADDRESS = "delete_billing_address"
+    }
+}
 
+fun AddressEntity.setAsBillingAddress() {
+    this.isBilling = true
+}

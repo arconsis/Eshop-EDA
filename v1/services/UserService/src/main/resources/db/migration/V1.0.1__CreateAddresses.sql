@@ -10,5 +10,6 @@ CREATE TABLE addresses
     postal_code  VARCHAR(10)                NOT NULL,
     city         VARCHAR(200)               NOT NULL,
     phone        VARCHAR(50)                NOT NULL,
+    is_billing   BOOLEAN                    NOT NULL,
     user_id      UUID REFERENCES users (id) NOT NULL
 )

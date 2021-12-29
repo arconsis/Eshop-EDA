@@ -1,7 +1,6 @@
 package com.arconsis.presentation.http.errors
 
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper
-import javax.validation.ConstraintViolation
 import javax.validation.ConstraintViolationException
 import javax.ws.rs.NotFoundException
 import javax.ws.rs.ServerErrorException
@@ -18,7 +17,9 @@ class AppExceptionMapper {
     fun mapValidationException(exception: ConstraintViolationException): Response {
         val listOfViolations = exception.constraintViolations.toList()
         val propertySeparator = ": "
-        val message = listOfViolations.map { violation -> "${violation.propertyPath}$propertySeparator${violation.message}" }.joinToString()
+        val message =
+            listOfViolations.map { violation -> "${violation.propertyPath}$propertySeparator${violation.message}" }
+                .joinToString()
         val errorPayload = ErrorPayload(message, Response.Status.BAD_REQUEST)
         return Response.status(Response.Status.BAD_REQUEST).entity(errorPayload).build()
     }
