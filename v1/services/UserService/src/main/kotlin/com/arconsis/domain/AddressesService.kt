@@ -34,4 +34,19 @@ class AddressesService(private val addressesRepository: AddressesRepository) {
     fun deleteBillingAddress(userId: UUID, addressId: UUID): Boolean {
         return addressesRepository.deleteBillingAddress(userId, addressId)
     }
+
+    @Transactional
+    fun getPreferredShippingAddresses(userId: UUID): List<Address>? {
+        return addressesRepository.getPreferredShippingAddresses(userId)
+    }
+
+    @Transactional
+    fun createPreferredShippingAddress(userId: UUID, addressId: UUID): Address? {
+        return addressesRepository.createPreferredShippingAddress(userId, addressId)
+    }
+
+    @Transactional
+    fun deletePreferredShippingAddress(userId: UUID, addressId: UUID): Boolean {
+        return addressesRepository.deletePreferredShippingAddress(userId, addressId)
+    }
 }

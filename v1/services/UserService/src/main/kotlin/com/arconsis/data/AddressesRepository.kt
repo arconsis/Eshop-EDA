@@ -2,9 +2,11 @@ package com.arconsis.data
 
 import Address
 import AddressEntity
+import com.arconsis.data.common.ADDRESS_ID
 import com.arconsis.data.common.USER_ID
 import com.arconsis.presentation.http.dto.CreateAddress
 import setAsBillingAddress
+import setAsPreferredShippingAddress
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.persistence.EntityManager
@@ -33,7 +35,7 @@ class AddressesRepository(private val entityManager: EntityManager) {
     fun getAddresses(userId: UUID): List<Address> {
         val listOfAddressEntities =
             entityManager.createNamedQuery(AddressEntity.LIST_USER_ADDRESSES, AddressEntity::class.java)
-                .setParameter("user_id", userId).resultList
+                .setParameter(USER_ID, userId).resultList
 
         return listOfAddressEntities.map { addressEntity -> addressEntity.toAddress() }
     }
@@ -62,7 +64,38 @@ class AddressesRepository(private val entityManager: EntityManager) {
 
     fun deleteBillingAddress(userId: UUID, addressId: UUID): Boolean {
         val numOfExecutedUpdates = entityManager.createNamedQuery(AddressEntity.DELETE_BILLING_ADDRESS)
-            .setParameter("user_id", userId).executeUpdate()
+            .setParameter(USER_ID, userId).executeUpdate()
+        return numOfExecutedUpdates != 0
+    }
+
+    fun getPreferredShippingAddresses(userId: UUID): List<Address> {
+        val preferredShippingAddressEntities =
+            entityManager.createNamedQuery(AddressEntity.GET_PREFERRED_SHIPPING_ADDRESSES, AddressEntity::class.java)
+                .setParameter(USER_ID, userId).resultList
+
+        return preferredShippingAddressEntities.map { addressEntity -> addressEntity.toAddress() }
+    }
+
+    fun createPreferredShippingAddress(userId: UUID, addressId: UUID): Address? {
+        val userEntity = entityManager.getReference(UserEntity::class.java, userId)
+        val isAllowed = userEntity.checkPreferredList()
+        if (isAllowed) {
+            val addressEntity = entityManager.find(AddressEntity::class.java, addressId)
+            addressEntity.setAsPreferredShippingAddress()
+
+            entityManager.persist(addressEntity)
+            entityManager.flush()
+
+            return addressEntity.toAddress()
+        } else return null
+    }
+
+    fun deletePreferredShippingAddress(userId: UUID, addressId: UUID): Boolean {
+        val numOfExecutedUpdates = entityManager.createNamedQuery(AddressEntity.DELETE_PREFERRED_SHIPPING_ADDRESS)
+            .setParameter(USER_ID, userId)
+            .setParameter(ADDRESS_ID, addressId)
+            .executeUpdate()
+
         return numOfExecutedUpdates != 0
     }
 }

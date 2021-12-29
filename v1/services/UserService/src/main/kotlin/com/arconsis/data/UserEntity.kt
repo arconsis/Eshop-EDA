@@ -40,3 +40,9 @@ class UserEntity(
 fun UserEntity.setAllBillingFlagsFalse() {
     this.addressEntities.map { addressEntity -> addressEntity.isBilling = false }
 }
+
+fun UserEntity.checkPreferredList(): Boolean {
+    val allowToAddPreferredShippingAddress =
+        this.addressEntities.map { addressEntity -> addressEntity.isPreferredShipping = true }.size
+    return allowToAddPreferredShippingAddress < 3
+}
