@@ -2,7 +2,6 @@ package com.arconsis.domain.inventory
 
 import com.arconsis.common.LocalStores
 import com.arconsis.domain.orders.Order
-import com.arconsis.domain.ordervalidations.OrderValidation
 import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.kstream.Transformer
 import org.apache.kafka.streams.processor.ProcessorContext

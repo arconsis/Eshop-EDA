@@ -1,7 +1,6 @@
 package com.arconsis.presentation.http.orders.dto
 
 import com.arconsis.domain.orders.CreateOrder
-import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 import javax.validation.constraints.NotBlank
 

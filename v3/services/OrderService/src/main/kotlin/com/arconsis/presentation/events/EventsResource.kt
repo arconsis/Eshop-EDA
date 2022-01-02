@@ -1,6 +1,9 @@
 package com.arconsis.presentation.events
 
-import com.arconsis.common.*
+import com.arconsis.common.Topics
+import com.arconsis.common.orderValidationSerde
+import com.arconsis.common.paymentTopicSerde
+import com.arconsis.common.shipmentTopicSerde
 import com.arconsis.domain.ordersValidations.OrderValidationsService
 import com.arconsis.domain.payments.PaymentsService
 import com.arconsis.domain.shipments.ShipmentsService
