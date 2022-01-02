@@ -12,13 +12,13 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriInfo
 
 @ApplicationScoped
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 @Path("/users")
 class UserResource(private val usersService: UsersService) {
 
     @Blocking
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     fun createUser(@Valid userCreate: UserCreate, uriInfo: UriInfo): User {
         return usersService.createUser(userCreate)
     }
@@ -26,8 +26,6 @@ class UserResource(private val usersService: UsersService) {
     @Blocking
     @GET
     @Path("/{userId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     fun getUser(@PathParam("userId") userId: UUID): User {
         return usersService.getUser(userId)
     }
