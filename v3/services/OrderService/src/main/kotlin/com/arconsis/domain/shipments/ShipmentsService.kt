@@ -12,10 +12,11 @@ import org.apache.kafka.streams.kstream.Produced
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class ShipmentsService(private val ordersTable: KTable<String, Order>) {
+class ShipmentsService {
 
-    fun handleShipmentEvents(stream: KStream<String, Shipment>) {
-        stream.filter { _, shipment -> shipment.isOutForShipment || shipment.isDelivered || shipment.failed }
+    fun handleShipmentEvents(stream: KStream<String, Shipment>, ordersTable: KTable<String, Order>) {
+        stream
+            .filter { _, shipment -> shipment.isOutForShipment || shipment.isDelivered || shipment.failed }
             .join(ordersTable) { shipment, order ->
                 val updatedOrder = order.copy(status = shipment.status.toOrderStatus())
                 updatedOrder

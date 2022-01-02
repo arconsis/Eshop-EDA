@@ -12,9 +12,9 @@ import org.apache.kafka.streams.kstream.Produced
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class PaymentsService(private val ordersTable: KTable<String, Order>) {
+class PaymentsService {
 
-    fun handlePaymentEvents(stream: KStream<String, Payment>) {
+    fun handlePaymentEvents(stream: KStream<String, Payment>, ordersTable: KTable<String, Order>) {
         stream.join(ordersTable) { payment, order ->
             val updatedOrder = order.copy(status = payment.status.toOrderStatus())
             updatedOrder

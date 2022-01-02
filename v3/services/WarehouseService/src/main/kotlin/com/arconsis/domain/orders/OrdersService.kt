@@ -14,14 +14,14 @@ import java.time.Duration
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class OrdersService(val inventoryTable: KTable<String, Inventory>) {
+class OrdersService {
 
-    fun handleOrderEvents(stream: KStream<String, Order>): BranchedKStream<String, Order> {
+    fun handleOrderEvents(stream: KStream<String, Order>, inventoryTable: KTable<String, Inventory>): BranchedKStream<String, Order> {
         return stream.split()
             .branch(
                 { _, order -> order.isRequested },
                 Branched.withConsumer {
-                    it.handlePendingOrder()
+                    it.handlePendingOrder(inventoryTable)
                 }
             )
             .branch(
@@ -33,13 +33,13 @@ class OrdersService(val inventoryTable: KTable<String, Inventory>) {
             .branch(
                 { _, order -> order.isPaymentFailed },
                 Branched.withConsumer {
-                    it.handleFailedPaymentOrder()
+                    it.handleFailedPaymentOrder(inventoryTable)
                 }
             )
     }
 
 
-    private fun KStream<String, Order>.handlePendingOrder() {
+    private fun KStream<String, Order>.handlePendingOrder(inventoryTable: KTable<String, Inventory>) {
         selectKey { _, order ->
             order.productId
         }
@@ -71,7 +71,7 @@ class OrdersService(val inventoryTable: KTable<String, Inventory>) {
         }.to(Topics.SHIPMENTS.topicName, Produced.with(Serdes.String(), shipmentTopicSerde))
     }
 
-    private fun KStream<String, Order>.handleFailedPaymentOrder(): KStream<String, Inventory> {
+    private fun KStream<String, Order>.handleFailedPaymentOrder(inventoryTable: KTable<String, Inventory>): KStream<String, Inventory> {
         return selectKey { _, order ->
             order.productId
         }

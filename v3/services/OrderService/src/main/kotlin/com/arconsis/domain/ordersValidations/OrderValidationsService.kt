@@ -12,9 +12,9 @@ import org.apache.kafka.streams.kstream.Produced
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class OrderValidationsService(private val ordersTable: KTable<String, Order>) {
+class OrderValidationsService {
 
-    fun handleOrderValidationEvents(stream: KStream<String, OrderValidation>) {
+    fun handleOrderValidationEvents(stream: KStream<String, OrderValidation>, ordersTable: KTable<String, Order>) {
         stream
             .filter { _, orderValidation ->
                 orderValidation.isValidated || orderValidation.isInvalid

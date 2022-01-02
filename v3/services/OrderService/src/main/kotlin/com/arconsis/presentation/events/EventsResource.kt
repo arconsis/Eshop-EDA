@@ -1,9 +1,7 @@
 package com.arconsis.presentation.events
 
-import com.arconsis.common.Topics
-import com.arconsis.common.orderValidationSerde
-import com.arconsis.common.paymentTopicSerde
-import com.arconsis.common.shipmentTopicSerde
+import com.arconsis.common.*
+import com.arconsis.domain.orders.Order
 import com.arconsis.domain.ordersValidations.OrderValidationsService
 import com.arconsis.domain.payments.PaymentsService
 import com.arconsis.domain.shipments.ShipmentsService
@@ -11,6 +9,7 @@ import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
+import org.apache.kafka.streams.kstream.KTable
 import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.inject.Produces
 
@@ -21,21 +20,19 @@ class EventsResource(
     private val shipmentsService: ShipmentsService,
 ) {
 
-    @ApplicationScoped
     @Produces
-    fun streamsBuilder(): StreamsBuilder {
-        return StreamsBuilder()
-    }
+    fun createTopology(): Topology {
 
-    @Produces
-    fun createTopology(builder: StreamsBuilder): Topology {
+        val builder = StreamsBuilder()
+
+        val ordersTable = createOrdersKTable(builder)
 
         val orderValidationsStream = builder
             .stream(
                 Topics.ORDERS_VALIDATIONS.topicName,
                 Consumed.with(Serdes.String(), orderValidationSerde)
             )
-        orderValidationsService.handleOrderValidationEvents(orderValidationsStream)
+        orderValidationsService.handleOrderValidationEvents(orderValidationsStream, ordersTable)
 
         val paymentsStream = builder
             .stream(
@@ -43,7 +40,7 @@ class EventsResource(
                 Consumed.with(Serdes.String(), paymentTopicSerde)
             )
 
-        paymentsService.handlePaymentEvents(paymentsStream)
+        paymentsService.handlePaymentEvents(paymentsStream, ordersTable)
 
         val shipmentsStream = builder
             .stream(
@@ -51,7 +48,11 @@ class EventsResource(
                 Consumed.with(Serdes.String(), shipmentTopicSerde)
             )
 
-        shipmentsService.handleShipmentEvents(shipmentsStream)
+        shipmentsService.handleShipmentEvents(shipmentsStream, ordersTable)
         return builder.build()
+    }
+
+    private fun createOrdersKTable(builder: StreamsBuilder): KTable<String, Order> {
+        return builder.table(Topics.ORDERS.topicName, Consumed.with(Serdes.String(), orderSerde))
     }
 }

@@ -18,11 +18,10 @@ import javax.enterprise.context.ApplicationScoped
 @ApplicationScoped
 class EmailService(
     private val emailRepository: EmailRepository,
-    private val usersTable: KTable<String, User>,
     @ConfigProperty(name = "email.sender") private val sender: String,
 ) {
 
-    fun handleOrderEvents(stream: KStream<String, Order>) {
+    fun handleOrderEvents(stream: KStream<String, Order>, usersTable: KTable<String, User>) {
         stream
             .selectKey { _, order ->
                 order.userId.toString()

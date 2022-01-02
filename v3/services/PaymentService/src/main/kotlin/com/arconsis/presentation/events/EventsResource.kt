@@ -14,6 +14,7 @@ import javax.enterprise.inject.Produces
 class EventsResource(
     val paymentsService: PaymentsService
 ) {
+
     @Produces
     fun createTopology(): Topology {
         val builder = StreamsBuilder()
