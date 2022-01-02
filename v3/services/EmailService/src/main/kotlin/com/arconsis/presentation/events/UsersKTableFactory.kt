@@ -7,12 +7,12 @@ import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.KTable
-import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.inject.Produces
+import javax.inject.Singleton
 
-@ApplicationScoped
 class UsersKTableFactory {
 
+    @Singleton
     @Produces
     fun createUsersKTable(builder: StreamsBuilder): KTable<String, User> {
         return builder.table(Topics.USERS.topicName, Consumed.with(Serdes.String(), userTopicSerde))

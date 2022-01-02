@@ -15,9 +15,10 @@ import javax.enterprise.context.ApplicationScoped
 class OrderValidationsService(private val ordersTable: KTable<String, Order>) {
 
     fun handleOrderValidationEvents(stream: KStream<String, OrderValidation>) {
-        stream.filter { _, orderValidation ->
-            orderValidation.isValidated || orderValidation.isInvalid
-        }
+        stream
+            .filter { _, orderValidation ->
+                orderValidation.isValidated || orderValidation.isInvalid
+            }
             .join(ordersTable) { orderValidation, order ->
                 val updatedOrder = order.copy(status = orderValidation.type.toOrderStatus())
                 updatedOrder

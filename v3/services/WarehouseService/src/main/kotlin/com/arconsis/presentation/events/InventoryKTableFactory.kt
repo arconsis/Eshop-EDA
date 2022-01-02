@@ -9,12 +9,12 @@ import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.KTable
 import org.apache.kafka.streams.state.Stores
-import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.inject.Produces
+import javax.inject.Singleton
 
-@ApplicationScoped
 class InventoryKTableFactory {
 
+    @Singleton
     @Produces
     fun createInventoryKTable(builder: StreamsBuilder): KTable<String, Inventory> {
         val changelogConfig: HashMap<String, String> = HashMap()
