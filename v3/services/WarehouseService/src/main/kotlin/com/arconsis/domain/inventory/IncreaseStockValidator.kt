@@ -2,7 +2,6 @@ package com.arconsis.domain.inventory
 
 import com.arconsis.common.LocalStores
 import com.arconsis.domain.orders.Order
-import com.arconsis.domain.ordervalidations.OrderValidation
 import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.kstream.Transformer
 import org.apache.kafka.streams.processor.ProcessorContext
@@ -22,11 +21,12 @@ class IncreaseStockValidator : Transformer<String, Pair<Order, Inventory>, KeyVa
         val (order, inventory) = orderAndStock
 
         //Look up locally 'reserved' stock from our state store
-        var reserved = this.reservedStocksStore[order.productId]
-        if (reserved == null) {
-            reserved = 0
+        val reserved = this.reservedStocksStore[order.productId]
+        if (reserved != null) {
+            var updatedReserved = reserved - order.quantity
+            updatedReserved = if (updatedReserved < 0) 0 else updatedReserved
+            reservedStocksStore.put(order.productId, updatedReserved)
         }
-        reservedStocksStore.put(order.productId, reserved - order.quantity)
 
         return KeyValue.pair(
             order.orderId.toString(), Inventory(

@@ -11,6 +11,9 @@ import javax.ws.rs.Path
 @ApplicationScoped
 @Path("/inventory")
 class InventoryResource(private val inventoryService: InventoryService) {
+
     @POST
-    fun createInventory(createInventory: CreateInventory): Uni<Inventory> = inventoryService.createInventory(createInventory)
+    fun createInventory(createInventory: CreateInventory): Uni<Inventory> {
+        return inventoryService.createInventory(createInventory)
+    }
 }

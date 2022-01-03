@@ -1,8 +1,5 @@
 package com.arconsis.domain.orders
 
-import com.arconsis.domain.ordervalidations.OrderValidation
-import com.arconsis.domain.ordervalidations.OrderValidationEvent
-import com.arconsis.domain.ordervalidations.OrderValidationType
 import java.util.*
 
 data class Order(

@@ -7,6 +7,7 @@ import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class OrdersService(@Channel("orders-out") private val emitter: Emitter<Record<String, Order>>) {
+
     suspend fun createOrder(createOrder: CreateOrder): Order {
         val pendingOrder = createOrder.toPendingOrder()
         val event = pendingOrder.toOrderRequestEvent()

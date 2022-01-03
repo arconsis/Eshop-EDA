@@ -1,40 +1,28 @@
-package com.arconsis.domain.events
+package com.arconsis.domain.email
 
-import com.arconsis.common.Topics
+import com.arconsis.common.orderTopicSerde
+import com.arconsis.common.userTopicSerde
 import com.arconsis.data.email.EmailDto
 import com.arconsis.data.email.EmailRepository
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.orders.isOutForShipment
 import com.arconsis.domain.orders.isPaid
 import com.arconsis.domain.users.User
-import io.quarkus.kafka.client.serialization.ObjectMapperSerde
 import org.apache.kafka.common.serialization.Serdes
-import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.Topology
-import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Joined
+import org.apache.kafka.streams.kstream.KStream
+import org.apache.kafka.streams.kstream.KTable
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import javax.enterprise.context.ApplicationScoped
-import javax.enterprise.inject.Produces
 
 @ApplicationScoped
-class StreamsService(
-    val emailRepository: EmailRepository,
+class EmailService(
+    private val emailRepository: EmailRepository,
     @ConfigProperty(name = "email.sender") private val sender: String,
 ) {
 
-    @Produces
-    fun buildTopology(): Topology {
-        val builder = StreamsBuilder()
-        val orderTopicSerde = ObjectMapperSerde(Order::class.java)
-        val userTopicSerde = ObjectMapperSerde(User::class.java)
-        val usersTable = builder.table(Topics.USERS.topicName, Consumed.with(Serdes.String(), userTopicSerde))
-
-        builder
-            .stream(
-                Topics.ORDERS.topicName,
-                Consumed.with(Serdes.String(), orderTopicSerde)
-            )
+    fun handleOrderEvents(stream: KStream<String, Order>, usersTable: KTable<String, User>) {
+        stream
             .selectKey { _, order ->
                 order.userId.toString()
             }
@@ -66,8 +54,6 @@ class StreamsService(
                     )
                 }
             }
-
-        return builder.build()
     }
 
     companion object {
