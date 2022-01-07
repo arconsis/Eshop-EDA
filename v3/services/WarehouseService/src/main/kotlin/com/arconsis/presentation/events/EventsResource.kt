@@ -24,6 +24,8 @@ class EventsResource(
     fun createTopology(): Topology {
         val builder = StreamsBuilder()
 
+
+        createReservedStockStateStore(builder)
         val inventoryTable = createInventoryKTable(builder)
 
         val ordersStream = builder
@@ -36,6 +38,17 @@ class EventsResource(
     }
 
     private fun createInventoryKTable(builder: StreamsBuilder): KTable<String, Inventory> {
+
+        return builder.table(
+            Topics.WAREHOUSE.topicName,
+            Consumed.with(
+                Serdes.String(),
+                inventoryTopicSerde
+            )
+        )
+    }
+
+    private fun createReservedStockStateStore(builder: StreamsBuilder) {
         val changelogConfig: HashMap<String, String> = HashMap()
         val reservedStockStoreBuilder = Stores
             .keyValueStoreBuilder(
@@ -45,13 +58,5 @@ class EventsResource(
             )
             .withLoggingEnabled(changelogConfig)
         builder.addStateStore(reservedStockStoreBuilder)
-
-        return builder.table(
-            Topics.WAREHOUSE.topicName,
-            Consumed.with(
-                Serdes.String(),
-                inventoryTopicSerde
-            )
-        )
     }
 }
