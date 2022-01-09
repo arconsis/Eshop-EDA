@@ -32,7 +32,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: v1/orders
-          IMAGE_TAG: ${{ steps.sha.outputs.sha7 }}
+          IMAGE_TAG: ${{ github.event.pull_request.head.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
