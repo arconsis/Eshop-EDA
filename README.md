@@ -9,3 +9,7 @@ We took multiple approaches of developing an event based systems:
 3) Version 3 is build using the Event Sourcing approach and KSQL and KStreams. The code for v3 can be found [here](https://github.com/arconsis/Eshop-EDA/tree/main/v3)
 
 We will keep the readme updated providing also and info about the macro architecture of the different versions.
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
