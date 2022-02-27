@@ -1,6 +1,6 @@
-package com.arconsis.data
+package com.arconsis.data.users
 
-import com.arconsis.domain.User
+import com.arconsis.domain.users.User
 import com.arconsis.http.dto.UserCreate
 import io.quarkus.elytron.security.common.BcryptUtil
 import java.util.*

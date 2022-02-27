@@ -1,8 +1,9 @@
-package com.arconsis.domain
+package com.arconsis.domain.users
 
-import com.arconsis.data.UsersRepository
-import com.arconsis.data.toUserEvent
+import com.arconsis.data.outboxevents.OutboxEventsRepository
+import com.arconsis.data.users.UsersRepository
 import com.arconsis.http.dto.UserCreate
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
@@ -10,14 +11,14 @@ import javax.transaction.Transactional
 @ApplicationScoped
 class UsersService(
     private val usersRepository: UsersRepository,
-    private val eventsService: EventsService,
+    private val outboxEventsRepository: OutboxEventsRepository,
+    private val objectMapper: ObjectMapper
 ) {
 
     @Transactional
     fun createUser(userCreate: UserCreate): User {
         val user = usersRepository.createUser(userCreate)
-        val event = user.toUserEvent()
-        eventsService.sendUserEvent(event)
+        outboxEventsRepository.createEvent(user.toCreateOutboxEvent(objectMapper))
         return user
     }
 

@@ -1,11 +1,10 @@
 package com.arconsis.presentation.events
 
 import com.arconsis.common.Topics
+import com.arconsis.common.orderTopicSerde
 import com.arconsis.common.userTopicSerde
 import com.arconsis.domain.email.EmailService
-import com.arconsis.domain.orders.Order
 import com.arconsis.domain.users.User
-import io.quarkus.kafka.client.serialization.ObjectMapperSerde
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
@@ -21,7 +20,6 @@ class EventsResource(private val emailService: EmailService) {
     fun createTopology(): Topology {
         val builder = StreamsBuilder()
         val usersTable = createUsersKTable(builder)
-        val orderTopicSerde = ObjectMapperSerde(Order::class.java)
         val ordersStream = builder
             .stream(
                 Topics.ORDERS.topicName,

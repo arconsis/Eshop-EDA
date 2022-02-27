@@ -1,4 +1,4 @@
-package com.arconsis.domain
+package com.arconsis.domain.users
 
 import java.util.*
 

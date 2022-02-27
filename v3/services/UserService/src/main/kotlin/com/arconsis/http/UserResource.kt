@@ -1,7 +1,7 @@
 package com.arconsis.http
 
-import com.arconsis.domain.User
-import com.arconsis.domain.UsersService
+import com.arconsis.domain.users.User
+import com.arconsis.domain.users.UsersService
 import com.arconsis.http.dto.UserCreate
 import io.smallrye.common.annotation.Blocking
 import java.util.*
