@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-app
+  name: transformer-app
   labels:
-    app: order-app
+    app: transformer-app
   namespace: eshop-eda
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: order-app
+      name: transformer-app
   template:
     metadata:
       labels:
-        name: order-app
+        name: transformer-app
     spec:
       containers:
-      - name: order-eda
+      - name: transformer-eda
         imagePullPolicy: Always
-        image: eldimious/order-eda-v3:latest
+        image: eldimious/transformer-eda-v3:latest
         ports:
           - containerPort: 8080
             protocol: TCP

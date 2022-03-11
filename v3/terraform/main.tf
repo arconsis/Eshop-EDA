@@ -22,7 +22,7 @@ provider "kubernetes" {
 # VPC Configuration
 ################################################################################
 module "networking" {
-  source                         = "../modules/network"
+  source                         = "./modules/network"
   create_vpc                     = var.create_vpc
   create_igw                     = var.create_igw
   single_nat_gateway             = var.single_nat_gateway
@@ -47,7 +47,7 @@ module "networking" {
 # SG Configuration
 ################################################################################
 module "private_vpc_sg" {
-  source                   = "../modules/security"
+  source                   = "./modules/security"
   create_vpc               = var.create_vpc
   create_sg                = true
   sg_name                  = "private-database-security-group"
@@ -68,29 +68,21 @@ module "private_vpc_sg" {
 ################################################################################
 # Database Configuration
 ################################################################################
-# Warehouse Database
-module "warehouse_database" {
-  source                = "../modules/database"
-  database_identifier   = "warehouse-database"
-  database_username     = var.warehouse_database_username
-  database_password     = var.warehouse_database_password
-  subnet_ids            = module.networking.private_subnet_ids
-  security_group_ids    = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name  = "WarehouseDatabaseMonitoringRole"
-}
-# Users Database
-module "users_database" {
-  source                = "../modules/database"
-  database_identifier   = "users-database"
-  database_username     = var.users_database_username
-  database_password     = var.users_database_password
-  subnet_ids            = module.networking.private_subnet_ids
-  security_group_ids    = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name  = "UsersDatabaseMonitoringRole"
+# Eda V3 Database
+module "eda_database" {
+  source               = "./modules/database"
+  database_identifier  = var.eda_database_name
+  database_username    = var.eda_database_username
+  database_password    = var.eda_database_password
+  subnet_ids           = module.networking.private_subnet_ids
+  security_group_ids   = [module.private_vpc_sg.security_group_id]
+  monitoring_role_name = "EdaDatabaseMonitoringRole"
+  database_parameters  = var.database_parameters
 }
 
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
+  version         = "17.24.0"
   cluster_name    = var.cluster_name
   cluster_version = "1.21"
 
@@ -125,7 +117,7 @@ resource "aws_iam_policy" "worker_policy" {
   name        = "worker-policy"
   description = "Worker policy for the ALB Ingress"
 
-  policy = file("../common/templates/eks/iam-policy.json")
+  policy = file("./common/templates/eks/iam-policy.json")
 }
 
 provider "helm" {
@@ -203,4 +195,17 @@ output "zookeeper_connect_string" {
 output "bootstrap_brokers_tls" {
   description = "TLS connection host:port pairs"
   value       = aws_msk_cluster.kafka.bootstrap_brokers_tls
+}
+
+data "template_file" "users_connector_initializer" {
+  template = file("./common/templates/debezium/connector.json.tpl")
+  vars     = {
+    database_hostname  = module.eda_database.db_endpoint
+    database_user      = var.eda_database_username
+    database_password  = var.eda_database_password
+    database_name      = var.users_database_name
+    bootstrap_servers  = aws_msk_cluster.kafka.bootstrap_brokers
+    history_topic      = var.users_history_topic
+    table_include_list = join(",", var.users_table_include_list)
+  }
 }

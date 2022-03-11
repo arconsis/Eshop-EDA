@@ -1,28 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: payment-backend
+  name: payment-app
   labels:
-    app: payment-backend
+    app: payment-app
   namespace: eshop-eda
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: payment-backend
+      name: payment-app
   template:
     metadata:
       labels:
-        name: payment-backend
+        name: payment-app
     spec:
       containers:
-      - name: payment-api
+      - name: payment-eda
         imagePullPolicy: Always
         image: eldimious/payment-eda-v3:latest
         ports:
-          - containerPort: 3000
+          - containerPort: 8080
             protocol: TCP
-        envFrom:
-        - secretRef:
-            name: payments-service-secrets
-            
+        resources:
+          limits:
+            cpu: '200m'
+            memory: '512Mi'
+          requests:
+            cpu: '200m'
+            memory: '512Mi'
+        env:
+          - name: KAFKA_BROKERS
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: KAFKA_BROKERS

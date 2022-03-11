@@ -89,50 +89,41 @@ variable "environment" {
 ################################################################################
 # https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1
 # using environment variables
-variable "users_database_username" {
-  description = "The username for the users DB master"
+variable "eda_database_username" {
+  description = "The password for the eda DB master"
   type        = string
   sensitive   = true
 }
 
-variable "users_database_password" {
-  description = "The password for the users DB master"
+variable "eda_database_password" {
+  description = "The password for the eda DB master"
   type        = string
   sensitive   = true
 }
 
-variable "orders_database_username" {
-  description = "The password for the orders DB master"
+variable "eda_database_name" {
+  description = "eda DB name"
   type        = string
-  sensitive   = true
 }
 
-variable "orders_database_password" {
-  description = "The password for the orders DB master"
+variable "users_database_name" {
+  description = "users DB name"
   type        = string
-  sensitive   = true
 }
 
-variable "payments_database_username" {
-  description = "The password for the payments DB master"
-  type        = string
-  sensitive   = true
+variable "database_parameters" {
+  description = "DB parameters"
+  type        = list(map(string))
+  default     = []
 }
 
-variable "payments_database_password" {
-  description = "The password for the payments DB master"
+variable "users_history_topic" {
+  description = "users db changes topic"
   type        = string
-  sensitive   = true
 }
 
-variable "warehouse_database_username" {
-  description = "The password for the warehouse DB master"
-  type        = string
-  sensitive   = true
-}
-
-variable "warehouse_database_password" {
-  description = "The password for the warehouse DB master"
-  type        = string
-  sensitive   = true
+variable "users_table_include_list" {
+  description = "list of tables that should be observed by debezium"
+  type        = list(string)
+  default     = []
 }
