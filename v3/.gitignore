@@ -33,11 +33,9 @@ node_modules
 bower_components
 
 # Editors
-.idea
 *.iml
 
 # OS metadata
-.DS_Store
 Thumbs.db
 
 # Ignore built ts files

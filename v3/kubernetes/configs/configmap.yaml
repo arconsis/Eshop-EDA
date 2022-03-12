@@ -5,9 +5,15 @@ metadata:
   name: eda-configmap
 data:
   BASTION_PORT: "3000"
-  KAFKA_BROKERS: ""
+  KAFKA_BROKERS: "b-1.kafka-eshop.pj3n0l.c12.kafka.us-west-2.amazonaws.com:9094,b-2.kafka-eshop.pj3n0l.c12.kafka.us-west-2.amazonaws.com:9094"
+  DEBEZIUM_HOST: "http://debezium-service:8083"
   USERS_SERVICE_URL: "http://user-service:8080"
-  QUARKUS_MAILGUN_DOMAIN_NAME: ""
+  QUARKUS_MAILGUN_DOMAIN_NAME: "rewr"
   POSTGRES_PORT: "5432"
-  POSTGRES_HOST: ""
+  POSTGRES_HOST: "postgres.crr8smwayccd.us-west-2.rds.amazonaws.com"
   USERS_POSTGRES_DB: "users-db"
+  GROUP_ID: "1"
+  CONFIG_STORAGE_TOPIC: "connect_configs"
+  OFFSET_STORAGE_TOPIC: "connect_offsets"
+  STATUS_STORAGE_TOPIC: "connect_status"
+  USERS_CONNECTOR_JSON: "\"{   \\\"name\\\": \\\"database-connector\\\",   \\\"config\\\": {     \\\"connector.class\\\": \\\"io.debezium.connector.postgresql.PostgresConnector\\\",     \\\"plugin.name\\\": \\\"pgoutput\\\",     \\\"database.hostname\\\": \\\"postgres.crr8smwayccd.us-west-2.rds.amazonaws.com:5432\\\",     \\\"database.port\\\": \\\"5432\\\",     \\\"database.user\\\": \\\"postgres\\\",     \\\"database.password\\\": \\\"Secret123!\\\",     \\\"database.dbname\\\" : \\\"users-db\\\",     \\\"database.server.name\\\": \\\"users-db\\\",     \\\"table.include.list\\\": \\\"users\\\",     \\\"database.history.kafka.bootstrap.servers\\\":\\\"\\\",     \\\"database.history.kafka.topic\\\": \\\"schema-changes.users\\\",     \\\"slot.name\\\" : \\\"users_slot\\\"   } }\""

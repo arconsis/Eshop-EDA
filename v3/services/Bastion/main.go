@@ -34,14 +34,17 @@ func main() {
 	debeziumHost = os.Getenv(debeziumHostKey)
 
 	connectors := []string{os.Getenv(usersConnectorJsonKey)}
-
+	log.Println("connectors...", connectors)
+	log.Println("debeziumHost...", debeziumHost)
 	r := chi.NewRouter()
-	r.Post("/createDatabases", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/bastion/createDatabases", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Request to create databases")
 		createDatabases()
 		w.Write([]byte(fmt.Sprint("Databases created")))
 	})
 
-	r.Post("/createConnectors", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/bastion/createConnectors", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Request to create connectors")
 		err := createConnectors(connectors)
 		if err != nil {
 			log.Printf("Connectors creation failed: %v", err)

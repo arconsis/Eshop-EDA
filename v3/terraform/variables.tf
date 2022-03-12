@@ -127,3 +127,8 @@ variable "users_table_include_list" {
   type        = list(string)
   default     = []
 }
+
+variable "users_slot_name" {
+  description = "users DB slot"
+  type        = string
+}

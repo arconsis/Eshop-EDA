@@ -18,7 +18,7 @@ spec:
       containers:
         - name: bastion-eda
           imagePullPolicy: Always
-          image: akoufa/bastion-eda-v3:latest
+          image: eldimious/bastion-eda-v3:latest
           ports:
             - containerPort: 3000
               protocol: TCP
@@ -35,6 +35,16 @@ spec:
                 configMapKeyRef:
                   name: eda-configmap
                   key: BASTION_PORT
+            - name: DEBEZIUM_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: eda-configmap
+                  key: DEBEZIUM_HOST
+            - name: USERS_CONNECTOR_JSON
+              valueFrom:
+                configMapKeyRef:
+                  name: eda-configmap
+                  key: USERS_CONNECTOR_JSON
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:

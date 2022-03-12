@@ -15,6 +15,5 @@ enum class AggregateType {
 }
 
 enum class OutboxEventType {
-    // users
     USER_CREATED
 }

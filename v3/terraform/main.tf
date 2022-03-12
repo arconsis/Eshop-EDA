@@ -95,7 +95,8 @@ module "eks" {
     {
       name                 = "worker-group-1"
       instance_type        = "t2.small"
-      asg_desired_capacity = 2
+      asg_desired_capacity = 3
+      asg_min_size         = 3
       asg_max_size         = 8
     }
   ]
@@ -171,17 +172,16 @@ resource "aws_msk_cluster" "kafka" {
       }
     }
   }
-
-  configuration_info {
-    arn      = "${aws_msk_configuration.mks_cluster_custom_configuration.arn}"
-    revision = "${aws_msk_configuration.mks_cluster_custom_configuration.latest_revision}"
-  }
 }
 
-resource "aws_msk_configuration" "mks_cluster_custom_configuration" {
+
+resource "aws_msk_configuration" "kafka_configuration" {
   kafka_versions = ["2.8.1"]
   name           = "mks-custom-config"
+
   server_properties = <<PROPERTIES
+min.insync.replicas = 1
+default.replication.factor = 1
 auto.create.topics.enable = true
 delete.topic.enable = true
 num.partitions = 1
@@ -207,5 +207,6 @@ data "template_file" "users_connector_initializer" {
     bootstrap_servers  = aws_msk_cluster.kafka.bootstrap_brokers
     history_topic      = var.users_history_topic
     table_include_list = join(",", var.users_table_include_list)
+    slot_name          = var.users_slot_name
   }
 }

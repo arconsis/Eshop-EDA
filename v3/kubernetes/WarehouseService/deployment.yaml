@@ -35,5 +35,3 @@ spec:
               configMapKeyRef:
                 name: eda-configmap
                 key: KAFKA_BROKERS
-
-            
