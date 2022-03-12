@@ -73,7 +73,7 @@ module "eda_database" {
   source               = "./modules/database"
   database_identifier  = var.eda_database_name
   database_username    = var.eda_database_username
-  database_password    = var.eda_database_username
+  database_password    = var.eda_database_password
   subnet_ids           = module.networking.private_subnet_ids
   security_group_ids   = [module.private_vpc_sg.security_group_id]
   monitoring_role_name = "EdaDatabaseMonitoringRole"
@@ -82,6 +82,7 @@ module "eda_database" {
 
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
+  version         = "17.24.0"
   cluster_name    = var.cluster_name
   cluster_version = "1.21"
 

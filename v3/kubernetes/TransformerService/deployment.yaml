@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: payment-app
+  name: transformer-app
   labels:
-    app: payment-app
+    app: transformer-app
   namespace: eshop-eda
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: payment-app
+      name: transformer-app
   template:
     metadata:
       labels:
-        name: payment-app
+        name: transformer-app
     spec:
       containers:
-      - name: payment-eda
+      - name: transformer-eda
         imagePullPolicy: Always
-        image: eldimious/payment-eda-v3:latest
+        image: eldimious/transformer-eda-v3:latest
         ports:
           - containerPort: 8080
             protocol: TCP

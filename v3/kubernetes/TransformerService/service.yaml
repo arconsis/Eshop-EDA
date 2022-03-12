@@ -3,8 +3,8 @@ kind: Service
 metadata:
   namespace: eshop-eda
   labels:
-    app: email-service
-  name: email-service
+    app: transformer-service
+  name: transformer-service
 spec:
   type: NodePort
   ports:
@@ -12,4 +12,4 @@ spec:
       port: 8080
       targetPort: 8080
   selector:
-    name: email-app
+    name: transformer-app
