@@ -172,6 +172,11 @@ resource "aws_msk_cluster" "kafka" {
       }
     }
   }
+
+  configuration_info {
+    arn      = aws_msk_configuration.kafka_configuration.arn
+    revision = aws_msk_configuration.kafka_configuration.latest_revision
+  }
 }
 
 
