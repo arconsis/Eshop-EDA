@@ -18,7 +18,7 @@ spec:
       containers:
         - name: bastion-eda
           imagePullPolicy: Always
-          image: akoufa/bastion-eda-v1:latest
+          image: eldimious/bastion-eda-v1:latest
           ports:
             - containerPort: 3000
               protocol: TCP
@@ -40,3 +40,8 @@ spec:
                 secretKeyRef:
                   name: eda-secrets
                   key: DATABASE_URL
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: eda-secrets
+                  key: POSTGRES_USER
