@@ -39,12 +39,12 @@ func main() {
 	connectors := []string{os.Getenv(ordersConnectorJsonKey), os.Getenv(warehouseConnectorJsonKey), os.Getenv(paymentsConnectorJsonKey), os.Getenv(usersConnectorJsonKey)}
 
 	r := chi.NewRouter()
-	r.Post("/createDatabases", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/bastion/createDatabases", func(w http.ResponseWriter, r *http.Request) {
 		createDatabases()
 		w.Write([]byte(fmt.Sprint("Databases created")))
 	})
 
-	r.Post("/createConnectors", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/bastion/createConnectors", func(w http.ResponseWriter, r *http.Request) {
 		err := createConnectors(connectors)
 		if err != nil {
 			log.Printf("Connectors creation failed: %v", err)
