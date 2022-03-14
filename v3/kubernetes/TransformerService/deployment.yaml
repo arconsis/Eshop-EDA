@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transformer-app
+  labels:
+    app: transformer-app
+  namespace: eshop-eda
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: transformer-app
+  template:
+    metadata:
+      labels:
+        name: transformer-app
+    spec:
+      containers:
+      - name: transformer-eda
+        imagePullPolicy: Always
+        image: eldimious/transformer-eda-v3:latest
+        ports:
+          - containerPort: 8080
+            protocol: TCP
+        resources:
+          limits:
+            cpu: '200m'
+            memory: '512Mi'
+          requests:
+            cpu: '200m'
+            memory: '512Mi'
+        env:
+          - name: KAFKA_BROKERS
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: KAFKA_BROKERS

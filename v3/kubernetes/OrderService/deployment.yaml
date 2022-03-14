@@ -1,28 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-backend
+  name: order-app
   labels:
-    app: order-backend
+    app: order-app
   namespace: eshop-eda
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: order-backend
+      name: order-app
   template:
     metadata:
       labels:
-        name: order-backend
+        name: order-app
     spec:
       containers:
-      - name: order-api
+      - name: order-eda
         imagePullPolicy: Always
         image: eldimious/order-eda-v3:latest
         ports:
-          - containerPort: 3000
+          - containerPort: 8080
             protocol: TCP
-        envFrom:
-        - secretRef:
-            name: orders-service-secrets
-            
+        resources:
+          limits:
+            cpu: '200m'
+            memory: '512Mi'
+          requests:
+            cpu: '200m'
+            memory: '512Mi'
+        env:
+          - name: KAFKA_BROKERS
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: KAFKA_BROKERS

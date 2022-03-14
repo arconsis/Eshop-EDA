@@ -1,28 +1,63 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-backend
+  name: user-app
   labels:
-    app: user-backend
+    app: user-app
   namespace: eshop-eda
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: user-backend
+      name: user-app
   template:
     metadata:
       labels:
-        name: user-backend
+        name: user-app
     spec:
       containers:
-      - name: user-api
+      - name: user-eda
         imagePullPolicy: Always
         image: eldimious/user-eda-v3:latest
         ports:
           - containerPort: 8080
             protocol: TCP
-        envFrom:
-        - secretRef:
-            name: users-service-secrets
+        resources:
+          limits:
+            cpu: '200m'
+            memory: '512Mi'
+          requests:
+            cpu: '200m'
+            memory: '512Mi'
+        env:
+          - name: POSTGRES_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: POSTGRES_HOST
+          - name: POSTGRES_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: POSTGRES_PORT
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: USERS_POSTGRES_DB
+          - name: KAFKA_BROKERS
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: KAFKA_BROKERS
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: eda-secrets
+                key: POSTGRES_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: eda-secrets
+                key: POSTGRES_PASSWORD
             
