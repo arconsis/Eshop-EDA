@@ -3,7 +3,5 @@ output "security_group_id" {
   value = concat(
     aws_security_group.this.*.id,
     [""],
-    )[
-    0
-  ]
+  )[0]
 }
