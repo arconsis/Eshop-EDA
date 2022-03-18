@@ -30,3 +30,17 @@ output "bootstrap_servers" {
 output "users_connector_json" {
   value = jsonencode(replace(data.template_file.users_connector_initializer.rendered, "\n", " "))
 }
+
+output "zookeeper_connect_string" {
+  value = module.kafka.zookeeper_connect_string
+}
+
+output "bootstrap_brokers_tls" {
+  description = "TLS connection host:port pairs"
+  value       = module.kafka.bootstrap_brokers_tls
+}
+
+output "bootstrap_brokers" {
+  description = "list of one or more hostname:port pairs of kafka brokers"
+  value       = module.kafka.bootstrap_brokers
+}
