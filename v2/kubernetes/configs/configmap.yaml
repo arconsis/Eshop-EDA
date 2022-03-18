@@ -6,7 +6,7 @@ metadata:
 data:
   BASTION_PORT: "3000"
   KAFKA_BROKERS: ""
-  DEBEZIUM_HOST: "http://debezium-service:8083"
+  DEBEZIUM_HOST: "http://debezium-service:8083/connectors"
   USERS_SERVICE_URL: "http://user-service:8080"
   QUARKUS_MAILGUN_DOMAIN_NAME: ""
   POSTGRES_PORT: "5432"
@@ -19,7 +19,7 @@ data:
   CONFIG_STORAGE_TOPIC: "connect_configs"
   OFFSET_STORAGE_TOPIC: "connect_offsets"
   STATUS_STORAGE_TOPIC: "connect_status"
-  USERS_CONNECTOR_JSON: ""
   ORDERS_CONNECTOR_JSON: ""
-  WAREHOUSE_CONNECTOR_JSON: ""
   PAYMENTS_CONNECTOR_JSON: ""
+  USERS_CONNECTOR_JSON: ""
+  WAREHOUSE_CONNECTOR_JSON: ""

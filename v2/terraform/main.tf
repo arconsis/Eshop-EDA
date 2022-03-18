@@ -94,7 +94,7 @@ module "eks" {
   worker_groups = [
     {
       name                 = "worker-group-1"
-      instance_type        = "t2.small"
+      instance_type        = "t2.medium"
       asg_desired_capacity = 3
       asg_min_size         = 3
       asg_max_size         = 8
@@ -181,7 +181,7 @@ resource "aws_msk_cluster" "kafka" {
 
 resource "aws_msk_configuration" "kafka_configuration" {
   kafka_versions = ["2.8.1"]
-  name           = "kafka{random_string.unique_configuration_identifier.result}"
+  name           = "kafka-custom-config"
 
   server_properties = <<PROPERTIES
 min.insync.replicas = 1
@@ -210,6 +210,7 @@ data "template_file" "users_connector_initializer" {
     bootstrap_servers  = aws_msk_cluster.kafka.bootstrap_brokers
     history_topic      = var.users_history_topic
     table_include_list = join(",", var.users_table_include_list)
+    slot_name          = var.users_slot_name
   }
 }
 
@@ -223,6 +224,7 @@ data "template_file" "orders_connector_initializer" {
     bootstrap_servers  = aws_msk_cluster.kafka.bootstrap_brokers
     history_topic      = var.orders_history_topic
     table_include_list = join(",", var.orders_table_include_list)
+    slot_name          = var.orders_slot_name
   }
 }
 
@@ -236,6 +238,7 @@ data "template_file" "warehouse_connector_initializer" {
     bootstrap_servers  = aws_msk_cluster.kafka.bootstrap_brokers
     history_topic      = var.warehouse_history_topic
     table_include_list = join(",", var.warehouse_table_include_list)
+    slot_name          = var.warehouse_slot_name
   }
 }
 
@@ -249,5 +252,6 @@ data "template_file" "payment_connector_initializer" {
     bootstrap_servers  = aws_msk_cluster.kafka.bootstrap_brokers
     history_topic      = var.payments_history_topic
     table_include_list = join(",", var.payments_table_include_list)
+    slot_name          = var.payments_slot_name
   }
 }

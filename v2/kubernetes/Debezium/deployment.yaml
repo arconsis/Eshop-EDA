@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: debezium-deployment
+  name: debezium-connector
   labels:
     app: debezium-connector
   namespace: eshop-eda
@@ -9,44 +9,49 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: debezium-connector
+      name: debezium-connector
   template:
     metadata:
       labels:
-        app: debezium-connector
+        name: debezium-connector
     spec:
       containers:
-        - name: debezium-connector
-          imagePullPolicy: IfNotPresent
-          image: debezium/connect:1.7
-          ports:
-            - containerPort: 8083
-              protocol: TCP
-          resources:
-            limits:
-              cpu: '600m'
-              memory: '2048Mi'
-            requests:
-              cpu: '300m'
-              memory: '2048Mi'
-          env:
-            - name: GROUP_ID
-              valueFrom:
-                configMapKeyRef:
-                  name: eda-configmap
-                  key: GROUP_ID
-            - name: CONFIG_STORAGE_TOPIC
-              valueFrom:
-                configMapKeyRef:
-                  name: eda-configmap
-                  key: CONFIG_STORAGE_TOPIC
-            - name: OFFSET_STORAGE_TOPIC
-              valueFrom:
-                configMapKeyRef:
-                  name: eda-configmap
-                  key: OFFSET_STORAGE_TOPIC
-            - name: STATUS_STORAGE_TOPIC
-              valueFrom:
-                configMapKeyRef:
-                  name: eda-configmap
-                  key: STATUS_STORAGE_TOPIC
+      - name: debezium-eda
+        imagePullPolicy: IfNotPresent
+        image: debezium/connect:1.8.1.Final
+        ports:
+          - containerPort: 8083
+            protocol: TCP
+        resources:
+          limits:
+            cpu: '600m'
+            memory: '2048Mi'
+          requests:
+            cpu: '300m'
+            memory: '2048Mi'
+        env:
+#          - name: BOOTSTRAP_SERVERS
+#            valueFrom:
+#              configMapKeyRef:
+#                name: eda-configmap
+#                key: KAFKA_BROKERS
+          - name: GROUP_ID
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: GROUP_ID
+          - name: CONFIG_STORAGE_TOPIC
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: CONFIG_STORAGE_TOPIC
+          - name: OFFSET_STORAGE_TOPIC
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: OFFSET_STORAGE_TOPIC
+          - name: STATUS_STORAGE_TOPIC
+            valueFrom:
+              configMapKeyRef:
+                name: eda-configmap
+                key: STATUS_STORAGE_TOPIC
