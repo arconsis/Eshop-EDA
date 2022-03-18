@@ -8,7 +8,7 @@ resource "aws_alb" "this" {
   security_groups    = var.security_groups
   subnets            = var.subnet_ids
   tags               = {
-    Name = "${var.alb_name}-aws-warmup-alb"
+    Name = "${var.alb_name}-eda-alb"
     Role = var.internal ? "internal" : "external"
   }
 }

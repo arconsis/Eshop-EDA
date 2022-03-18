@@ -15,7 +15,7 @@ variable "default_tags" {
   description = "Default tags to set to every resource"
   type        = map(string)
   default     = {
-    Project   = "ecs-fargate-aws-warmup"
+    Project   = "eshop-eda"
     ManagedBy = "terraform"
   }
 }

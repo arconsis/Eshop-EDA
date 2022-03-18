@@ -22,3 +22,17 @@ output "cluster_name" {
   description = "Kubernetes Cluster Name"
   value       = var.cluster_name
 }
+
+output "zookeeper_connect_string" {
+  value = module.kafka.zookeeper_connect_string
+}
+
+output "bootstrap_brokers_tls" {
+  description = "TLS connection host:port pairs"
+  value       = module.kafka.bootstrap_brokers_tls
+}
+
+output "bootstrap_brokers" {
+  description = "list of one or more hostname:port pairs of kafka brokers"
+  value       = module.kafka.bootstrap_brokers
+}

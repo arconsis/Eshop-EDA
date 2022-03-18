@@ -51,7 +51,7 @@ module "private_vpc_sg" {
   ingress_cidr_rules      = {
     1 = {
       description      = "allow inbound access only from resources in VPC"
-      protocol         = "tcp"
+      protocol         = "-1"
       from_port        = 0
       to_port          = 0
       cidr_blocks      = [module.networking.vpc_cidr_block]
@@ -122,5 +122,5 @@ module "eks" {
 module "kafka" {
   source     = "../../terraform/modules/kafka"
   subnet_ids = module.networking.private_subnet_ids
-  msk_sg_ids = [module.eks_worker_sg.security_group_id]
+  msk_sg_ids = [module.private_vpc_sg.security_group_id]
 }

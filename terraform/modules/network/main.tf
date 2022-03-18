@@ -8,7 +8,7 @@ resource "aws_vpc" "this" {
   enable_dns_hostnames             = var.enable_dns_hostnames
 
   tags = {
-    Name = "aws-warmup-vpc"
+    Name = "eda-vpc"
   }
 }
 
@@ -26,7 +26,7 @@ data "aws_availability_zones" "available" {
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.this.id
   tags   = {
-    Name = "aws-warmup-ig"
+    Name = "eda-ig"
   }
 }
 
@@ -46,7 +46,7 @@ resource "aws_subnet" "public" {
   tags = merge(
     var.public_subnet_additional_tags,
     {
-      Name   = "aws-warmup-public-subnet"
+      Name   = "eda-public-subnet"
       Role   = "public"
       VPC    = aws_vpc.this.id
       Subnet = data.aws_availability_zones.available.names[count.index]
@@ -64,7 +64,7 @@ resource "aws_subnet" "private" {
 
   tags = merge(
     var.private_subnet_additional_tags, {
-      Name   = "aws-warmup-public-subnet"
+      Name   = "eda-public-subnet"
       Role   = "private"
       VPC    = aws_vpc.this.id
       Subnet = data.aws_availability_zones.available.names[count.index]
@@ -83,7 +83,7 @@ resource "aws_eip" "nat" {
   vpc = true
 
   tags = {
-    Name   = "aws-warmup-eip"
+    Name   = "eda-eip"
     Role   = "private"
     VPC    = aws_vpc.this.id
     Subnet = element(aws_subnet.public.*.id, count.index)
@@ -98,7 +98,7 @@ resource "aws_nat_gateway" "ngw" {
   subnet_id     = element(aws_subnet.public.*.id, count.index)
 
   tags = {
-    Name   = "aws-warmup-ngw"
+    Name   = "eda-ngw"
     Role   = "private"
     VPC    = aws_vpc.this.id
     Subnet = element(aws_subnet.public.*.id, count.index)
@@ -115,7 +115,7 @@ resource "aws_route_table" "public" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "aws-warmup-public-rt"
+    Name = "eda-public-rt"
     Role = "public"
     VPC  = aws_vpc.this.id
   }
@@ -139,7 +139,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name   = "aws-warmup-private-rt"
+    Name   = "eda-private-rt"
     Role   = "private"
     VPC    = aws_vpc.this.id
     Subnet = element(aws_subnet.private.*.id, count.index)

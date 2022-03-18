@@ -7,7 +7,7 @@ module "database" {
   version = "~> 4.1.3"
 
   tags = {
-    Name = "${var.database_identifier}-aws-warmup-db"
+    Name = "${var.database_identifier}-eda-db"
   }
 
   identifier = var.database_identifier

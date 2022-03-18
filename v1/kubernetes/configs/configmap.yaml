@@ -5,11 +5,11 @@ metadata:
   name: eda-configmap
 data:
   BASTION_PORT: "3000"
-  KAFKA_BROKERS: ""
+  KAFKA_BROKERS: "b-1.kafka-eshop.15ct64.c9.kafka.eu-west-1.amazonaws.com:9094,b-2.kafka-eshop.15ct64.c9.kafka.eu-west-1.amazonaws.com:9094"
   USERS_SERVICE_URL: "http://user-service:8080"
   QUARKUS_MAILGUN_DOMAIN_NAME: ""
   POSTGRES_PORT: "5432"
-  POSTGRES_HOST: ""
+  POSTGRES_HOST: "eda-database.cwlms0jewkyq.eu-west-1.rds.amazonaws.com"
   ORDERS_POSTGRES_DB: "orders-db"
   USERS_POSTGRES_DB: "users-db"
   PAYMENTS_POSTGRES_DB: "payments-db"
