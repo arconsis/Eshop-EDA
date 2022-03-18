@@ -10,6 +10,13 @@ We took multiple approaches of developing an event based systems:
 
 We will keep the readme updated providing also and info about the macro architecture of the different versions.
 
+#### Kubernetes setup
+
+To get the kubeconfig for the cluster run the following command after applying terraform
+```
+aws eks update-kubeconfig --region region-code --name cluster-name
+```
+
 ## Show your support
 
 Give a ⭐️ if this project helped you!

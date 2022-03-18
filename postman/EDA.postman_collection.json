@@ -1,5 +1,6 @@
 {
 	"info": {
+		"_postman_id": "25dae0c4-ea84-4940-bfd9-b75faca52359",
 		"name": "EDA",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -22,11 +23,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/orders",
+							"raw": "{{orders-host}}/orders",
 							"host": [
-								"localhost"
+								"{{orders-host}}"
 							],
-							"port": "8080",
 							"path": [
 								"orders"
 							]
@@ -40,11 +40,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/orders/6f640b4c-6094-4567-afce-8fb0d63da9f3",
+							"raw": "{{orders-host}}/orders/6f640b4c-6094-4567-afce-8fb0d63da9f3",
 							"host": [
-								"localhost"
+								"{{orders-host}}"
 							],
-							"port": "8080",
 							"path": [
 								"orders",
 								"6f640b4c-6094-4567-afce-8fb0d63da9f3"
@@ -95,11 +94,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/users",
+							"raw": "{{users-host}}/users",
 							"host": [
-								"localhost"
+								"{{users-host}}"
 							],
-							"port": "8081",
 							"path": [
 								"users"
 							]
@@ -113,11 +111,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/bastion/createDatabases",
+							"raw": "{{bastion-host}}/bastion/createDatabases",
 							"host": [
-								"localhost"
+								"{{bastion-host}}"
 							],
-							"port": "3000",
 							"path": [
 								"bastion",
 								"createDatabases"
@@ -132,11 +129,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/bastion/createConnectors",
+							"raw": "{{bastion-host}}/bastion/createConnectors",
 							"host": [
-								"localhost"
+								"{{bastion-host}}"
 							],
-							"port": "3000",
 							"path": [
 								"bastion",
 								"createConnectors"
@@ -165,11 +161,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/orders",
+							"raw": "{{orders-host}}/orders",
 							"host": [
-								"localhost"
+								"{{orders-host}}"
 							],
-							"port": "8080",
 							"path": [
 								"orders"
 							]
@@ -183,11 +178,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/orders/6f640b4c-6094-4567-afce-8fb0d63da9f3",
+							"raw": "{{orders-host}}/orders/6f640b4c-6094-4567-afce-8fb0d63da9f3",
 							"host": [
-								"localhost"
+								"{{orders-host}}"
 							],
-							"port": "8080",
 							"path": [
 								"orders",
 								"6f640b4c-6094-4567-afce-8fb0d63da9f3"
@@ -211,11 +205,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8082/inventory",
+							"raw": "{{warehouse-host}}/inventory",
 							"host": [
-								"localhost"
+								"{{warehouse-host}}"
 							],
-							"port": "8082",
 							"path": [
 								"inventory"
 							]
@@ -238,11 +231,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/users",
+							"raw": "{{users-host}}/users",
 							"host": [
-								"localhost"
+								"{{users-host}}"
 							],
-							"port": "8081",
 							"path": [
 								"users"
 							]
@@ -256,11 +248,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/bastion/createDatabases",
+							"raw": "{{bastion-host}}/bastion/createDatabases",
 							"host": [
-								"localhost"
+								"{{bastion-host}}"
 							],
-							"port": "3000",
 							"path": [
 								"bastion",
 								"createDatabases"
@@ -275,11 +266,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/bastion/createConnectors",
+							"raw": "{{bastion-host}}/bastion/createConnectors",
 							"host": [
-								"localhost"
+								"{{bastion-host}}"
 							],
-							"port": "3000",
 							"path": [
 								"bastion",
 								"createConnectors"
@@ -308,11 +298,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/orders",
+							"raw": "{{orders-host}}/orders",
 							"host": [
-								"localhost"
+								"{{orders-host}}"
 							],
-							"port": "8080",
 							"path": [
 								"orders"
 							]
@@ -335,11 +324,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8082/inventory",
+							"raw": "{{warehouse-host}}/inventory",
 							"host": [
-								"localhost"
+								"{{warehouse-host}}"
 							],
-							"port": "8082",
 							"path": [
 								"inventory"
 							]
@@ -362,11 +350,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/users",
+							"raw": "{{users-host}}/users",
 							"host": [
-								"localhost"
+								"{{users-host}}"
 							],
-							"port": "8081",
 							"path": [
 								"users"
 							]
@@ -380,11 +367,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/bastion/createDatabases",
+							"raw": "{{bastion-host}}/bastion/createDatabases",
 							"host": [
-								"localhost"
+								"{{bastion-host}}"
 							],
-							"port": "3000",
 							"path": [
 								"bastion",
 								"createDatabases"
@@ -399,11 +385,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/bastion/createConnectors",
+							"raw": "{{bastion-host}}/bastion/createConnectors",
 							"host": [
-								"localhost"
+								"{{bastion-host}}"
 							],
-							"port": "3000",
 							"path": [
 								"bastion",
 								"createConnectors"
