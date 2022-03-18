@@ -31,7 +31,7 @@ resource "aws_msk_cluster" "kafka" {
 
 resource "aws_msk_configuration" "kafka_configuration" {
   kafka_versions = ["2.8.1"]
-  name           = "kafka{random_string.unique_configuration_identifier.result}"
+  name           = "mks-eda-configuration"
 
   server_properties = <<PROPERTIES
 min.insync.replicas = 1
