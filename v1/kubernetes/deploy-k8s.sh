@@ -1,5 +1,3 @@
-kubectl config use-context eks_test-eks-cluster
-
 kubectl apply -f ./namespace.yaml
 
 cd ./configs
