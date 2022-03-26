@@ -5,8 +5,7 @@ import com.arconsis.data.OrdersRepository
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.orders.OrderStatus
 import com.arconsis.domain.orders.toOrderRecord
-import com.arconsis.domain.orders.toOrderRecordWithStatus
-import io.smallrye.mutiny.Uni
+import io.smallrye.mutiny.coroutines.awaitSuspending
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
@@ -20,48 +19,40 @@ class ShipmentsService(
     private val ordersRepository: OrdersRepository,
     private val logger: Logger
 ) {
-    fun handleShipmentEvents(shipment: Shipment): Uni<Void> {
-        return when (shipment.status) {
+    suspend fun handleShipmentEvents(shipment: Shipment) {
+        when (shipment.status) {
             ShipmentStatus.DELIVERED -> {
-                ordersRepository.updateOrder(shipment.orderId, OrderStatus.COMPLETED)
-                    .handleUpdateOrderErrors(shipment.orderId, OrderStatus.COMPLETED)
-                    .flatMap { order ->
-                        val orderRecord = order.toOrderRecord()
-                        emitter.send(orderRecord)
-                    }
+                updateAndSendOrder(shipment.orderId, OrderStatus.COMPLETED)
             }
             ShipmentStatus.SHIPPED -> {
-                ordersRepository.updateOrder(shipment.orderId, OrderStatus.SHIPPED)
-                    .handleUpdateOrderErrors(shipment.orderId, OrderStatus.SHIPPED)
-                    .flatMap { order ->
-                        val orderRecord = order.toOrderRecord()
-                        emitter.send(orderRecord)
-                    }
+                updateAndSendOrder(shipment.orderId, OrderStatus.SHIPPED)
             }
             ShipmentStatus.FAILED -> {
-                ordersRepository.updateOrder(shipment.orderId, OrderStatus.SHIPMENT_FAILED)
-                    .handleUpdateOrderErrors(shipment.orderId, OrderStatus.SHIPMENT_FAILED)
-                    .flatMap { order ->
-                        val orderRecord = order.toOrderRecord()
-                        emitter.send(orderRecord)
-                    }
+                updateAndSendOrder(shipment.orderId, OrderStatus.SHIPMENT_FAILED)
             }
-            else -> return Uni.createFrom().voidItem()
+            else -> return
         }
     }
 
-    private fun Uni<Order>.handleUpdateOrderErrors(orderId: UUID, orderStatus: OrderStatus) = retryWithBackoff()
-        .onFailure()
-        .call { _ ->
-            ordersRepository.getOrder(orderId)
-                .flatMap { order ->
-                    val orderRecord = order.toOrderRecordWithStatus(status = orderStatus)
-                    sendOrderEvent(orderRecord)
-                }
+    private suspend fun updateAndSendOrder(orderId: UUID, orderStatus: OrderStatus) {
+        val order = runCatching {
+            retryWithBackoff {
+                ordersRepository.updateOrder(orderId, orderStatus)
+            }
+        }.getOrElse {
+            TODO(
+                "What should we do when the repository update fails. " +
+                        "In the Uni version we were fetching the order here " +
+                        "from the repository and changing the status to the required"
+            )
         }
 
-    private fun sendOrderEvent(orderRecord: Record<String, Order>): Uni<Void> {
+        val orderRecord = order.toOrderRecord()
+        sendOrderEvent(orderRecord)
+    }
+
+    private suspend fun sendOrderEvent(orderRecord: Record<String, Order>) {
         logger.info("Send order record ${orderRecord.value()}")
-        return emitter.send(orderRecord)
+        emitter.send(orderRecord).awaitSuspending()
     }
 }

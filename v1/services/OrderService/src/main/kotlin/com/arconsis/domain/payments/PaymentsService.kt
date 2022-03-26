@@ -1,13 +1,11 @@
 package com.arconsis.domain.payments
 
 import com.arconsis.common.retryWithBackoff
-import com.arconsis.common.toUni
 import com.arconsis.data.OrdersRepository
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.orders.OrderStatus
 import com.arconsis.domain.orders.toOrderRecord
-import com.arconsis.domain.orders.toOrderRecordWithStatus
-import io.smallrye.mutiny.Uni
+import io.smallrye.mutiny.coroutines.awaitSuspending
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
@@ -21,37 +19,39 @@ class PaymentsService(
     private val ordersRepository: OrdersRepository,
     private val logger: Logger
 ) {
-    fun handlePaymentEvents(payment: Payment): Uni<Void> {
-        return when (payment.status) {
+    suspend fun handlePaymentEvents(payment: Payment) {
+        when (payment.status) {
             PaymentStatus.SUCCEED -> {
-                ordersRepository.updateOrder(payment.orderId, OrderStatus.PAID)
-                    .handleUpdateOrderErrors(payment.orderId, OrderStatus.PAID)
-                    .flatMap { order ->
-                        sendOrderEvent(order.toOrderRecord())
-                    }
+
+                updateAndSendOrder(payment.orderId, OrderStatus.PAID)
             }
             PaymentStatus.FAILED -> {
+                updateAndSendOrder(payment.orderId, OrderStatus.PAYMENT_FAILED)
                 ordersRepository.updateOrder(payment.orderId, OrderStatus.PAYMENT_FAILED)
-                    .handleUpdateOrderErrors(payment.orderId, OrderStatus.PAYMENT_FAILED)
-                    .flatMap { order ->
-                        val orderRecord = order.toOrderRecord()
-                        emitter.send(orderRecord)
-                    }
+
             }
-            else -> return Uni.createFrom().voidItem()
+            else -> return
         }
     }
 
-    private fun Uni<Order>.handleUpdateOrderErrors(orderId: UUID, orderStatus: OrderStatus) = retryWithBackoff()
-        .onFailure()
-        .call { _ ->
-            ordersRepository.getOrder(orderId).flatMap { order ->
-                sendOrderEvent(order.toOrderRecordWithStatus(status = orderStatus))
+    private suspend fun updateAndSendOrder(orderId: UUID, orderStatus: OrderStatus) {
+        val order = runCatching {
+            retryWithBackoff {
+                ordersRepository.updateOrder(orderId, orderStatus)
             }
+        }.getOrElse {
+            TODO(
+                "What should we do when the repository update fails. " +
+                        "In the Uni version we were fetching the order here " +
+                        "from the repository and changing the status to the required"
+            )
         }
+        val orderRecord = order.toOrderRecord()
+        sendOrderEvent(orderRecord)
+    }
 
-    private fun sendOrderEvent(orderRecord: Record<String, Order>): Uni<Void> {
+    private suspend fun sendOrderEvent(orderRecord: Record<String, Order>) {
         logger.info("Send order record ${orderRecord.value()}")
-        return emitter.send(orderRecord)
+        emitter.send(orderRecord).awaitSuspending()
     }
 }
