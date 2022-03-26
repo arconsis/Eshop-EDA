@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm") version "1.5.31"
-    kotlin("plugin.allopen") version "1.5.31"
-    kotlin("plugin.noarg") version "1.5.31"
-    kotlin("plugin.jpa") version "1.5.31"
+    kotlin("jvm") version "1.6.10"
+    kotlin("plugin.allopen") version "1.6.10"
+    kotlin("plugin.noarg") version "1.6.10"
+    kotlin("plugin.jpa") version "1.6.10"
     id("io.quarkus")
 }
 
