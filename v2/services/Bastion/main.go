@@ -76,7 +76,7 @@ func createConnectors(connectors []string) error {
 }
 
 func createDatabases() {
-	dbUsename := os.Getenv(databaseUsername)
+	dbUsername := os.Getenv(databaseUsername)
 	dbpool, err := pgxpool.Connect(context.Background(), os.Getenv(databaseUrlKey))
 	if err != nil {
 		log.Printf("Unable to connect to database: %v\n\n", err)
@@ -85,11 +85,11 @@ func createDatabases() {
 
 	defer dbpool.Close()
 
-	createOrdersDb := "CREATE DATABASE \"orders-db\" OWNER " + dbUsename
-	createWarehouseDb := "CREATE DATABASE \"warehouse-db\" OWNER " + dbUsename
-	createUsersDb := "CREATE DATABASE \"users-db\" OWNER " + dbUsename
-	createPaymentsDb := "CREATE DATABASE \"payments-db\" OWNER " + dbUsename
-	createEmailDb := "CREATE DATABASE \"email-db\" OWNER " + dbUsename
+	createOrdersDb := "CREATE DATABASE \"orders-db\" OWNER " + dbUsername
+	createWarehouseDb := "CREATE DATABASE \"warehouse-db\" OWNER " + dbUsername
+	createUsersDb := "CREATE DATABASE \"users-db\" OWNER " + dbUsername
+	createPaymentsDb := "CREATE DATABASE \"payments-db\" OWNER " + dbUsername
+	createEmailDb := "CREATE DATABASE \"email-db\" OWNER " + dbUsername
 	_, err = dbpool.Exec(context.Background(), createOrdersDb)
 	if err != nil {
 		log.Printf("Create orders-db failed: %v\n", err)
