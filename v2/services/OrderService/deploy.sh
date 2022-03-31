@@ -1,2 +1,2 @@
-docker build . -t eldimious/order-eda-v3:latest
-docker push eldimious/order-eda-v3:latest
+docker build . -t eldimious/order-eda-v2:latest
+docker push eldimious/order-eda-v2:latest

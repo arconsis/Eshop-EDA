@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/joho/godotenv"
 	"golang.org/x/sync/errgroup"
@@ -22,6 +21,7 @@ const debeziumHostKey = "DEBEZIUM_HOST"
 const portKey = "PORT"
 const databaseUrlKey = "DATABASE_URL"
 const appEnvKey = "APP_ENV"
+const databaseUsername = "DATABASE_USERNAME"
 
 var debeziumHost = ""
 
@@ -76,6 +76,7 @@ func createConnectors(connectors []string) error {
 }
 
 func createDatabases() {
+	dbUsename := os.Getenv(databaseUsername)
 	dbpool, err := pgxpool.Connect(context.Background(), os.Getenv(databaseUrlKey))
 	if err != nil {
 		log.Printf("Unable to connect to database: %v\n\n", err)
@@ -84,30 +85,35 @@ func createDatabases() {
 
 	defer dbpool.Close()
 
-	_, err = dbpool.Exec(context.Background(), "CREATE DATABASE \"orders-db\" OWNER postgres")
+	createOrdersDb := "CREATE DATABASE \"orders-db\" OWNER " + dbUsename
+	createWarehouseDb := "CREATE DATABASE \"warehouse-db\" OWNER " + dbUsename
+	createUsersDb := "CREATE DATABASE \"users-db\" OWNER " + dbUsename
+	createPaymentsDb := "CREATE DATABASE \"payments-db\" OWNER " + dbUsename
+	createEmailDb := "CREATE DATABASE \"email-db\" OWNER " + dbUsename
+	_, err = dbpool.Exec(context.Background(), createOrdersDb)
 	if err != nil {
 		log.Printf("Create orders-db failed: %v\n", err)
 	}
-	_, err = dbpool.Exec(context.Background(), "CREATE DATABASE \"warehouse-db\" OWNER postgres")
+	_, err = dbpool.Exec(context.Background(), createWarehouseDb)
 
 	if err != nil {
 		log.Printf("Create warehouse-db failed: %v\n", err)
 	}
 
-	_, err = dbpool.Exec(context.Background(), "CREATE DATABASE \"users-db\" OWNER postgres")
+	_, err = dbpool.Exec(context.Background(), createUsersDb)
 	if err != nil {
 		log.Printf("Create users-db failed: %v\n", err)
 	}
 
-	_, err = dbpool.Exec(context.Background(), "CREATE DATABASE \"payments-db\" OWNER postgres")
+	_, err = dbpool.Exec(context.Background(), createPaymentsDb)
 	if err != nil {
 		log.Printf("Create payments-db failed: %v\n", err)
 	}
 
-	_, err = dbpool.Exec(context.Background(), "CREATE DATABASE \"email-db\" OWNER postgres")
-    if err != nil {
-    	log.Printf("Create email-db failed: %v\n", err)
-    }
+	_, err = dbpool.Exec(context.Background(), createEmailDb)
+	if err != nil {
+		log.Printf("Create email-db failed: %v\n", err)
+	}
 }
 
 func createConnector(json string) error {

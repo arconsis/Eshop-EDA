@@ -1,2 +1,2 @@
-docker build . -t eldimious/bastion-v2:latest
-docker push eldimious/bastion-v2:latest
+docker build . -t eldimious/bastion-eda-v2:latest
+docker push eldimious/bastion-eda-v2:latest

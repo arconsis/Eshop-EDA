@@ -18,7 +18,7 @@ spec:
       containers:
       - name: payment-eda
         imagePullPolicy: Always
-        image: eldimious/payment-eda-v1:latest
+        image: eldimious/payment-eda-v2:latest
         ports:
           - containerPort: 8080
             protocol: TCP
