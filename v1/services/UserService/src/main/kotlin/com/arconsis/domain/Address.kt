@@ -10,6 +10,7 @@ data class Address(
     val city: String,
     val phone: String,
     val isBilling: Boolean = false,
+    val isPreferredShipping: Boolean = false,
 )
 
 enum class CountryCode {

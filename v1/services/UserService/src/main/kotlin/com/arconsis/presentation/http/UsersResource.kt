@@ -88,4 +88,40 @@ class UsersResource(private val usersService: UsersService, private val addresse
             throw NotFoundException("Billing address with userId: $userId and addressId: $addressId doesn't exist")
         }
     }
+
+
+    @Blocking
+    @GET
+    @Path("/{userId}/addresses/preferred")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun getPreferredShippingAddresses(@PathParam("userId") userId: UUID): List<Address> {
+        return addressesService.getPreferredShippingAddresses(userId)
+            ?: throw NotFoundException("Preferred shipping addresses for user with id: $userId not found")
+    }
+
+    @Blocking
+    @POST
+    @Path("/{userId}/address/{addressId}/preferred")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun createPreferredShippingAddress(
+        @PathParam("userId") userId: UUID,
+        @PathParam("addressId") addressId: UUID
+    ): Address? {
+        return addressesService.createPreferredShippingAddress(userId, addressId)
+            ?: throw NotAllowedException("List of preferred shipping addresses for the user with id: $userId is full")
+    }
+
+    @Blocking
+    @DELETE
+    @Path("/{userId}/address/{addressId}/preferred")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun deletePreferredShippingAddresses(@PathParam("userId") userId: UUID, @PathParam("addressId") addressId: UUID) {
+        val deleted = addressesService.deletePreferredShippingAddress(userId, addressId)
+        if (!deleted) {
+            throw NotFoundException("PreferredShipping address with userId: $userId and addressId: $addressId doesn't exist to delete")
+        }
+    }
 }

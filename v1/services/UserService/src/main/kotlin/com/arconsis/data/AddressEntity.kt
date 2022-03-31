@@ -1,5 +1,6 @@
 import com.arconsis.data.PostgreSQLEnumType
 import com.arconsis.data.UserEntity
+import com.arconsis.data.common.ADDRESS_ID
 import com.arconsis.data.common.USER_ID
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
@@ -25,6 +26,20 @@ import javax.persistence.*
                     set a.isBilling  = case a.isBilling
                     when true then false else false end
                     where a.userEntity.id = :$USER_ID
+                        """
+    ),
+    NamedQuery(
+        name = AddressEntity.GET_PREFERRED_SHIPPING_ADDRESSES,
+        query = """ select a from addresses a
+                    where a.userEntity.id = :$USER_ID and a.isPreferredShipping = true
+                        """
+    ),
+    NamedQuery(
+        name = AddressEntity.DELETE_PREFERRED_SHIPPING_ADDRESS,
+        query = """ update addresses a 
+                    set a.isPreferredShipping  = case a.isPreferredShipping
+                    when true then false else false end
+                    where a.userEntity.id = :$USER_ID and a.id = :$ADDRESS_ID
                         """
     )
 )
@@ -64,6 +79,9 @@ class AddressEntity(
     @Column(name = "is_billing")
     var isBilling: Boolean = false,
 
+    @Column(name = "is_preferred_shipping")
+    var isPreferredShipping: Boolean = false,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     var userEntity: UserEntity,
@@ -72,9 +90,16 @@ class AddressEntity(
         const val LIST_USER_ADDRESSES = "list_user_addresses"
         const val GET_BILLING_ADDRESS = "get_billing_address"
         const val DELETE_BILLING_ADDRESS = "delete_billing_address"
+        const val GET_PREFERRED_SHIPPING_ADDRESSES = "get_preferred_shipping_address"
+        const val DELETE_PREFERRED_SHIPPING_ADDRESS = "delete_preferred_shipping_address"
     }
 }
 
 fun AddressEntity.setAsBillingAddress() {
     this.isBilling = true
 }
+
+fun AddressEntity.setAsPreferredShippingAddress() {
+    this.isPreferredShipping = true
+}
+
