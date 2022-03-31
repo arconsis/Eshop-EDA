@@ -135,6 +135,7 @@ data "template_file" "users_connector_initializer" {
     bootstrap_servers  = module.kafka.bootstrap_brokers
     history_topic      = var.users_history_topic
     table_include_list = join(",", var.users_table_include_list)
+    slot_name          = var.users_slot_name
   }
 }
 
@@ -148,6 +149,7 @@ data "template_file" "orders_connector_initializer" {
     bootstrap_servers  = module.kafka.bootstrap_brokers
     history_topic      = var.orders_history_topic
     table_include_list = join(",", var.orders_table_include_list)
+    slot_name          = var.orders_slot_name
   }
 }
 
@@ -161,6 +163,7 @@ data "template_file" "warehouse_connector_initializer" {
     bootstrap_servers  = module.kafka.bootstrap_brokers
     history_topic      = var.warehouse_history_topic
     table_include_list = join(",", var.warehouse_table_include_list)
+    slot_name          = var.warehouse_slot_name
   }
 }
 
@@ -174,5 +177,6 @@ data "template_file" "payment_connector_initializer" {
     bootstrap_servers  = module.kafka.bootstrap_brokers
     history_topic      = var.payments_history_topic
     table_include_list = join(",", var.payments_table_include_list)
+    slot_name          = var.payments_slot_name
   }
 }

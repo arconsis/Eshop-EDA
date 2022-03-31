@@ -103,6 +103,11 @@ variable "users_table_include_list" {
   type        = list(string)
 }
 
+variable "users_slot_name" {
+  description = "users slot name observed by debezium"
+  type        = string
+}
+
 variable "email_database_name" {
   description = "email DB name"
   type        = string
@@ -123,6 +128,11 @@ variable "orders_table_include_list" {
   type        = list(string)
 }
 
+variable "orders_slot_name" {
+  description = "orders slot name observed by debezium"
+  type        = string
+}
+
 variable "payments_history_topic" {
   description = "payments db changes topic"
   type        = string
@@ -135,6 +145,11 @@ variable "payments_table_include_list" {
 
 variable "payments_database_name" {
   description = "payments DB name"
+  type        = string
+}
+
+variable "payments_slot_name" {
+  description = "payments slot name observed by debezium"
   type        = string
 }
 
@@ -151,6 +166,11 @@ variable "warehouse_history_topic" {
 variable "warehouse_table_include_list" {
   description = "list of tables that should be observed by debezium"
   type        = list(string)
+}
+
+variable "warehouse_slot_name" {
+  description = "warehouse slot name observed by debezium"
+  type        = string
 }
 
 variable "database_parameters" {
