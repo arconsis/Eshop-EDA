@@ -93,11 +93,6 @@ variable "users_database_name" {
   type        = string
 }
 
-variable "users_database_connector_name" {
-  description = "Name for debezium connector"
-  type        = string
-}
-
 variable "users_history_topic" {
   description = "users db changes topic"
   type        = string
@@ -125,11 +120,6 @@ variable "email_database_name" {
 
 variable "orders_database_name" {
   description = "orders DB name"
-  type        = string
-}
-
-variable "orders_database_connector_name" {
-  description = "Name for debezium connector"
   type        = string
 }
 
@@ -173,12 +163,6 @@ variable "payments_database_name" {
   type        = string
 }
 
-variable "payments_database_connector_name" {
-  description = "Name for debezium connector"
-  type        = string
-}
-
-
 variable "payments_slot_name" {
   description = "payments slot name observed by debezium"
   type        = string
@@ -186,11 +170,6 @@ variable "payments_slot_name" {
 
 variable "warehouse_database_name" {
   description = "warehouse DB name"
-  type        = string
-}
-
-variable "warehouse_database_connector_name" {
-  description = "Name for debezium connector"
   type        = string
 }
 

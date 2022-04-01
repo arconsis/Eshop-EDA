@@ -7,6 +7,10 @@ provider "aws" {
   #  }
 }
 
+locals {
+  database_connector_name_suffix = "database-connector"
+}
+
 ################################################################################
 # VPC Configuration
 ################################################################################
@@ -129,7 +133,7 @@ module "kafka" {
 data "template_file" "users_connector_initializer" {
   template = file("../../terraform/templates/debezium/connector.json.tpl")
   vars     = {
-    database_connector_name = var.users_database_connector_name
+    database_connector_name = "${var.users_database_name}-${local.database_connector_name_suffix}"
     database_hostname       = module.eda_database.db_endpoint
     database_user           = var.eda_database_username
     database_password       = var.eda_database_password
@@ -144,7 +148,7 @@ data "template_file" "users_connector_initializer" {
 data "template_file" "orders_connector_initializer" {
   template = file("../../terraform/templates/debezium/connector.json.tpl")
   vars     = {
-    database_connector_name = var.orders_database_connector_name
+    database_connector_name = "${var.orders_database_name}-${local.database_connector_name_suffix}"
     database_hostname       = module.eda_database.db_endpoint
     database_user           = var.eda_database_username
     database_password       = var.eda_database_password
@@ -159,7 +163,7 @@ data "template_file" "orders_connector_initializer" {
 data "template_file" "warehouse_connector_initializer" {
   template = file("../../terraform/templates/debezium/connector.json.tpl")
   vars     = {
-    database_connector_name = var.warehouse_database_connector_name
+    database_connector_name = "${var.warehouse_database_name}-${local.database_connector_name_suffix}"
     database_hostname       = module.eda_database.db_endpoint
     database_user           = var.eda_database_username
     database_password       = var.eda_database_password
@@ -174,7 +178,7 @@ data "template_file" "warehouse_connector_initializer" {
 data "template_file" "payment_connector_initializer" {
   template = file("../../terraform/templates/debezium/connector.json.tpl")
   vars     = {
-    database_connector_name = var.payments_database_connector_name
+    database_connector_name = "${var.payments_database_name}-${local.database_connector_name_suffix}"
     database_hostname       = module.eda_database.db_endpoint
     database_user           = var.eda_database_username
     database_password       = var.eda_database_password
