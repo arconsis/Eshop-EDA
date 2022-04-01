@@ -1,2 +1,2 @@
-docker build . -t eldimious/payment-eda-v3:latest
-docker push eldimious/payment-eda-v3:latest
+docker build . -t eldimious/payment-eda-v2:latest
+docker push eldimious/payment-eda-v2:latest

@@ -64,7 +64,7 @@ resource "aws_subnet" "private" {
 
   tags = merge(
     var.private_subnet_additional_tags, {
-      Name   = "eda-public-subnet"
+      Name   = "eda-private-subnet"
       Role   = "private"
       VPC    = aws_vpc.this.id
       Subnet = data.aws_availability_zones.available.names[count.index]

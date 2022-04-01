@@ -1,5 +1,5 @@
 {
-  "name": "database-connector",
+  "name": "${database_connector_name}",
   "config": {
     "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
     "plugin.name": "pgoutput",

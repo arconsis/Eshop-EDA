@@ -22,16 +22,16 @@ module "eks" {
   vpc_id     = var.vpc_id
 
   self_managed_node_group_defaults = {
-    instance_type                = "t2.small"
+    instance_type                = var.instance_type
   }
 
   self_managed_node_groups = {
     worker-group-1 = {
-      instance_type                 = "t2.small"
+      instance_type                 = var.instance_type
       additional_security_group_ids = var.worker_sg_ids
-      min_size                      = 3
-      max_size                      = 8
-      desired_size                  = 3
+      min_size                      = var.workers_min_size
+      max_size                      = var.workers_max_size
+      desired_size                  = var.workers_desired_size
     }
   }
 

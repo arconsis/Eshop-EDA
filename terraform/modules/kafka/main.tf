@@ -23,6 +23,13 @@ resource "aws_msk_cluster" "kafka" {
     }
   }
 
+  encryption_info {
+    encryption_in_transit {
+      client_broker = var.client_broker_encryption_in_transit
+      in_cluster    = var.in_cluster_encryption_encryption_in_transit
+    }
+  }
+
   configuration_info {
     arn      = aws_msk_configuration.kafka_configuration.arn
     revision = aws_msk_configuration.kafka_configuration.latest_revision
