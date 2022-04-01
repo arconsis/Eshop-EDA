@@ -113,3 +113,8 @@ variable "users_slot_name" {
   description = "users DB slot"
   type        = string
 }
+
+variable "users_outbox_table_include_list" {
+  description = "list of outbox tables that should be observed by debezium"
+  type        = list(string)
+}

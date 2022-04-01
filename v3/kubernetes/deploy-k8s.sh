@@ -6,8 +6,6 @@ cd ./configs
 sh deploy.sh
 cd ../Bastion
 sh deploy.sh
-cd ../Debezium
-sh deploy.sh
 cd ../EmailService
 sh deploy.sh
 cd ../OrderService

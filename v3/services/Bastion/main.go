@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/joho/godotenv"
 	"golang.org/x/sync/errgroup"
@@ -19,6 +18,7 @@ const debeziumHostKey = "DEBEZIUM_HOST"
 const portKey = "PORT"
 const databaseUrlKey = "DATABASE_URL"
 const appEnvKey = "APP_ENV"
+const databaseUsername = "DATABASE_USERNAME"
 
 var debeziumHost = ""
 
@@ -77,6 +77,7 @@ func createConnectors(connectors []string) error {
 }
 
 func createDatabases() {
+	dbUsername := os.Getenv(databaseUsername)
 	dbpool, err := pgxpool.Connect(context.Background(), os.Getenv(databaseUrlKey))
 	if err != nil {
 		log.Printf("Unable to connect to database: %v\n\n", err)
@@ -85,7 +86,8 @@ func createDatabases() {
 
 	defer dbpool.Close()
 
-	_, err = dbpool.Exec(context.Background(), "CREATE DATABASE \"users-db\" OWNER postgres")
+	createUsersDb := "CREATE DATABASE \"users-db\" OWNER " + dbUsername
+	_, err = dbpool.Exec(context.Background(), createUsersDb)
 	if err != nil {
 		log.Printf("Create users-db failed: %v\n", err)
 	}

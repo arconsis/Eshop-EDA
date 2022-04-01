@@ -6,7 +6,8 @@ metadata:
 data:
   BASTION_PORT: "3000"
   KAFKA_BROKERS: ""
-  DEBEZIUM_HOST: "http://debezium-service:8083"
+  KAFKA_BROKERS_PLAINTEXT: ""
+  DEBEZIUM_HOST: "http://debezium-service:8083/connectors"
   USERS_SERVICE_URL: "http://user-service:8080"
   QUARKUS_MAILGUN_DOMAIN_NAME: ""
   POSTGRES_PORT: "5432"
@@ -16,4 +17,4 @@ data:
   CONFIG_STORAGE_TOPIC: "connect_configs"
   OFFSET_STORAGE_TOPIC: "connect_offsets"
   STATUS_STORAGE_TOPIC: "connect_status"
-  USERS_CONNECTOR_JSON: ""
+  USERS_CONNECTOR_JSON: '{"name":"CONNECTOR_NAME","config":{"connector.class":"io.debezium.connector.postgresql.PostgresConnector","plugin.name":"pgoutput","database.hostname":"DB_HOSTNAME","database.port":"5432","database.user":"DB_USER","database.password":"DB_PASSWORD","database.dbname":"users-db","database.server.name":"postgres","table.include.list":"public.users_outbox_events","database.history.kafka.bootstrap.servers":"KAFKA_BROKERS_PLAINTEXT","database.history.kafka.topic":"schema-changes.users","slot.name": "users_slot" } }'

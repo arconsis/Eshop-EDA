@@ -50,3 +50,8 @@ spec:
                 secretKeyRef:
                   name: eda-secrets
                   key: DATABASE_URL
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: eda-secrets
+                  key: POSTGRES_USER
