@@ -120,63 +120,68 @@ module "eks" {
 ################################################################################
 
 module "kafka" {
-  source     = "../../terraform/modules/kafka"
-  subnet_ids = module.networking.private_subnet_ids
-  msk_sg_ids = [module.private_vpc_sg.security_group_id]
+  source                              = "../../terraform/modules/kafka"
+  subnet_ids                          = module.networking.private_subnet_ids
+  msk_sg_ids                          = [module.private_vpc_sg.security_group_id]
+  client_broker_encryption_in_transit = "TLS_PLAINTEXT"
 }
 
 data "template_file" "users_connector_initializer" {
   template = file("../../terraform/templates/debezium/connector.json.tpl")
   vars     = {
-    database_hostname  = module.eda_database.db_endpoint
-    database_user      = var.eda_database_username
-    database_password  = var.eda_database_password
-    database_name      = var.users_database_name
-    bootstrap_servers  = module.kafka.bootstrap_brokers
-    history_topic      = var.users_history_topic
-    table_include_list = join(",", var.users_table_include_list)
-    slot_name          = var.users_slot_name
+    database_connector_name = var.users_database_connector_name
+    database_hostname       = module.eda_database.db_endpoint
+    database_user           = var.eda_database_username
+    database_password       = var.eda_database_password
+    database_name           = var.users_database_name
+    bootstrap_servers       = module.kafka.bootstrap_brokers
+    history_topic           = var.users_history_topic
+    table_include_list      = join(",", var.users_outbox_table_include_list)
+    slot_name               = var.users_slot_name
   }
 }
 
 data "template_file" "orders_connector_initializer" {
   template = file("../../terraform/templates/debezium/connector.json.tpl")
   vars     = {
-    database_hostname  = module.eda_database.db_endpoint
-    database_user      = var.eda_database_username
-    database_password  = var.eda_database_password
-    database_name      = var.orders_database_name
-    bootstrap_servers  = module.kafka.bootstrap_brokers
-    history_topic      = var.orders_history_topic
-    table_include_list = join(",", var.orders_table_include_list)
-    slot_name          = var.orders_slot_name
+    database_connector_name = var.orders_database_connector_name
+    database_hostname       = module.eda_database.db_endpoint
+    database_user           = var.eda_database_username
+    database_password       = var.eda_database_password
+    database_name           = var.orders_database_name
+    bootstrap_servers       = module.kafka.bootstrap_brokers
+    history_topic           = var.orders_history_topic
+    table_include_list      = join(",", var.orders_outbox_table_include_list)
+    slot_name               = var.orders_slot_name
   }
 }
 
 data "template_file" "warehouse_connector_initializer" {
   template = file("../../terraform/templates/debezium/connector.json.tpl")
   vars     = {
-    database_hostname  = module.eda_database.db_endpoint
-    database_user      = var.eda_database_username
-    database_password  = var.eda_database_password
-    database_name      = var.warehouse_database_name
-    bootstrap_servers  = module.kafka.bootstrap_brokers
-    history_topic      = var.warehouse_history_topic
-    table_include_list = join(",", var.warehouse_table_include_list)
-    slot_name          = var.warehouse_slot_name
+    database_connector_name = var.warehouse_database_connector_name
+    database_hostname       = module.eda_database.db_endpoint
+    database_user           = var.eda_database_username
+    database_password       = var.eda_database_password
+    database_name           = var.warehouse_database_name
+    bootstrap_servers       = module.kafka.bootstrap_brokers
+    history_topic           = var.warehouse_history_topic
+    table_include_list      = join(",", var.warehouse_outbox_table_include_list)
+    slot_name               = var.warehouse_slot_name
   }
 }
 
 data "template_file" "payment_connector_initializer" {
   template = file("../../terraform/templates/debezium/connector.json.tpl")
   vars     = {
-    database_hostname  = module.eda_database.db_endpoint
-    database_user      = var.eda_database_username
-    database_password  = var.eda_database_password
-    database_name      = var.payments_database_name
-    bootstrap_servers  = module.kafka.bootstrap_brokers
-    history_topic      = var.payments_history_topic
-    table_include_list = join(",", var.payments_table_include_list)
-    slot_name          = var.payments_slot_name
+    database_connector_name = var.payments_database_connector_name
+    database_hostname       = module.eda_database.db_endpoint
+    database_user           = var.eda_database_username
+    database_password       = var.eda_database_password
+    database_name           = var.payments_database_name
+    bootstrap_servers       = module.kafka.bootstrap_brokers
+    history_topic           = var.payments_history_topic
+    table_include_list      = join(",", var.payments_outbox_table_include_list)
+    slot_name               = var.payments_slot_name
   }
 }

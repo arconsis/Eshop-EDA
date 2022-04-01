@@ -27,6 +27,7 @@ output "bootstrap_servers" {
   value = module.kafka.bootstrap_brokers
 }
 
+# TODO: check connectors json format to make it valid, as now the output is not working when we try to create connectors
 output "users_connector_json" {
   value = jsonencode(replace(data.template_file.users_connector_initializer.rendered, "\n", " "))
 }

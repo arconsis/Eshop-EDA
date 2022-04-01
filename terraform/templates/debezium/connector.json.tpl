@@ -1,5 +1,5 @@
 {
-  "name": "database-connector",
+  "name": "${database_connector_name}",
   "config": {
     "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
     "plugin.name": "pgoutput",
@@ -12,7 +12,6 @@
     "table.include.list": "${table_include_list}",
     "database.history.kafka.bootstrap.servers":"${bootstrap_servers}",
     "database.history.kafka.topic": "${history_topic}",
-    "database.sslmode": "require",
     "slot.name" : "${slot_name}"
   }
 }

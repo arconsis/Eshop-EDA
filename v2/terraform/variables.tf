@@ -85,11 +85,16 @@ variable "eda_database_password" {
 variable "eda_database_name" {
   description = "eda DB name"
   type        = string
-  default = "postgres"
+  default     = "postgres"
 }
 
 variable "users_database_name" {
   description = "users DB name"
+  type        = string
+}
+
+variable "users_database_connector_name" {
+  description = "Name for debezium connector"
   type        = string
 }
 
@@ -100,6 +105,11 @@ variable "users_history_topic" {
 
 variable "users_table_include_list" {
   description = "list of tables that should be observed by debezium"
+  type        = list(string)
+}
+
+variable "users_outbox_table_include_list" {
+  description = "list of outbox tables that should be observed by debezium"
   type        = list(string)
 }
 
@@ -118,6 +128,11 @@ variable "orders_database_name" {
   type        = string
 }
 
+variable "orders_database_connector_name" {
+  description = "Name for debezium connector"
+  type        = string
+}
+
 variable "orders_history_topic" {
   description = "orders db changes topic"
   type        = string
@@ -125,6 +140,11 @@ variable "orders_history_topic" {
 
 variable "orders_table_include_list" {
   description = "list of tables that should be observed by debezium"
+  type        = list(string)
+}
+
+variable "orders_outbox_table_include_list" {
+  description = "list of outbox tables that should be observed by debezium"
   type        = list(string)
 }
 
@@ -143,10 +163,21 @@ variable "payments_table_include_list" {
   type        = list(string)
 }
 
+variable "payments_outbox_table_include_list" {
+  description = "list of outbox tables that should be observed by debezium"
+  type        = list(string)
+}
+
 variable "payments_database_name" {
   description = "payments DB name"
   type        = string
 }
+
+variable "payments_database_connector_name" {
+  description = "Name for debezium connector"
+  type        = string
+}
+
 
 variable "payments_slot_name" {
   description = "payments slot name observed by debezium"
@@ -158,6 +189,11 @@ variable "warehouse_database_name" {
   type        = string
 }
 
+variable "warehouse_database_connector_name" {
+  description = "Name for debezium connector"
+  type        = string
+}
+
 variable "warehouse_history_topic" {
   description = "orders db changes topic"
   type        = string
@@ -165,6 +201,11 @@ variable "warehouse_history_topic" {
 
 variable "warehouse_table_include_list" {
   description = "list of tables that should be observed by debezium"
+  type        = list(string)
+}
+
+variable "warehouse_outbox_table_include_list" {
+  description = "list of outbox tables that should be observed by debezium"
   type        = list(string)
 }
 

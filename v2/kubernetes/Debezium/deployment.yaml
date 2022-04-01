@@ -34,7 +34,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: eda-configmap
-                  key: KAFKA_BROKERS
+                  key: KAFKA_BROKERS_PLAINTEXT
             - name: GROUP_ID
               valueFrom:
                 configMapKeyRef:
