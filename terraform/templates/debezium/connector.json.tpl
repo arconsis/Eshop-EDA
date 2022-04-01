@@ -12,6 +12,7 @@
     "table.include.list": "${table_include_list}",
     "database.history.kafka.bootstrap.servers":"${bootstrap_servers}",
     "database.history.kafka.topic": "${history_topic}",
+    "database.sslmode": "require",
     "slot.name" : "${slot_name}"
   }
 }

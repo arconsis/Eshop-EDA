@@ -18,7 +18,7 @@ spec:
       containers:
         - name: debezium-connector
           imagePullPolicy: IfNotPresent
-          image: debezium/connect:1.7
+          image: debezium/connect:1.8
           ports:
             - containerPort: 8083
               protocol: TCP
@@ -30,6 +30,11 @@ spec:
               cpu: '300m'
               memory: '2048Mi'
           env:
+            - name: BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: eda-configmap
+                  key: KAFKA_BROKERS
             - name: GROUP_ID
               valueFrom:
                 configMapKeyRef:
