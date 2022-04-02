@@ -92,8 +92,8 @@ module "users_database" {
   source               = "../../terraform/modules/database"
   database_identifier  = "eda-users-database"
   database_name        = var.users_database_name
-  database_username    = var.eda_database_username
-  database_password    = var.eda_database_password
+  database_username    = var.users_database_username
+  database_password    = var.users_database_password
   subnet_ids           = module.networking.private_subnet_ids
   security_group_ids   = [module.private_vpc_sg.security_group_id]
   monitoring_role_name = "EdaUsersDatabaseMonitoringRole"
@@ -133,8 +133,8 @@ data "template_file" "users_connector_initializer" {
   vars     = {
     database_connector_name = "${var.users_database_name}-${local.database_connector_name_suffix}"
     database_hostname       = module.users_database.db_endpoint
-    database_user           = var.eda_database_username
-    database_password       = var.eda_database_password
+    database_user           = var.users_database_username
+    database_password       = var.users_database_password
     database_name           = var.users_database_name
     bootstrap_servers       = module.kafka.bootstrap_brokers
     history_topic           = var.users_history_topic
