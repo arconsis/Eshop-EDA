@@ -47,7 +47,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: secret
-      POSTGRES_DB: postgres
+      POSTGRES_DB: usersDb
     volumes:
       - postgres:/var/lib/postgresql/data
 
@@ -58,10 +58,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      USERS_CONNECTOR_JSON: '{"name":"users-connector","config":{"connector.class":"io.debezium.connector.postgresql.PostgresConnector","plugin.name":"pgoutput","database.hostname":"postgres","database.port":"5432","database.user":"postgres","database.password":"secret","database.dbname":"users-db","database.server.name":"postgres","table.include.list":"public.users_outbox_events","database.history.kafka.bootstrap.servers":"kafka:9092","database.history.kafka.topic":"schema-changes.users","slot.name": "users_slot" } }'
+      USERS_CONNECTOR_JSON: '{"name":"users-connector","config":{"connector.class":"io.debezium.connector.postgresql.PostgresConnector","plugin.name":"pgoutput","database.hostname":"postgres","database.port":"5432","database.user":"postgres","database.password":"secret","database.dbname":"usersDb","database.server.name":"postgres","table.include.list":"public.users_outbox_events","database.history.kafka.bootstrap.servers":"kafka:9092","database.history.kafka.topic":"schema-changes.users","slot.name": "users_slot" } }'
       DEBEZIUM_HOST: http://debezium:8083/connectors
-      DATABASE_URL: postgres://postgres:secret@postgres:5432/postgres
-      DATABASE_USERNAME: postgres
       APP_ENV: production
       PORT: 3000
     restart: always

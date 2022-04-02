@@ -2,9 +2,8 @@ package main
 
 import (
 	"bytes"
-	"context"
 	"fmt"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 	"golang.org/x/sync/errgroup"
 	"io"
@@ -16,9 +15,7 @@ import (
 const usersConnectorJsonKey = "USERS_CONNECTOR_JSON"
 const debeziumHostKey = "DEBEZIUM_HOST"
 const portKey = "PORT"
-const databaseUrlKey = "DATABASE_URL"
 const appEnvKey = "APP_ENV"
-const databaseUsername = "DATABASE_USERNAME"
 
 var debeziumHost = ""
 
@@ -34,14 +31,7 @@ func main() {
 	debeziumHost = os.Getenv(debeziumHostKey)
 
 	connectors := []string{os.Getenv(usersConnectorJsonKey)}
-	log.Println("connectors...", connectors)
-	log.Println("debeziumHost...", debeziumHost)
 	r := chi.NewRouter()
-	r.Post("/bastion/createDatabases", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Request to create databases")
-		createDatabases()
-		w.Write([]byte(fmt.Sprint("Databases created")))
-	})
 
 	r.Post("/bastion/createConnectors", func(w http.ResponseWriter, r *http.Request) {
 		log.Println("Request to create connectors")
@@ -76,23 +66,6 @@ func createConnectors(connectors []string) error {
 	return err
 }
 
-func createDatabases() {
-	dbUsername := os.Getenv(databaseUsername)
-	dbpool, err := pgxpool.Connect(context.Background(), os.Getenv(databaseUrlKey))
-	if err != nil {
-		log.Printf("Unable to connect to database: %v\n\n", err)
-		os.Exit(1)
-	}
-
-	defer dbpool.Close()
-
-	createUsersDb := "CREATE DATABASE \"users-db\" OWNER " + dbUsername
-	_, err = dbpool.Exec(context.Background(), createUsersDb)
-	if err != nil {
-		log.Printf("Create users-db failed: %v\n", err)
-	}
-}
-
 func createConnector(json string) error {
 	body := bytes.NewBuffer([]byte(json))
 	res, err := http.Post(debeziumHost, "application/json", body)
@@ -105,7 +78,6 @@ func createConnector(json string) error {
 				log.Fatal(err)
 			}
 			bodyString := string(bodyBytes)
-
 			return fmt.Errorf("debezium connector error with status: %v response: %v", res.StatusCode, bodyString)
 		}
 

@@ -362,24 +362,6 @@
 					"response": []
 				},
 				{
-					"name": "CreateDatabases",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{bastion-host}}/bastion/createDatabases",
-							"host": [
-								"{{bastion-host}}"
-							],
-							"path": [
-								"bastion",
-								"createDatabases"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "CreateConnectors",
 					"request": {
 						"method": "POST",

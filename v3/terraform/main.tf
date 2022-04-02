@@ -87,23 +87,22 @@ module "eks_worker_sg" {
 ################################################################################
 # Database Configuration
 ################################################################################
-# Eda Database
-module "eda_database" {
+# Users Database
+module "users_database" {
   source               = "../../terraform/modules/database"
-  database_identifier  = "eda-database"
-  database_name        = var.eda_database_name
+  database_identifier  = "eda-users-database"
+  database_name        = var.users_database_name
   database_username    = var.eda_database_username
   database_password    = var.eda_database_password
   subnet_ids           = module.networking.private_subnet_ids
   security_group_ids   = [module.private_vpc_sg.security_group_id]
-  monitoring_role_name = "EdaDatabaseMonitoringRole"
+  monitoring_role_name = "EdaUsersDatabaseMonitoringRole"
   database_parameters  = var.database_parameters
 }
 
 ################################################################################
 # EKS Configuration
 ################################################################################
-
 resource "aws_iam_policy" "worker_policy" {
   name        = "worker-policy"
   description = "Worker policy for the ALB Ingress"
@@ -122,7 +121,6 @@ module "eks" {
 ################################################################################
 # Kafka Configuration
 ################################################################################
-
 module "kafka" {
   source                              = "../../terraform/modules/kafka"
   subnet_ids                          = module.networking.private_subnet_ids
@@ -134,13 +132,13 @@ data "template_file" "users_connector_initializer" {
   template = file("../../terraform/templates/debezium/connector.json.tpl")
   vars     = {
     database_connector_name = "${var.users_database_name}-${local.database_connector_name_suffix}"
-    database_hostname       = module.eda_database.db_endpoint
+    database_hostname       = module.users_database.db_endpoint
     database_user           = var.eda_database_username
     database_password       = var.eda_database_password
     database_name           = var.users_database_name
     bootstrap_servers       = module.kafka.bootstrap_brokers
     history_topic           = var.users_history_topic
-    table_include_list      = join(",", var.users_table_include_list)
+    table_include_list      = join(",", var.users_outbox_table_include_list)
     slot_name               = var.users_slot_name
   }
 }
