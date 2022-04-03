@@ -19,6 +19,7 @@ const debeziumHostKey = "DEBEZIUM_HOST"
 const portKey = "PORT"
 const databaseUrlKey = "DATABASE_URL"
 const appEnvKey = "APP_ENV"
+const databaseUsername = "DATABASE_USERNAME"
 
 var debeziumHost = ""
 
@@ -34,17 +35,14 @@ func main() {
 	debeziumHost = os.Getenv(debeziumHostKey)
 
 	connectors := []string{os.Getenv(usersConnectorJsonKey)}
-	log.Println("connectors...", connectors)
-	log.Println("debeziumHost...", debeziumHost)
+
 	r := chi.NewRouter()
 	r.Post("/bastion/createDatabases", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Request to create databases")
 		createDatabases()
 		w.Write([]byte(fmt.Sprint("Databases created")))
 	})
 
 	r.Post("/bastion/createConnectors", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Request to create connectors")
 		err := createConnectors(connectors)
 		if err != nil {
 			log.Printf("Connectors creation failed: %v", err)
@@ -55,7 +53,6 @@ func main() {
 	})
 
 	port := fmt.Sprintf(":%v", os.Getenv(portKey))
-	log.Println("Listening on port port: ", port)
 	http.ListenAndServe(port, r)
 }
 
@@ -77,6 +74,7 @@ func createConnectors(connectors []string) error {
 }
 
 func createDatabases() {
+	dbUsername := os.Getenv(databaseUsername)
 	dbpool, err := pgxpool.Connect(context.Background(), os.Getenv(databaseUrlKey))
 	if err != nil {
 		log.Printf("Unable to connect to database: %v\n\n", err)
@@ -85,7 +83,9 @@ func createDatabases() {
 
 	defer dbpool.Close()
 
-	_, err = dbpool.Exec(context.Background(), "CREATE DATABASE \"users-db\" OWNER postgres")
+	createUsersDb := "CREATE DATABASE \"users-db\" OWNER " + dbUsername
+
+	_, err = dbpool.Exec(context.Background(), createUsersDb)
 	if err != nil {
 		log.Printf("Create users-db failed: %v\n", err)
 	}

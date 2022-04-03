@@ -71,13 +71,13 @@ variable "environment" {
 # https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1
 # using environment variables
 variable "eda_database_username" {
-  description = "The password for the eda DB master"
+  description = "The password for the DB master"
   type        = string
   sensitive   = true
 }
 
 variable "eda_database_password" {
-  description = "The password for the eda DB master"
+  description = "The password for the DB master"
   type        = string
   sensitive   = true
 }
@@ -112,4 +112,9 @@ variable "users_table_include_list" {
 variable "users_slot_name" {
   description = "users DB slot"
   type        = string
+}
+
+variable "users_outbox_table_include_list" {
+  description = "list of outbox tables that should be observed by debezium"
+  type        = list(string)
 }

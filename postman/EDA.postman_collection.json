@@ -1,403 +1,403 @@
 {
-	"info": {
-		"_postman_id": "25dae0c4-ea84-4940-bfd9-b75faca52359",
-		"name": "EDA",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "V1",
-			"item": [
-				{
-					"name": "Create order",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"userId\": \"9d1ceb98-ef02-480a-9313-d115ef5ab81e\",\n    \"amount\": 177,\n    \"currency\": \"EUR\",\n    \"productId\": \"1\",\n    \"quantity\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{orders-host}}/orders",
-							"host": [
-								"{{orders-host}}"
-							],
-							"path": [
-								"orders"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get specific order",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{orders-host}}/orders/6f640b4c-6094-4567-afce-8fb0d63da9f3",
-							"host": [
-								"{{orders-host}}"
-							],
-							"path": [
-								"orders",
-								"6f640b4c-6094-4567-afce-8fb0d63da9f3"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add product with stock",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"productId\": 1,\n    \"stock\": 100\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8082/inventory",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"inventory"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"firstName\": \"dimos\",\n    \"lastName\": \"botsaris\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"secret\",\n    \"username\": \"tester\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{users-host}}/users",
-							"host": [
-								"{{users-host}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateDatabases",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{bastion-host}}/bastion/createDatabases",
-							"host": [
-								"{{bastion-host}}"
-							],
-							"path": [
-								"bastion",
-								"createDatabases"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateConnectors",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{bastion-host}}/bastion/createConnectors",
-							"host": [
-								"{{bastion-host}}"
-							],
-							"path": [
-								"bastion",
-								"createConnectors"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "V2",
-			"item": [
-				{
-					"name": "Create order",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"userId\": \"9d1ceb98-ef02-480a-9313-d115ef5ab81e\",\n    \"amount\": 177,\n    \"currency\": \"EUR\",\n    \"productId\": \"1\",\n    \"quantity\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{orders-host}}/orders",
-							"host": [
-								"{{orders-host}}"
-							],
-							"path": [
-								"orders"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get specific order",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{orders-host}}/orders/6f640b4c-6094-4567-afce-8fb0d63da9f3",
-							"host": [
-								"{{orders-host}}"
-							],
-							"path": [
-								"orders",
-								"6f640b4c-6094-4567-afce-8fb0d63da9f3"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add product with stock",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"productId\": 1,\n    \"stock\": 100\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{warehouse-host}}/inventory",
-							"host": [
-								"{{warehouse-host}}"
-							],
-							"path": [
-								"inventory"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"firstName\": \"dimos\",\n    \"lastName\": \"botsaris\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"secret\",\n    \"username\": \"tester\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{users-host}}/users",
-							"host": [
-								"{{users-host}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateDatabases",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{bastion-host}}/bastion/createDatabases",
-							"host": [
-								"{{bastion-host}}"
-							],
-							"path": [
-								"bastion",
-								"createDatabases"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateConnectors",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{bastion-host}}/bastion/createConnectors",
-							"host": [
-								"{{bastion-host}}"
-							],
-							"path": [
-								"bastion",
-								"createConnectors"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "V3",
-			"item": [
-				{
-					"name": "Create order",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"userId\": \"9d1ceb98-ef02-480a-9313-d115ef5ab81e\",\n    \"amount\": 177,\n    \"currency\": \"EUR\",\n    \"productId\": \"1\",\n    \"quantity\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{orders-host}}/orders",
-							"host": [
-								"{{orders-host}}"
-							],
-							"path": [
-								"orders"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add product with stock",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"productId\": 1,\n    \"stock\": 100\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{warehouse-host}}/inventory",
-							"host": [
-								"{{warehouse-host}}"
-							],
-							"path": [
-								"inventory"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"firstName\": \"dimos\",\n    \"lastName\": \"botsaris\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"secret\",\n    \"username\": \"tester\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{users-host}}/users",
-							"host": [
-								"{{users-host}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateDatabases",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{bastion-host}}/bastion/createDatabases",
-							"host": [
-								"{{bastion-host}}"
-							],
-							"path": [
-								"bastion",
-								"createDatabases"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateConnectors",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{bastion-host}}/bastion/createConnectors",
-							"host": [
-								"{{bastion-host}}"
-							],
-							"path": [
-								"bastion",
-								"createConnectors"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	]
+  "info": {
+    "_postman_id": "25dae0c4-ea84-4940-bfd9-b75faca52359",
+    "name": "EDA",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "V1",
+      "item": [
+        {
+          "name": "Create order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"userId\": \"9d1ceb98-ef02-480a-9313-d115ef5ab81e\",\n    \"amount\": 177,\n    \"currency\": \"EUR\",\n    \"productId\": \"1\",\n    \"quantity\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{orders-host}}/orders",
+              "host": [
+                "{{orders-host}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get specific order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orders-host}}/orders/6f640b4c-6094-4567-afce-8fb0d63da9f3",
+              "host": [
+                "{{orders-host}}"
+              ],
+              "path": [
+                "orders",
+                "6f640b4c-6094-4567-afce-8fb0d63da9f3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add product with stock",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"productId\": 1,\n    \"stock\": 100\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8082/inventory",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "inventory"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"dimos\",\n    \"lastName\": \"botsaris\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"secret\",\n    \"username\": \"tester\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{users-host}}/users",
+              "host": [
+                "{{users-host}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateDatabases",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{bastion-host}}/bastion/createDatabases",
+              "host": [
+                "{{bastion-host}}"
+              ],
+              "path": [
+                "bastion",
+                "createDatabases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateConnectors",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{bastion-host}}/bastion/createConnectors",
+              "host": [
+                "{{bastion-host}}"
+              ],
+              "path": [
+                "bastion",
+                "createConnectors"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "V2",
+      "item": [
+        {
+          "name": "Create order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"userId\": \"9d1ceb98-ef02-480a-9313-d115ef5ab81e\",\n    \"amount\": 177,\n    \"currency\": \"EUR\",\n    \"productId\": \"1\",\n    \"quantity\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{orders-host}}/orders",
+              "host": [
+                "{{orders-host}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get specific order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orders-host}}/orders/6f640b4c-6094-4567-afce-8fb0d63da9f3",
+              "host": [
+                "{{orders-host}}"
+              ],
+              "path": [
+                "orders",
+                "6f640b4c-6094-4567-afce-8fb0d63da9f3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add product with stock",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"productId\": 1,\n    \"stock\": 100\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{warehouse-host}}/inventory",
+              "host": [
+                "{{warehouse-host}}"
+              ],
+              "path": [
+                "inventory"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"dimos\",\n    \"lastName\": \"botsaris\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"secret\",\n    \"username\": \"tester\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{users-host}}/users",
+              "host": [
+                "{{users-host}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateDatabases",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{bastion-host}}/bastion/createDatabases",
+              "host": [
+                "{{bastion-host}}"
+              ],
+              "path": [
+                "bastion",
+                "createDatabases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateConnectors",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{bastion-host}}/bastion/createConnectors",
+              "host": [
+                "{{bastion-host}}"
+              ],
+              "path": [
+                "bastion",
+                "createConnectors"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "V3",
+      "item": [
+        {
+          "name": "Create order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"userId\": \"9d1ceb98-ef02-480a-9313-d115ef5ab81e\",\n    \"amount\": 177,\n    \"currency\": \"EUR\",\n    \"productId\": \"1\",\n    \"quantity\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{orders-host}}/orders",
+              "host": [
+                "{{orders-host}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add product with stock",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"productId\": 1,\n    \"stock\": 100\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{warehouse-host}}/inventory",
+              "host": [
+                "{{warehouse-host}}"
+              ],
+              "path": [
+                "inventory"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"dimos\",\n    \"lastName\": \"botsaris\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"secret\",\n    \"username\": \"tester\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{users-host}}/users",
+              "host": [
+                "{{users-host}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateDatabases",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{bastion-host}}/bastion/createDatabases",
+              "host": [
+                "{{bastion-host}}"
+              ],
+              "path": [
+                "bastion",
+                "createDatabases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateConnectors",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{bastion-host}}/bastion/createConnectors",
+              "host": [
+                "{{bastion-host}}"
+              ],
+              "path": [
+                "bastion",
+                "createConnectors"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
 }
