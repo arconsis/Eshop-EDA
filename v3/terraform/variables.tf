@@ -70,16 +70,21 @@ variable "environment" {
 ################################################################################
 # https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1
 # using environment variables
-variable "users_database_username" {
-  description = "The password for the users DB master"
+variable "eda_database_username" {
+  description = "The password for the DB master"
   type        = string
   sensitive   = true
 }
 
-variable "users_database_password" {
-  description = "The password for the users DB master"
+variable "eda_database_password" {
+  description = "The password for the DB master"
   type        = string
   sensitive   = true
+}
+
+variable "eda_database_name" {
+  description = "eda DB name"
+  type        = string
 }
 
 variable "users_database_name" {

@@ -17,4 +17,8 @@ terraform apply
 bash deploy-k8s.sh
 ```
 
-3. Make a request to create connectors using Bastion POST /createConnectors
+3. Make a request to create databases using Bastion POST /createDatabases
+
+4. Navigate to kubernetes folder, and deploy debezium image to EKS.
+
+5. Make a request to create connectors using Bastion POST /createConnectors
