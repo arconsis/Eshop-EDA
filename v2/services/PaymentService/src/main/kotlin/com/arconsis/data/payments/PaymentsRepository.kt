@@ -8,6 +8,7 @@ import com.arconsis.domain.processedevents.ProcessedEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
 import org.hibernate.reactive.mutiny.Mutiny
+import java.time.Duration
 import java.time.Instant
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
@@ -22,17 +23,17 @@ class PaymentsRepository(
     private val objectMapper: ObjectMapper,
 ) {
     fun createPayment(eventId: UUID, createPayment: CreatePayment): Uni<Payment> {
+        // https://github.com/quarkusio/quarkus/issues/23804
+        val payment = createPayment.toPayment(transactionId = UUID.randomUUID(), status = PaymentStatus.SUCCEED)
         return sessionFactory.withTransaction { session, _ ->
-            val payment = createPayment.toPayment(transactionId = UUID.randomUUID(), status = PaymentStatus.SUCCEED)
-                    processedEventsRepository.getEvent(eventId, session)
-                        .createPaymentEntity(payment, session)
-                        .createOutboxEvent(session)
-                        .createProceedEvent(eventId, session)
-                        .map {
-                            payment
-                        }
+            processedEventsRepository.getEvent(eventId, session)
+                .createPaymentEntity(payment, session)
+                .createOutboxEvent(session)
+                .createProceedEvent(eventId, session)
+                .map {
+                    payment
                 }
-        // }
+        }
     }
 
     private fun Uni<ProcessedEvent?>.createPaymentEntity(payment: Payment, session: Mutiny.Session) = flatMap { event ->
