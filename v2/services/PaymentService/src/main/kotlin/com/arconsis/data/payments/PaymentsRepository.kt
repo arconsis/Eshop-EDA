@@ -3,9 +3,7 @@ package com.arconsis.data.payments
 import com.arconsis.data.outboxevents.OutboxEventsRepository
 import com.arconsis.data.processedevents.ProcessedEventsRepository
 import com.arconsis.domain.outboxevents.OutboxEvent
-import com.arconsis.domain.payments.CreatePayment
-import com.arconsis.domain.payments.Payment
-import com.arconsis.domain.payments.toCreateOutboxEvent
+import com.arconsis.domain.payments.*
 import com.arconsis.domain.processedevents.ProcessedEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Uni
@@ -24,9 +22,8 @@ class PaymentsRepository(
     private val objectMapper: ObjectMapper,
 ) {
     fun createPayment(eventId: UUID, createPayment: CreatePayment): Uni<Payment> {
-        return paymentsRemoteStore.createPayment(createPayment)
-            .flatMap { payment ->
-                sessionFactory.withTransaction { session, _ ->
+        return sessionFactory.withTransaction { session, _ ->
+            val payment = createPayment.toPayment(transactionId = UUID.randomUUID(), status = PaymentStatus.SUCCEED)
                     processedEventsRepository.getEvent(eventId, session)
                         .createPaymentEntity(payment, session)
                         .createOutboxEvent(session)
@@ -35,7 +32,7 @@ class PaymentsRepository(
                             payment
                         }
                 }
-            }
+        // }
     }
 
     private fun Uni<ProcessedEvent?>.createPaymentEntity(payment: Payment, session: Mutiny.Session) = flatMap { event ->
