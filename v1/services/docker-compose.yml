@@ -1,24 +1,91 @@
 version: "3.9"
 services:
   zookeeper:
-    image: wurstmeister/zookeeper:latest
-    ports:
-      - "2181:2181"
-  kafka:
-    image: wurstmeister/kafka:latest
+    image: confluentinc/cp-zookeeper
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka1:
+    image: confluentinc/cp-kafka
+    container_name: kafka1
+    depends_on:
+      - zookeeper
     ports:
       - "9092:9092"
-    links:
-      - zookeeper
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      KAFKA_DELETE_TOPIC_ENABLE: 'true'
-      KAFKA_CREATE_TOPICS: "Orders:1:1,Payments:1:1,Shipments:1:1,OrdersValidation:1:1,Users:1:1"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./testHelpers/kafka/server-jaas.conf:/opt/kafka/config/server-jaas.conf:ro,z
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_LISTENERS: INSIDE://:39092,OUTSIDE://:9092
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka1:39092,OUTSIDE://localhost:9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_DELETE_TOPIC_ENABLE: 'false'
+      KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE: 'false'
+
+  kafka2:
+    image: confluentinc/cp-kafka
+    container_name: kafka2
+    depends_on:
+      - zookeeper
+    ports:
+      - "19092:19092"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_LISTENERS: INSIDE://:49092,OUTSIDE://:19092
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka2:49092,OUTSIDE://localhost:19092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_DELETE_TOPIC_ENABLE: 'false'
+      KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE: 'false'
+
+  kafka3:
+    image: confluentinc/cp-kafka
+    container_name: kafka3
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_LISTENERS: INSIDE://:59092,OUTSIDE://:29092
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka3:59092,OUTSIDE://localhost:29092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_DELETE_TOPIC_ENABLE: 'false'
+      KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE: 'false'
+
+  init-kafka:
+    image: confluentinc/cp-kafka
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      sleep 30 &&
+      # blocks until kafka is reachable
+      echo -e 'Listing kafka topics'
+      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --list
+      
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --create --if-not-exists --topic Orders --replication-factor 3 --partitions 3 --config min.insync.replicas=2
+      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --create --if-not-exists --topic Payments --replication-factor 3 --partitions 3 --config min.insync.replicas=2
+      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --create --if-not-exists --topic OrdersValidations --replication-factor 3 --partitions 3 --config min.insync.replicas=2
+      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --create --if-not-exists --topic Shipments --replication-factor 3 --partitions 3 --config min.insync.replicas=2
+      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --create --if-not-exists --topic Users --replication-factor 3 --partitions 3 --config min.insync.replicas=2
+      
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --list
+      "
+
   postgres:
     build:
       context: .
@@ -43,6 +110,7 @@ services:
       DATABASE_URL: postgres://postgres:secret@postgres:5432/postgres
       DATABASE_USERNAME: postgres
       APP_ENV: production
+      PORT: 3000
     restart: always
 
 volumes:
