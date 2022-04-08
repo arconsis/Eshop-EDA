@@ -27,9 +27,7 @@ class OrderValidationsService(
                 val orderRecord = order.toOrderRecord()
                 sendOrderEvent(orderRecord)
             }
-            OrderValidationStatus.INVALID -> {
-                updateOrder(orderValidation.orderId, OrderStatus.OUT_OF_STOCK)
-            }
+            OrderValidationStatus.INVALID -> updateOrder(orderValidation.orderId, OrderStatus.OUT_OF_STOCK)
         }
     }
 
@@ -39,9 +37,7 @@ class OrderValidationsService(
                 ordersRepository.updateOrder(orderId, orderStatus)
             }
         }.getOrElse {
-            TODO("What should we do when the repository update fails. " +
-                    "In the Uni version we were fetching the order here " +
-                    "from the repository and changing the status to the required")
+            ordersRepository.getOrder(orderId).copy(status = orderStatus)
         }
     }
 

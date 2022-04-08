@@ -12,7 +12,7 @@ class OrdersService(
     val usersRepository: UsersRepository,
     @ConfigProperty(name = "email.sender") private val sender: String,
 ) {
-    fun handleOrderEvents(order: Order) {
+    suspend fun handleOrderEvents(order: Order) {
         when (order.status) {
             OrderStatus.PAID -> handlePaidOrders(order)
             OrderStatus.SHIPPED -> handleOutForShipmentOrders(order)
@@ -20,7 +20,7 @@ class OrdersService(
         }
     }
 
-    private fun handlePaidOrders(order: Order) {
+    private suspend fun handlePaidOrders(order: Order) {
         val user = usersRepository.getUser(order.userId)
         if (user != null) {
             emailRepository.sendEmail(
@@ -34,7 +34,7 @@ class OrdersService(
         }
     }
 
-    private fun handleOutForShipmentOrders(order: Order) {
+    private suspend fun handleOutForShipmentOrders(order: Order) {
         val user = usersRepository.getUser(order.userId)
         if (user != null) {
             emailRepository.sendEmail(

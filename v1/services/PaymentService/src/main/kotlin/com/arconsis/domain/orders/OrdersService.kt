@@ -4,7 +4,7 @@ import com.arconsis.data.PaymentsRepository
 import com.arconsis.data.toCreatePayment
 import com.arconsis.domain.payments.Payment
 import com.arconsis.domain.payments.toPaymentRecord
-import io.smallrye.mutiny.Uni
+import io.smallrye.mutiny.coroutines.awaitSuspending
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
@@ -17,31 +17,25 @@ class OrdersService(
     private val paymentsRepository: PaymentsRepository,
     private val logger: Logger
 ) {
-    fun handleOrderEvents(order: Order): Uni<Void> {
+    suspend fun handleOrderEvents(order: Order) {
         return when (order.status) {
-            OrderStatus.VALIDATED -> {
-                paymentsRepository.createPayment(order.toCreatePayment())
-                    .handleCreatePaymentError(order)
-                    .sendPaymentEvent()
-            }
-            else -> Uni.createFrom().voidItem()
+            OrderStatus.VALIDATED -> createPayment(order)
+            else -> return
         }
     }
 
-    private fun Uni<Payment>.handleCreatePaymentError(order: Order) = onFailure()
-        .call { _ ->
-            val payment = order.toPaymentFailed()
-            val paymentRecord = payment.toPaymentRecord()
-            sendPaymentEvent(paymentRecord)
+    private suspend fun createPayment(order: Order) {
+        val payment = runCatching {
+            paymentsRepository.createPayment(order.toCreatePayment())
+        }.getOrElse {
+            order.toPaymentFailed()
         }
+        sendPaymentEvent(payment)
+    }
 
-    private fun Uni<Payment>.sendPaymentEvent() = flatMap { payment ->
+    private suspend fun sendPaymentEvent(payment: Payment) {
         val paymentRecord = payment.toPaymentRecord()
-        sendPaymentEvent(paymentRecord)
-    }
-
-    private fun sendPaymentEvent(paymentRecord: Record<String, Payment>): Uni<Void> {
-        logger.info("Send payment record ${paymentRecord.value()}" )
-        return emitter.send(paymentRecord)
+        logger.info("Send payment record ${paymentRecord.value()}")
+        emitter.send(paymentRecord).awaitSuspending()
     }
 }

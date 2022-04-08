@@ -21,15 +21,8 @@ class PaymentsService(
 ) {
     suspend fun handlePaymentEvents(payment: Payment) {
         when (payment.status) {
-            PaymentStatus.SUCCEED -> {
-
-                updateAndSendOrder(payment.orderId, OrderStatus.PAID)
-            }
-            PaymentStatus.FAILED -> {
-                updateAndSendOrder(payment.orderId, OrderStatus.PAYMENT_FAILED)
-                ordersRepository.updateOrder(payment.orderId, OrderStatus.PAYMENT_FAILED)
-
-            }
+            PaymentStatus.SUCCEED -> updateAndSendOrder(payment.orderId, OrderStatus.PAID)
+            PaymentStatus.FAILED -> updateAndSendOrder(payment.orderId, OrderStatus.PAYMENT_FAILED)
             else -> return
         }
     }
@@ -40,11 +33,7 @@ class PaymentsService(
                 ordersRepository.updateOrder(orderId, orderStatus)
             }
         }.getOrElse {
-            TODO(
-                "What should we do when the repository update fails. " +
-                        "In the Uni version we were fetching the order here " +
-                        "from the repository and changing the status to the required"
-            )
+            ordersRepository.getOrder(orderId).copy(status = orderStatus)
         }
         val orderRecord = order.toOrderRecord()
         sendOrderEvent(orderRecord)

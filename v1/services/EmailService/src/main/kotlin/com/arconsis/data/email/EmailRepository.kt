@@ -1,5 +1,6 @@
 package com.arconsis.data.email
 
+import io.smallrye.mutiny.coroutines.awaitSuspending
 import org.eclipse.microprofile.rest.client.inject.RestClient
 import javax.enterprise.context.ApplicationScoped
 
@@ -7,7 +8,7 @@ import javax.enterprise.context.ApplicationScoped
 class EmailRepository(
     @RestClient val emailApi: EmailApi
 ) {
-    fun sendEmail(emailDto: EmailDto) {
+    suspend fun sendEmail(emailDto: EmailDto) {
         try {
             emailApi.sendEmail(
                 senderEmail = emailDto.senderEmail,
@@ -17,7 +18,7 @@ class EmailRepository(
             )
                 .onFailure()
                 .recoverWithNull()
-                .await().indefinitely()
+                .awaitSuspending()
         } catch (e: Exception) {
             return
         }

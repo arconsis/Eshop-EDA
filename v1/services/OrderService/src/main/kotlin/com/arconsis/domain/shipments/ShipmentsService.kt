@@ -21,15 +21,9 @@ class ShipmentsService(
 ) {
     suspend fun handleShipmentEvents(shipment: Shipment) {
         when (shipment.status) {
-            ShipmentStatus.DELIVERED -> {
-                updateAndSendOrder(shipment.orderId, OrderStatus.COMPLETED)
-            }
-            ShipmentStatus.SHIPPED -> {
-                updateAndSendOrder(shipment.orderId, OrderStatus.SHIPPED)
-            }
-            ShipmentStatus.FAILED -> {
-                updateAndSendOrder(shipment.orderId, OrderStatus.SHIPMENT_FAILED)
-            }
+            ShipmentStatus.DELIVERED -> updateAndSendOrder(shipment.orderId, OrderStatus.COMPLETED)
+            ShipmentStatus.SHIPPED -> updateAndSendOrder(shipment.orderId, OrderStatus.SHIPPED)
+            ShipmentStatus.FAILED -> updateAndSendOrder(shipment.orderId, OrderStatus.SHIPMENT_FAILED)
             else -> return
         }
     }
@@ -40,11 +34,7 @@ class ShipmentsService(
                 ordersRepository.updateOrder(orderId, orderStatus)
             }
         }.getOrElse {
-            TODO(
-                "What should we do when the repository update fails. " +
-                        "In the Uni version we were fetching the order here " +
-                        "from the repository and changing the status to the required"
-            )
+            ordersRepository.getOrder(orderId).copy(status = orderStatus)
         }
 
         val orderRecord = order.toOrderRecord()

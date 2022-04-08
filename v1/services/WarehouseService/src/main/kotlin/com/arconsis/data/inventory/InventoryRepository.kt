@@ -5,7 +5,6 @@ import com.arconsis.data.inventory.InventoryEntity.Companion.STOCK
 import com.arconsis.domain.inventory.CreateInventory
 import com.arconsis.domain.inventory.Inventory
 import com.arconsis.domain.inventory.UpdateInventory
-import io.smallrye.mutiny.Uni
 import io.smallrye.mutiny.coroutines.awaitSuspending
 import org.hibernate.reactive.mutiny.Mutiny
 import java.util.*
@@ -43,7 +42,7 @@ class InventoryRepository(private val sessionFactory: Mutiny.SessionFactory) {
         return inventoryEntity.toInventory()
     }
 
-    fun reserveProductStock(productId: String, stock: Int): Uni<Boolean> {
+    suspend fun reserveProductStock(productId: String, stock: Int): Boolean {
         return sessionFactory.withTransaction { s, _ ->
             s.createNamedQuery<InventoryEntity>(InventoryEntity.UPDATE_PRODUCT_STOCK)
                 .setParameter(PRODUCT_ID, productId)
@@ -52,10 +51,10 @@ class InventoryRepository(private val sessionFactory: Mutiny.SessionFactory) {
                 .map { updatedRows -> updatedRows == 1 }
                 .onFailure()
                 .recoverWithItem(false)
-        }
+        }.awaitSuspending()
     }
 
-    fun increaseProductStock(productId: String, stock: Int): Uni<Boolean> {
+    suspend fun increaseProductStock(productId: String, stock: Int): Boolean {
         return sessionFactory.withTransaction { s, _ ->
             s.createNamedQuery<InventoryEntity>(InventoryEntity.UPDATE_PRODUCT_STOCK)
                 .setParameter(PRODUCT_ID, productId)
@@ -65,5 +64,6 @@ class InventoryRepository(private val sessionFactory: Mutiny.SessionFactory) {
                 // TODO: Check if we need to handle only the update stock constraint error here
                 .onFailure().recoverWithItem(false)
         }
+            .awaitSuspending()
     }
 }
