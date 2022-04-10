@@ -33,6 +33,7 @@ class PaymentsService(
                 ordersRepository.updateOrder(orderId, orderStatus)
             }
         }.getOrElse {
+            logger.error(it)
             ordersRepository.getOrder(orderId).copy(status = orderStatus)
         }
         val orderRecord = order.toOrderRecord()

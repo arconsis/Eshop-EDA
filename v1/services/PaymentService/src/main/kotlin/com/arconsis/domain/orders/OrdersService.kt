@@ -28,6 +28,7 @@ class OrdersService(
         val payment = runCatching {
             paymentsRepository.createPayment(order.toCreatePayment())
         }.getOrElse {
+            logger.error(it)
             order.toPaymentFailed()
         }
         sendPaymentEvent(payment)

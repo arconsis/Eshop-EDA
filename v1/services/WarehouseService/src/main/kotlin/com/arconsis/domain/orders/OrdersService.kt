@@ -56,9 +56,10 @@ class OrdersService(
                 )
             }
 
-            updateShipment(shipment)
-            sendShipmentEvent(shipment.toShipmentRecord())
+            val updatedShipment = updateShipment(shipment)
+            sendShipmentEvent(updatedShipment.toShipmentRecord())
         }.getOrElse {
+            logger.error(it)
             handleShipmentError(order, null)
         }
     }
@@ -67,11 +68,11 @@ class OrdersService(
         return retryWithBackoff { inventoryRepository.increaseProductStock(order.productId, order.quantity) }
     }
 
-    private suspend fun updateShipment(shipment: Shipment) {
+    private suspend fun updateShipment(shipment: Shipment): Shipment {
         if (shipment.id == null) {
             throw Exception("Shipment failed")
         }
-        shipmentsRepository.updateShipment(
+        return shipmentsRepository.updateShipment(
             UpdateShipment(
                 shipment.id,
                 ShipmentStatus.SHIPPED
@@ -80,11 +81,11 @@ class OrdersService(
     }
 
     private suspend fun handleShipmentError(order: Order, shipmentId: UUID?) {
-        sendShipmentEvent(order.toFailedShipment(shipmentId).toShipmentRecord()).awaitSuspending()
+        sendShipmentEvent(order.toFailedShipment(shipmentId).toShipmentRecord())
     }
 
-    private fun sendShipmentEvent(shipmentRecord: Record<String, Shipment>): Uni<Void> {
+    private suspend fun sendShipmentEvent(shipmentRecord: Record<String, Shipment>) {
         logger.info("Send shipment record $shipmentRecord")
-        return shipmentEmitter.send(shipmentRecord)
+        shipmentEmitter.send(shipmentRecord).awaitSuspending()
     }
 }

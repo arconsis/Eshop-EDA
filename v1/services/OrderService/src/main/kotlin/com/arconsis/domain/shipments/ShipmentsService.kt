@@ -34,6 +34,7 @@ class ShipmentsService(
                 ordersRepository.updateOrder(orderId, orderStatus)
             }
         }.getOrElse {
+            logger.error(it)
             ordersRepository.getOrder(orderId).copy(status = orderStatus)
         }
 
