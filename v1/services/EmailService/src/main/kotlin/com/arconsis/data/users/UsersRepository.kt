@@ -2,6 +2,7 @@ package com.arconsis.data.users
 
 import com.arconsis.common.body
 import com.arconsis.domain.users.User
+import io.smallrye.mutiny.coroutines.awaitSuspending
 import org.eclipse.microprofile.rest.client.inject.RestClient
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
@@ -11,9 +12,9 @@ import javax.ws.rs.core.Response
 class UsersRepository(
     @RestClient val usersApi: UsersApi
 ) {
-    fun getUser(userId: UUID): User? {
+    suspend fun getUser(userId: UUID): User? {
         return try {
-            usersApi.getUser(userId).await().indefinitely().mapToUserResponse()
+            usersApi.getUser(userId).awaitSuspending().mapToUserResponse()
         } catch (e: Exception) {
             null
         }

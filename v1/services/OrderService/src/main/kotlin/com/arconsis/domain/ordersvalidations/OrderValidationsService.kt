@@ -5,8 +5,7 @@ import com.arconsis.data.OrdersRepository
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.orders.OrderStatus
 import com.arconsis.domain.orders.toOrderRecord
-import com.arconsis.domain.orders.toOrderRecordWithStatus
-import io.smallrye.mutiny.Uni
+import io.smallrye.mutiny.coroutines.awaitSuspending
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
@@ -21,37 +20,30 @@ class OrderValidationsService(
     private val logger: Logger
 ) {
 
-    fun handleOrderValidationEvents(orderValidation: OrderValidation): Uni<Void> {
-        return when (orderValidation.status) {
+    suspend fun handleOrderValidationEvents(orderValidation: OrderValidation) {
+        when (orderValidation.status) {
             OrderValidationStatus.VALIDATED -> {
-                ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.VALIDATED)
-                    .handleUpdateOrderErrors(orderValidation.orderId, OrderStatus.VALIDATED)
-                    .flatMap { order ->
-                        val orderRecord = order.toOrderRecord()
-                        sendOrderEvent(orderRecord)
-                    }
+                val order = updateOrder(orderValidation.orderId, OrderStatus.VALIDATED)
+                val orderRecord = order.toOrderRecord()
+                sendOrderEvent(orderRecord)
             }
-            OrderValidationStatus.INVALID -> {
-                ordersRepository.updateOrder(orderValidation.orderId, OrderStatus.OUT_OF_STOCK)
-                    .retryWithBackoff()
-                    .replaceWithVoid()
-            }
+            OrderValidationStatus.INVALID -> updateOrder(orderValidation.orderId, OrderStatus.OUT_OF_STOCK)
         }
     }
 
-    private fun Uni<Order>.handleUpdateOrderErrors(orderId: UUID, orderStatus: OrderStatus) = retryWithBackoff()
-        .onFailure()
-        .call { _ ->
-            ordersRepository.getOrder(orderId)
-                .retryWithBackoff()
-                .flatMap { order ->
-                    val orderRecord = order.toOrderRecordWithStatus(status = orderStatus)
-                    sendOrderEvent(orderRecord)
-                }
+    private suspend fun updateOrder(orderId: UUID, orderStatus: OrderStatus): Order {
+        return runCatching {
+            retryWithBackoff {
+                ordersRepository.updateOrder(orderId, orderStatus)
+            }
+        }.getOrElse {
+            logger.error(it)
+            ordersRepository.getOrder(orderId).copy(status = orderStatus)
         }
+    }
 
-    private fun sendOrderEvent(orderRecord: Record<String, Order>): Uni<Void> {
+    private suspend fun sendOrderEvent(orderRecord: Record<String, Order>) {
         logger.info("Send order record ${orderRecord.value()}")
-        return emitter.send(orderRecord)
+        emitter.send(orderRecord).awaitSuspending()
     }
 }

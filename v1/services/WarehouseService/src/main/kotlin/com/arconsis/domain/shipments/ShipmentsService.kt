@@ -1,5 +1,6 @@
 package com.arconsis.domain.shipments
 
+import com.arconsis.common.retryWithBackoff
 import com.arconsis.data.shipments.ShipmentsRepository
 import io.smallrye.mutiny.coroutines.awaitSuspending
 import io.smallrye.reactive.messaging.MutinyEmitter
@@ -12,11 +13,9 @@ class ShipmentsService(
 ) {
 
     suspend fun updateShipment(updateShipment: UpdateShipment): Shipment {
-        val shipment = this.shipmentsRepository.updateShipment(updateShipment)
-            .onFailure()
-            .retry()
-            .atMost(3)
-            .awaitSuspending()
+        val shipment = retryWithBackoff {
+            shipmentsRepository.updateShipment(updateShipment)
+        }
         sendShipmentEvent(shipment.toShipmentRecord())
         return shipment
     }

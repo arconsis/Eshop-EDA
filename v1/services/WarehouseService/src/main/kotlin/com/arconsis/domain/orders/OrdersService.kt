@@ -7,6 +7,7 @@ import com.arconsis.domain.ordersvalidations.OrderValidation
 import com.arconsis.domain.ordersvalidations.OrderValidationStatus
 import com.arconsis.domain.shipments.*
 import io.smallrye.mutiny.Uni
+import io.smallrye.mutiny.coroutines.awaitSuspending
 import io.smallrye.reactive.messaging.MutinyEmitter
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Channel
@@ -22,71 +23,69 @@ class OrdersService(
     private val inventoryRepository: InventoryRepository,
     private val logger: Logger
 ) {
-    fun handleOrderEvents(order: Order): Uni<Void> {
+    suspend fun handleOrderEvents(order: Order) {
         return when (order.status) {
             OrderStatus.REQUESTED -> handleOrderPending(order)
             OrderStatus.PAID -> handleOrderPaid(order)
             OrderStatus.PAYMENT_FAILED -> handleOrderPaymentFailed(order)
-            else -> Uni.createFrom().voidItem()
+            else -> return
         }
     }
 
-    private fun handleOrderPending(order: Order): Uni<Void> {
-        return inventoryRepository.reserveProductStock(order.productId, order.quantity)
-            .flatMap { stockUpdated ->
-                val orderValidation = OrderValidation(
-                    productId = order.productId,
-                    quantity = order.quantity,
-                    orderId = order.id,
-                    userId = order.userId,
-                    status = if (stockUpdated) OrderValidationStatus.VALIDATED else OrderValidationStatus.INVALID
-                )
-                orderValidationEmitter.send(Record.of(order.id.toString(), orderValidation))
-            }
-    }
-
-    private fun handleOrderPaid(order: Order): Uni<Void> {
-        return shipmentsRepository.createShipment(
-            CreateShipment(
-                orderId = order.id,
-                userId = order.userId,
-                status = ShipmentStatus.PREPARING_SHIPMENT
-            )
+    private suspend fun handleOrderPending(order: Order) {
+        val stockUpdated = inventoryRepository.reserveProductStock(order.productId, order.quantity)
+        val orderValidation = OrderValidation(
+            productId = order.productId,
+            quantity = order.quantity,
+            orderId = order.id,
+            userId = order.userId,
+            status = if (stockUpdated) OrderValidationStatus.VALIDATED else OrderValidationStatus.INVALID
         )
-            .handleShipmentError(order, null)
-            .updateShipment(order)
-            .flatMap { shipment -> sendShipmentEvent(shipment.toShipmentRecord()) }
+        orderValidationEmitter.send(Record.of(order.id.toString(), orderValidation)).awaitSuspending()
     }
 
-    private fun handleOrderPaymentFailed(order: Order): Uni<Void> {
-        return inventoryRepository.increaseProductStock(order.productId, order.quantity)
-            .onFailure()
-            .retry()
-            .atMost(3)
-            .flatMap {
-                Uni.createFrom().voidItem()
+    private suspend fun handleOrderPaid(order: Order) {
+        runCatching {
+            val shipment = retryWithBackoff {
+                shipmentsRepository.createShipment(
+                    CreateShipment(
+                        orderId = order.id,
+                        userId = order.userId,
+                        status = ShipmentStatus.PREPARING_SHIPMENT
+                    )
+                )
             }
+
+            val updatedShipment = updateShipment(shipment)
+            sendShipmentEvent(updatedShipment.toShipmentRecord())
+        }.getOrElse {
+            logger.error(it)
+            handleShipmentError(order, null)
+        }
     }
 
-    private fun Uni<Shipment>.updateShipment(order: Order) = flatMap { shipment ->
-        if (shipment?.id == null) {
+    private suspend fun handleOrderPaymentFailed(order: Order) {
+        return retryWithBackoff { inventoryRepository.increaseProductStock(order.productId, order.quantity) }
+    }
+
+    private suspend fun updateShipment(shipment: Shipment): Shipment {
+        if (shipment.id == null) {
             throw Exception("Shipment failed")
         }
-        shipmentsRepository.updateShipment(
+        return shipmentsRepository.updateShipment(
             UpdateShipment(
                 shipment.id,
                 ShipmentStatus.SHIPPED
             )
         )
-            .handleShipmentError(order, shipment.id)
     }
 
-    private fun Uni<Shipment>.handleShipmentError(order: Order, shipmentId: UUID?) = retryWithBackoff()
-        .onFailure()
-        .call { _ -> sendShipmentEvent(order.toFailedShipment(shipmentId).toShipmentRecord()) }
+    private suspend fun handleShipmentError(order: Order, shipmentId: UUID?) {
+        sendShipmentEvent(order.toFailedShipment(shipmentId).toShipmentRecord())
+    }
 
-    private fun sendShipmentEvent(shipmentRecord: Record<String, Shipment>): Uni<Void> {
+    private suspend fun sendShipmentEvent(shipmentRecord: Record<String, Shipment>) {
         logger.info("Send shipment record $shipmentRecord")
-        return shipmentEmitter.send(shipmentRecord)
+        shipmentEmitter.send(shipmentRecord).awaitSuspending()
     }
 }
