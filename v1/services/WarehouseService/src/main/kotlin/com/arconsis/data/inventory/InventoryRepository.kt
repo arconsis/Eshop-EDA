@@ -51,6 +51,7 @@ class InventoryRepository(private val sessionFactory: Mutiny.SessionFactory) {
                 .map { updatedRows -> updatedRows == 1 }
                 .onFailure()
                 .recoverWithItem { _ ->
+                    println("reserveProductStock failed and rolled back")
                     transaction.markForRollback()
                     false
                 }
@@ -67,6 +68,7 @@ class InventoryRepository(private val sessionFactory: Mutiny.SessionFactory) {
                 // TODO: Check if we need to handle only the update stock constraint error here
                 .onFailure()
                 .recoverWithItem { _ ->
+                    println("increaseProductStock failed and rolled back")
                     transaction.markForRollback()
                     false
                 }
