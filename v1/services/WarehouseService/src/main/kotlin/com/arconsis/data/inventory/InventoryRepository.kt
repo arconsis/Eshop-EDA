@@ -43,26 +43,33 @@ class InventoryRepository(private val sessionFactory: Mutiny.SessionFactory) {
     }
 
     suspend fun reserveProductStock(productId: String, stock: Int): Boolean {
-        return sessionFactory.withTransaction { s, _ ->
+        return sessionFactory.withTransaction { s, transaction ->
             s.createNamedQuery<InventoryEntity>(InventoryEntity.UPDATE_PRODUCT_STOCK)
                 .setParameter(PRODUCT_ID, productId)
                 .setParameter(STOCK, stock)
                 .executeUpdate()
                 .map { updatedRows -> updatedRows == 1 }
                 .onFailure()
-                .recoverWithItem(false)
+                .recoverWithItem { _ ->
+                    transaction.markForRollback()
+                    false
+                }
         }.awaitSuspending()
     }
 
     suspend fun increaseProductStock(productId: String, stock: Int): Boolean {
-        return sessionFactory.withTransaction { s, _ ->
-            s.createNamedQuery<InventoryEntity>(InventoryEntity.UPDATE_PRODUCT_STOCK)
+        return sessionFactory.withTransaction { s, transaction ->
+            s.createNamedQuery<InventoryEntity>(InventoryEntity.INCREASE_PRODUCT_STOCK)
                 .setParameter(PRODUCT_ID, productId)
                 .setParameter(STOCK, stock)
                 .executeUpdate()
                 .map { updatedRows -> updatedRows == 1 }
                 // TODO: Check if we need to handle only the update stock constraint error here
-                .onFailure().recoverWithItem(false)
+                .onFailure()
+                .recoverWithItem { _ ->
+                    transaction.markForRollback()
+                    false
+                }
         }
             .awaitSuspending()
     }
