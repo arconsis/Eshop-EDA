@@ -1,6 +1,6 @@
 package com.arconsis.presentation.events.orders
 
-import com.arconsis.domain.orders.Order
+import com.arconsis.domain.orders.OrderMessage
 import com.arconsis.domain.orders.OrdersService
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Incoming
@@ -11,10 +11,10 @@ class OrderEventsResource(
     private val ordersService: OrdersService,
 ) {
     @Incoming("orders-in")
-    suspend fun consumeOrderEvents(orderRecord: Record<String, Order>) {
-        val order = orderRecord.value()
+    suspend fun consumeOrderEvents(orderMessageRecord: Record<String, OrderMessage>) {
+        val orderMessage = orderMessageRecord.value()
         runCatching {
-            ordersService.handleOrderEvents(order)
+            ordersService.handleOrderEvents(orderMessage)
         }.getOrNull()
     }
 }

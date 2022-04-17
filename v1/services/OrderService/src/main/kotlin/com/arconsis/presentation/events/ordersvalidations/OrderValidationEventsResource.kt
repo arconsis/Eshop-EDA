@@ -1,6 +1,6 @@
 package com.arconsis.presentation.events.ordersvalidations
 
-import com.arconsis.domain.ordersvalidations.OrderValidation
+import com.arconsis.domain.ordersvalidations.OrderValidationMessage
 import com.arconsis.domain.ordersvalidations.OrderValidationsService
 import io.smallrye.reactive.messaging.kafka.Record
 import org.eclipse.microprofile.reactive.messaging.Incoming
@@ -10,11 +10,11 @@ import javax.enterprise.context.ApplicationScoped
 class OrderValidationEventsResource(private val orderValidationsService: OrderValidationsService) {
 
     @Incoming("order-validation-in")
-    suspend fun consumeOrderValidationEvents(orderValidationRecord: Record<String, OrderValidation>) {
+    suspend fun consumeOrderValidationEvents(orderValidationMessageRecord: Record<String, OrderValidationMessage>) {
         // TODO: Log the possible error here
-        val orderValidation = orderValidationRecord.value()
+        val orderValidationMessage = orderValidationMessageRecord.value()
         runCatching {
-            orderValidationsService.handleOrderValidationEvents(orderValidation)
+            orderValidationsService.handleOrderValidationEvents(orderValidationMessage)
         }.getOrNull()
     }
 }

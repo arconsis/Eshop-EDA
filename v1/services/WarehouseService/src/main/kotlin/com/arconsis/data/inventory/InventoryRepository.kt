@@ -5,13 +5,18 @@ import com.arconsis.data.inventory.InventoryEntity.Companion.STOCK
 import com.arconsis.domain.inventory.CreateInventory
 import com.arconsis.domain.inventory.Inventory
 import com.arconsis.domain.inventory.UpdateInventory
+import io.smallrye.mutiny.Uni
 import io.smallrye.mutiny.coroutines.awaitSuspending
 import org.hibernate.reactive.mutiny.Mutiny
+import org.jboss.logging.Logger
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class InventoryRepository(private val sessionFactory: Mutiny.SessionFactory) {
+class InventoryRepository(
+    private val sessionFactory: Mutiny.SessionFactory,
+    private val logger: Logger
+) {
 
     suspend fun getInventory(id: UUID): Inventory? {
 
@@ -42,37 +47,19 @@ class InventoryRepository(private val sessionFactory: Mutiny.SessionFactory) {
         return inventoryEntity.toInventory()
     }
 
-    suspend fun reserveProductStock(productId: String, stock: Int): Boolean {
-        return sessionFactory.withTransaction { s, transaction ->
-            s.createNamedQuery<InventoryEntity>(InventoryEntity.UPDATE_PRODUCT_STOCK)
-                .setParameter(PRODUCT_ID, productId)
-                .setParameter(STOCK, stock)
-                .executeUpdate()
-                .map { updatedRows -> updatedRows == 1 }
-                .onFailure()
-                .recoverWithItem { _ ->
-                    println("reserveProductStock failed and rolled back")
-                    transaction.markForRollback()
-                    false
-                }
-        }.awaitSuspending()
+    fun reserveProductStock(productId: String, stock: Int, session: Mutiny.Session): Uni<Boolean> {
+        return session.createNamedQuery<InventoryEntity>(InventoryEntity.UPDATE_PRODUCT_STOCK)
+            .setParameter(PRODUCT_ID, productId)
+            .setParameter(STOCK, stock)
+            .executeUpdate()
+            .map { updatedRows -> updatedRows == 1 }
     }
 
-    suspend fun increaseProductStock(productId: String, stock: Int): Boolean {
-        return sessionFactory.withTransaction { s, transaction ->
-            s.createNamedQuery<InventoryEntity>(InventoryEntity.INCREASE_PRODUCT_STOCK)
-                .setParameter(PRODUCT_ID, productId)
-                .setParameter(STOCK, stock)
-                .executeUpdate()
-                .map { updatedRows -> updatedRows == 1 }
-                // TODO: Check if we need to handle only the update stock constraint error here
-                .onFailure()
-                .recoverWithItem { _ ->
-                    println("increaseProductStock failed and rolled back")
-                    transaction.markForRollback()
-                    false
-                }
-        }
-            .awaitSuspending()
+    fun increaseProductStock(productId: String, stock: Int, session: Mutiny.Session): Uni<Boolean> {
+        return session.createNamedQuery<InventoryEntity>(InventoryEntity.INCREASE_PRODUCT_STOCK)
+            .setParameter(PRODUCT_ID, productId)
+            .setParameter(STOCK, stock)
+            .executeUpdate()
+            .map { updatedRows -> updatedRows == 1 }
     }
 }

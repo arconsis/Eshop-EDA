@@ -12,7 +12,8 @@ class OrdersService(
     val usersRepository: UsersRepository,
     @ConfigProperty(name = "email.sender") private val sender: String,
 ) {
-    suspend fun handleOrderEvents(order: Order) {
+    suspend fun handleOrderEvents(orderMessage: OrderMessage) {
+        val order = orderMessage.payload
         when (order.status) {
             OrderStatus.PAID -> handlePaidOrders(order)
             OrderStatus.SHIPPED -> handleOutForShipmentOrders(order)

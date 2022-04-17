@@ -2,6 +2,7 @@ package com.arconsis.common
 
 import kotlinx.coroutines.delay
 
+// TODO: Move it to a class for db handling
 suspend inline fun <T> retryWithBackoff(atMost: Int = 3, initialDelayMillis: Long = 300, block: () -> T): T {
     var currentDelayMillis = initialDelayMillis
     repeat(atMost - 1) {

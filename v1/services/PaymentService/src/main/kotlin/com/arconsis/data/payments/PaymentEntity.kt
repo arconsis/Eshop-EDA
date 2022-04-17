@@ -1,5 +1,6 @@
-package com.arconsis.data
+package com.arconsis.data.payments
 
+import com.arconsis.data.PostgreSQLEnumType
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.payments.CreatePayment
 import com.arconsis.domain.payments.Payment
@@ -21,6 +22,9 @@ class PaymentEntity(
     @Id
     @GeneratedValue
     var id: UUID? = null,
+
+    @Column(name = "transaction_id", nullable = true)
+    var transactionId: UUID?,
 
     @Column(name = "user_id", nullable = false)
     var userId: UUID,
@@ -49,7 +53,8 @@ class PaymentEntity(
 )
 
 fun PaymentEntity.toPayment() = Payment(
-    transactionId = id!!,
+    id = id!!,
+    transactionId = transactionId,
     orderId = orderId,
     userId = userId,
     amount = amount,
@@ -58,7 +63,7 @@ fun PaymentEntity.toPayment() = Payment(
 )
 
 fun Payment.toPaymentEntity() = PaymentEntity(
-    id = transactionId,
+    transactionId = transactionId,
     userId = userId,
     orderId = orderId,
     amount = amount,

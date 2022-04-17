@@ -2,7 +2,6 @@ package com.arconsis.domain.orders
 
 import com.arconsis.domain.payments.Payment
 import com.arconsis.domain.payments.PaymentStatus
-import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 import java.util.*
 
 data class Order(
@@ -28,13 +27,12 @@ enum class OrderStatus {
     SHIPMENT_FAILED
 }
 
-fun Order.toPaymentFailed() = Payment(
-    transactionId = null,
+fun Order.toPaymentFailed(transactionId: UUID?) = Payment(
+    id = null,
+    transactionId = transactionId,
     amount = amount,
     currency = currency,
     orderId = id,
     userId = userId,
     status = PaymentStatus.FAILED
 )
-
-class OrdersDeserializer : ObjectMapperDeserializer<Order>(Order::class.java)
