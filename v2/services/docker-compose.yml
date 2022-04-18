@@ -123,18 +123,13 @@ services:
 
   bastion:
     build:
-      context: ./Bastion
+      context: ../../Bastion
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
-      ORDERS_CONNECTOR_JSON: '{"name":"orders-connector","config":{"connector.class":"io.debezium.connector.postgresql.PostgresConnector","plugin.name":"pgoutput","database.hostname":"postgres","database.port":"5432","database.user":"postgres","database.password":"secret","database.dbname":"orders-db","database.server.name":"postgres","table.include.list":"public.orders_outbox_events","database.history.kafka.bootstrap.servers":"kafka1:39092,kafka2:49092,kafka3:59092","database.history.kafka.topic":"schema-changes.orders","slot.name": "orders_slot" } }'
-      WAREHOUSE_CONNECTOR_JSON: '{"name":"warehouse-connector","config":{"connector.class":"io.debezium.connector.postgresql.PostgresConnector","plugin.name":"pgoutput","database.hostname":"postgres","database.port":"5432","database.user":"postgres","database.password":"secret","database.dbname":"warehouse-db","database.server.name":"postgres","table.include.list":"public.warehouse_outbox_events","database.history.kafka.bootstrap.servers":"kafka1:39092,kafka2:49092,kafka3:59092","database.history.kafka.topic":"schema-changes.warehouse","slot.name": "warehouse_slot" } }'
-      PAYMENTS_CONNECTOR_JSON: '{"name":"payments-connector","config":{"connector.class":"io.debezium.connector.postgresql.PostgresConnector","plugin.name":"pgoutput","database.hostname":"postgres","database.port":"5432","database.user":"postgres","database.password":"secret","database.dbname":"payments-db","database.server.name":"postgres","table.include.list":"public.payments_outbox_events","database.history.kafka.bootstrap.servers":"kafka1:39092,kafka2:49092,kafka3:59092","database.history.kafka.topic":"schema-changes.payments","slot.name": "payments_slot" } }'
-      USERS_CONNECTOR_JSON: '{"name":"users-connector","config":{"connector.class":"io.debezium.connector.postgresql.PostgresConnector","plugin.name":"pgoutput","database.hostname":"postgres","database.port":"5432","database.user":"postgres","database.password":"secret","database.dbname":"users-db","database.server.name":"postgres","table.include.list":"public.users_outbox_events","database.history.kafka.bootstrap.servers":"kafka1:39092,kafka2:49092,kafka3:59092","database.history.kafka.topic":"schema-changes.users","slot.name": "users_slot"} }'
       DEBEZIUM_HOST: http://debezium:8083/connectors
       DATABASE_URL: postgres://postgres:secret@postgres:5432/postgres
-      DATABASE_USERNAME: postgres
       APP_ENV: production
       PORT: 3000
     restart: always

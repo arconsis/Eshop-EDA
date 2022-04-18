@@ -1,9 +1,8 @@
 package models
 
 type Database struct {
-	Name     string `json:"name"`
-	UserName string `json:"userName"`
-	Endpoint string `json:"endpoint"`
+	Name  string `json:"name"`
+	Owner string `json:"owner"`
 }
 
 type DatabaseRequest struct {

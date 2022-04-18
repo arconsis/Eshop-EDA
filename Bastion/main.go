@@ -97,7 +97,7 @@ func createDatabases(databases []models.Database) {
 	defer dbpool.Close()
 
 	for _, d := range databases {
-		createDb := "CREATE DATABASE " + d.Name + " OWNER " + d.UserName
+		createDb := "CREATE DATABASE \"" + d.Name + "\" OWNER " + d.Owner
 
 		_, err = dbpool.Exec(context.Background(), createDb)
 		if err != nil {
@@ -131,6 +131,11 @@ func createConnector(connector models.Connector) error {
 	}
 
 	res, err := http.Post(debeziumHost, "application/json", b)
+
+	if err != nil {
+		return err
+	}
+	
 	defer res.Body.Close()
 
 	if res.StatusCode > 299 {

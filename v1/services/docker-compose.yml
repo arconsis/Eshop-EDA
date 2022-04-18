@@ -102,13 +102,12 @@ services:
 
   bastion:
     build:
-      context: ./Bastion
+      context: ../../Bastion
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
       DATABASE_URL: postgres://postgres:secret@postgres:5432/postgres
-      DATABASE_USERNAME: postgres
       APP_ENV: production
       PORT: 3000
     restart: always
