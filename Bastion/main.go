@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/joho/godotenv"
@@ -14,14 +15,17 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 const debeziumHostKey = "DEBEZIUM_HOST"
 const portKey = "PORT"
 const databaseUrlKey = "DATABASE_URL"
 const appEnvKey = "APP_ENV"
+const bootstrapServersKey = "BOOTSTRAP_SERVERS"
 
 var debeziumHost = ""
+var bootstrapServers = ""
 
 func main() {
 
@@ -33,11 +37,11 @@ func main() {
 	}
 
 	debeziumHost = os.Getenv(debeziumHostKey)
+	bootstrapServers = os.Getenv(bootstrapServersKey)
 
 	r := chi.NewRouter()
 
 	r.Post("/bastion/databases", func(w http.ResponseWriter, r *http.Request) {
-
 		var databases []models.Database
 		err := parseJson(w, r, &databases)
 
@@ -46,9 +50,15 @@ func main() {
 			return
 		}
 
-		createDatabases(databases)
+		err = createDatabases(databases)
 
-		w.Write([]byte(fmt.Sprint("Database created")))
+		if err != nil {
+			log.Printf("Database creation failed: %v", err)
+			http.Error(w, http.StatusText(400), 400)
+			return
+		}
+
+		w.Write([]byte(fmt.Sprint("Databases created")))
 	})
 
 	r.Post("/bastion/connectors", func(w http.ResponseWriter, r *http.Request) {
@@ -71,6 +81,26 @@ func main() {
 		w.Write([]byte(fmt.Sprint("Connectors created")))
 	})
 
+	r.Post("/bastion/topics", func(w http.ResponseWriter, r *http.Request) {
+		var topics []models.Topic
+		err := parseJson(w, r, &topics)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		err = createTopics(topics)
+
+		if err != nil {
+			log.Printf("Topics creation failed: %v", err)
+			http.Error(w, http.StatusText(400), 400)
+			return
+		}
+
+		w.Write([]byte(fmt.Sprint("Topics created")))
+	})
+
 	port := fmt.Sprintf(":%v", os.Getenv(portKey))
 	log.Printf("Listening at server: %v", port)
 	http.ListenAndServe(port, r)
@@ -87,7 +117,7 @@ func parseJson(w http.ResponseWriter, r *http.Request, dst interface{}) error {
 	return dec.Decode(&dst)
 }
 
-func createDatabases(databases []models.Database) {
+func createDatabases(databases []models.Database) error {
 	dbpool, err := pgxpool.Connect(context.Background(), os.Getenv(databaseUrlKey))
 	if err != nil {
 		log.Printf("Unable to connect to database: %v\n\n", err)
@@ -102,8 +132,11 @@ func createDatabases(databases []models.Database) {
 		_, err = dbpool.Exec(context.Background(), createDb)
 		if err != nil {
 			log.Printf("Create %v failed: %v\n", d.Name, err)
+			return err
 		}
 	}
+
+	return nil
 }
 
 func createConnectors(connectors []models.Connector) error {
@@ -135,7 +168,7 @@ func createConnector(connector models.Connector) error {
 	if err != nil {
 		return err
 	}
-	
+
 	defer res.Body.Close()
 
 	if res.StatusCode > 299 {
@@ -153,4 +186,54 @@ func createConnector(connector models.Connector) error {
 	}
 
 	return err
+}
+
+func createTopics(topics []models.Topic) error {
+	adminClient, err := kafka.NewAdminClient(&kafka.ConfigMap{"bootstrap.servers": bootstrapServers})
+	if err != nil {
+		fmt.Printf("Failed to create Admin client: %s\n", err)
+		return err
+	}
+
+	// Contexts are used to abort or limit the amount of time
+	// the Admin call blocks waiting for a result.
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// Create topics on cluster.
+	// Set Admin options to wait for the operation to finish (or at most 60s)
+	maxDur, err := time.ParseDuration("60s")
+	if err != nil {
+		return fmt.Errorf("Parse duration error")
+	}
+
+	var topicSpecifications []kafka.TopicSpecification
+
+	for _, topic := range topics {
+		topicSpecifications = append(topicSpecifications, kafka.TopicSpecification{
+			Topic:             topic.Name,
+			NumPartitions:     topic.Partitions,
+			ReplicationFactor: topic.ReplicationFactor,
+			Config:            topic.Config},
+		)
+	}
+
+	results, err := adminClient.CreateTopics(
+		ctx,
+		topicSpecifications,
+		// Admin options
+		kafka.SetAdminOperationTimeout(maxDur),
+	)
+
+	if err != nil {
+		fmt.Printf("Failed to create topics: %v\n", err)
+		return err
+	}
+
+	for _, result := range results {
+		fmt.Printf("%s\n", result)
+	}
+
+	adminClient.Close()
+	return nil
 }

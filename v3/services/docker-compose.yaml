@@ -61,32 +61,6 @@ services:
       KAFKA_DELETE_TOPIC_ENABLE: 'true'
       KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE: 'false'
 
-  init-kafka:
-    image: confluentinc/cp-kafka
-    depends_on:
-      - kafka1
-      - kafka2
-      - kafka3
-    entrypoint: [ '/bin/sh', '-c' ]
-    command: |
-      "
-      sleep 30 &&
-      # blocks until kafka is reachable
-      echo -e 'Listing kafka topics'
-      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --list
-      
-      echo -e 'Creating kafka topics'
-      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --create --if-not-exists --topic Orders --replication-factor 3 --partitions 3 --config min.insync.replicas=2
-      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --create --if-not-exists --topic Payments --replication-factor 3 --partitions 3 --config min.insync.replicas=2
-      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --create --if-not-exists --topic OrdersValidations --replication-factor 3 --partitions 3 --config min.insync.replicas=2
-      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --create --if-not-exists --topic Shipments --replication-factor 3 --partitions 3 --config min.insync.replicas=2
-      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --create --if-not-exists --topic Users --replication-factor 3 --partitions 3 --config min.insync.replicas=2
-      
-      echo -e 'Successfully created the following topics:'
-      kafka-topics --bootstrap-server kafka1:39092,kafka2:49092,kafka3:59092 --list
-      "
-  
-
   debezium:
     image: debezium/connect:1.8
     environment:
@@ -132,6 +106,7 @@ services:
       DEBEZIUM_HOST: http://debezium:8083/connectors
       APP_ENV: production
       PORT: 3000
+      BOOTSTRAP_SERVERS: kafka1:39092,kafka2:49092,kafka3:59092
       DATABASE_URL: postgres://postgres:secret@postgres:5432/postgres
     restart: always
 
