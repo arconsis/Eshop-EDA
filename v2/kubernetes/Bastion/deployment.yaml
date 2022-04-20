@@ -40,36 +40,11 @@ spec:
                 configMapKeyRef:
                   name: eda-configmap
                   key: DEBEZIUM_HOST
-            - name: USERS_CONNECTOR_JSON
-              valueFrom:
-                configMapKeyRef:
-                  name: eda-configmap
-                  key: USERS_CONNECTOR_JSON
-            - name: ORDERS_CONNECTOR_JSON
-              valueFrom:
-                configMapKeyRef:
-                  name: eda-configmap
-                  key: ORDERS_CONNECTOR_JSON
-            - name: WAREHOUSE_CONNECTOR_JSON
-              valueFrom:
-                configMapKeyRef:
-                  name: eda-configmap
-                  key: WAREHOUSE_CONNECTOR_JSON
-            - name: PAYMENTS_CONNECTOR_JSON
-              valueFrom:
-                configMapKeyRef:
-                  name: eda-configmap
-                  key: PAYMENTS_CONNECTOR_JSON
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: eda-secrets
                   key: DATABASE_URL
-            - name: DATABASE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: eda-secrets
-                  key: POSTGRES_USER
             - name: BOOTSTRAP_SERVERS
               valueFrom:
                 configMapKeyRef:
