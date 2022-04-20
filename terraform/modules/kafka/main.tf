@@ -41,9 +41,8 @@ resource "aws_msk_configuration" "kafka_configuration" {
   name           = "mks-eda-configuration"
 
   server_properties = <<PROPERTIES
-min.insync.replicas = 1
-default.replication.factor = 1
-auto.create.topics.enable = true
+auto.create.topics.enable = false
 delete.topic.enable = true
+unclean.leader.election.enable = false
 PROPERTIES
 }

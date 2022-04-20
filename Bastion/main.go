@@ -22,6 +22,7 @@ const debeziumHostKey = "DEBEZIUM_HOST"
 const portKey = "PORT"
 const databaseUrlKey = "DATABASE_URL"
 const appEnvKey = "APP_ENV"
+const securityProtocolEnvKey = "SECURITY_PROTOCOL"
 const bootstrapServersKey = "BOOTSTRAP_SERVERS"
 
 var debeziumHost = ""
@@ -189,7 +190,8 @@ func createConnector(connector models.Connector) error {
 }
 
 func createTopics(topics []models.Topic) error {
-	adminClient, err := kafka.NewAdminClient(&kafka.ConfigMap{"bootstrap.servers": bootstrapServers})
+	securityProtocol := os.Getenv(securityProtocolEnvKey)
+	adminClient, err := kafka.NewAdminClient(&kafka.ConfigMap{"bootstrap.servers": bootstrapServers, "security.protocol": securityProtocol})
 	if err != nil {
 		fmt.Printf("Failed to create Admin client: %s\n", err)
 		return err

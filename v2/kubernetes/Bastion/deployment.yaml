@@ -18,7 +18,7 @@ spec:
       containers:
         - name: bastion-eda
           imagePullPolicy: Always
-          image: eldimious/bastion-eda-v2:latest
+          image: eldimious/bastion-eda:latest
           ports:
             - containerPort: 3000
               protocol: TCP
@@ -70,3 +70,10 @@ spec:
                 secretKeyRef:
                   name: eda-secrets
                   key: POSTGRES_USER
+            - name: BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: eda-configmap
+                  key: KAFKA_BROKERS
+            - name: SECURITY_PROTOCOL
+              value: "SSL"

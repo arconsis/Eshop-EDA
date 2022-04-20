@@ -86,6 +86,7 @@ services:
       APP_ENV: production
       PORT: 3000
       BOOTSTRAP_SERVERS: kafka1:39092,kafka2:49092,kafka3:59092
+      SECURITY_PROTOCOL: PLAINTEXT
     restart: always
 
 volumes:
