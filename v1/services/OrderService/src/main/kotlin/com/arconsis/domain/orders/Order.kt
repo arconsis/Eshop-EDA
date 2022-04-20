@@ -34,12 +34,10 @@ enum class OrderStatus {
     SHIPMENT_FAILED
 }
 
-fun Order.toOrderRecord(): Record<String, Order> = Record.of(
+fun Order.toOrderMessageRecord(): Record<String, OrderMessage> = Record.of(
     id.toString(),
-    this
-)
-
-fun Order.toOrderRecordWithStatus(status: OrderStatus): Record<String, Order> = Record.of(
-    id.toString(),
-    this.copy(status = status)
+    OrderMessage(
+        payload = this,
+        messageId = UUID.randomUUID()
+    )
 )

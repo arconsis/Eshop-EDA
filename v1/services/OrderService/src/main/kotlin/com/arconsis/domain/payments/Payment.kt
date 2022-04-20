@@ -1,6 +1,5 @@
 package com.arconsis.domain.payments
 
-import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 import java.util.*
 
 data class Payment(
@@ -17,5 +16,3 @@ enum class PaymentStatus {
     FAILED,
     REFUNDED
 }
-
-class PaymentDeserializer : ObjectMapperDeserializer<Payment>(Payment::class.java)

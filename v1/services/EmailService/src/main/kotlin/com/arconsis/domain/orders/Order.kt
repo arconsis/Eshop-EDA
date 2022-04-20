@@ -1,6 +1,5 @@
 package com.arconsis.domain.orders
 
-import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
 import java.util.*
 
 data class Order(
@@ -25,5 +24,3 @@ enum class OrderStatus {
     REFUNDED,
     SHIPMENT_FAILED
 }
-
-class OrdersDeserializer : ObjectMapperDeserializer<Order>(Order::class.java)

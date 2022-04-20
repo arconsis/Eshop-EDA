@@ -4,6 +4,7 @@ import io.smallrye.reactive.messaging.kafka.Record
 import java.util.*
 
 data class Payment(
+    val id: UUID?,
     val transactionId: UUID?,
     val orderId: UUID,
     val userId: UUID,
@@ -26,6 +27,7 @@ data class CreatePayment(
 )
 
 fun CreatePayment.toPayment(transactionId: UUID, status: PaymentStatus) = Payment(
+    id = null,
     transactionId = transactionId,
     orderId = orderId,
     userId = userId,
@@ -34,7 +36,10 @@ fun CreatePayment.toPayment(transactionId: UUID, status: PaymentStatus) = Paymen
     status = status,
 )
 
-fun Payment.toPaymentRecord(): Record<String, Payment> = Record.of(
+fun Payment.toPaymentMessageRecord(): Record<String, PaymentMessage> = Record.of(
     orderId.toString(),
-    this
+    PaymentMessage(
+        payload = this,
+        messageId = UUID.randomUUID()
+    )
 )

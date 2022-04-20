@@ -1,5 +1,6 @@
-package com.arconsis.data
+package com.arconsis.data.orders
 
+import com.arconsis.data.PostgreSQLEnumType
 import com.arconsis.domain.orders.CreateOrder
 import com.arconsis.domain.orders.Order
 import com.arconsis.domain.orders.OrderStatus
