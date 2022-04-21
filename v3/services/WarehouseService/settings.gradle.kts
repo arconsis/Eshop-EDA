@@ -10,4 +10,4 @@ pluginManagement {
         id(quarkusPluginId) version quarkusPluginVersion
     }
 }
-rootProject.name = "warehouseservice"
+rootProject.name = "warehouseservice-v3"

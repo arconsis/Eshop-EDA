@@ -102,6 +102,15 @@ func main() {
 		w.Write([]byte(fmt.Sprint("Topics created")))
 	})
 
+	r.Delete("/bastion/topics/{topicName}", func(w http.ResponseWriter, r *http.Request) {
+
+		topicName := chi.URLParam(r, "topicName")
+
+		deleteTopic(topicName)
+
+		w.Write([]byte(fmt.Sprint("Topic deleted")))
+	})
+
 	port := fmt.Sprintf(":%v", os.Getenv(portKey))
 	log.Printf("Listening at server: %v", port)
 	http.ListenAndServe(port, r)
@@ -187,6 +196,46 @@ func createConnector(connector models.Connector) error {
 	}
 
 	return err
+}
+
+func deleteTopic(topicName string) error {
+	securityProtocol := os.Getenv(securityProtocolEnvKey)
+	adminClient, err := kafka.NewAdminClient(&kafka.ConfigMap{"bootstrap.servers": bootstrapServers, "security.protocol": securityProtocol})
+	if err != nil {
+		fmt.Printf("Failed to create Admin client: %s\n", err)
+		return err
+	}
+
+	// Contexts are used to abort or limit the amount of time
+	// the Admin call blocks waiting for a result.
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// Delete topic on cluster.
+	// Set Admin options to wait for the operation to finish (or at most 60s)
+	maxDur, err := time.ParseDuration("60s")
+	if err != nil {
+		return fmt.Errorf("Parse duration error")
+	}
+
+	results, err := adminClient.DeleteTopics(
+		ctx,
+		[]string{topicName},
+		// Admin options
+		kafka.SetAdminOperationTimeout(maxDur),
+	)
+
+	if err != nil {
+		fmt.Printf("Failed to delete topic: %v\n", err)
+		return err
+	}
+
+	for _, result := range results {
+		fmt.Printf("%s\n", result)
+	}
+
+	adminClient.Close()
+	return nil
 }
 
 func createTopics(topics []models.Topic) error {
