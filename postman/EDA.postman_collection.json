@@ -319,6 +319,21 @@
 				{
 					"name": "Create Connectors",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "bastion",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "YmFzdGlvbjouQWFxU0NyaHZ6MQ",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -365,7 +380,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n    {\n        \"name\": \"Orders\",\n        \"partitions\": 3,\n        \"replicationFactor\": 3,\n        \"config\": {\n            \"min.insync.replicas\": \"2\"\n        }\n    },\n    {\n        \"name\": \"Payments\",\n        \"partitions\": 3,\n        \"replicationFactor\": 3,\n        \"config\": {\n            \"min.insync.replicas\": \"2\"\n        }\n    },\n    {\n        \"name\": \"OrdersValidations\",\n        \"partitions\": 3,\n        \"replicationFactor\": 3,\n        \"config\": {\n            \"min.insync.replicas\": \"2\"\n        }\n    },\n    {\n        \"name\": \"Shipments\",\n        \"partitions\": 3,\n        \"replicationFactor\": 3,\n        \"config\": {\n            \"min.insync.replicas\": \"2\"\n        }\n    },\n     {\n        \"name\": \"Users\",\n        \"partitions\": 3,\n        \"replicationFactor\": 3,\n        \"config\": {\n            \"min.insync.replicas\": \"2\"\n        }\n    }\n]",
+							"raw": "[\n  {\n    \"name\": \"Orders\",\n    \"partitions\": 3,\n    \"replicationFactor\": 3,\n    \"config\": {\n      \"min.insync.replicas\": \"2\"\n    }\n  },\n  {\n    \"name\": \"Payments\",\n    \"partitions\": 3,\n    \"replicationFactor\": 3,\n    \"config\": {\n      \"min.insync.replicas\": \"2\"\n    }\n  },\n  {\n    \"name\": \"OrdersValidations\",\n    \"partitions\": 3,\n    \"replicationFactor\": 3,\n    \"config\": {\n      \"min.insync.replicas\": \"2\"\n    }\n  },\n  {\n    \"name\": \"Shipments\",\n    \"partitions\": 3,\n    \"replicationFactor\": 3,\n    \"config\": {\n      \"min.insync.replicas\": \"2\"\n    }\n  },\n  {\n    \"name\": \"Users\",\n    \"partitions\": 3,\n    \"replicationFactor\": 3,\n    \"config\": {\n      \"min.insync.replicas\": \"2\"\n    }\n  },\n  {\n    \"name\": \"postgres.public.orders_outbox_events\",\n    \"partitions\": 3,\n    \"replicationFactor\": 3,\n    \"config\": {\n      \"min.insync.replicas\": \"2\"\n    }\n  },\n  {\n    \"name\": \"postgres.public.warehouse_outbox_events\",\n    \"partitions\": 3,\n    \"replicationFactor\": 3,\n    \"config\": {\n      \"min.insync.replicas\": \"2\"\n    }\n  },\n  {\n    \"name\": \"postgres.public.payments_outbox_events\",\n    \"partitions\": 3,\n    \"replicationFactor\": 3,\n    \"config\": {\n      \"min.insync.replicas\": \"2\"\n    }\n  },\n  {\n    \"name\": \"postgres.public.users_outbox_events\",\n    \"partitions\": 3,\n    \"replicationFactor\": 3,\n    \"config\": {\n      \"min.insync.replicas\": \"2\"\n    }\n  }\n]",
 							"options": {
 								"raw": {
 									"language": "json"
