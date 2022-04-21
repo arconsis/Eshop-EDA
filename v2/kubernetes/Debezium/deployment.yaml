@@ -55,3 +55,13 @@ spec:
                 configMapKeyRef:
                   name: eda-configmap
                   key: STATUS_STORAGE_TOPIC
+            - name: CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR
+              value: "3"
+            - name: CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR
+              value: "3"
+            - name: CONNECT_STATUS_STORAGE_REPLICATION_FACTOR
+              value: "3"
+            - name: CONNECT_OFFSET_STORAGE_PARTITIONS
+              value: "25"
+            - name: CONNECT_STATUS_STORAGE_PARTITIONS
+              value: "5"

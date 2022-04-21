@@ -3,7 +3,6 @@ plugins {
     kotlin("plugin.allopen") version "1.6.10"
     kotlin("plugin.noarg") version "1.6.10"
     kotlin("plugin.jpa") version "1.6.10"
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     id("io.quarkus")
 }
 
