@@ -10,4 +10,4 @@ pluginManagement {
         id(quarkusPluginId) version quarkusPluginVersion
     }
 }
-rootProject.name = "ordersservice"
+rootProject.name = "ordersservice-v3"

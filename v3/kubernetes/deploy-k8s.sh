@@ -1,5 +1,3 @@
-kubectl config use-context eks_test-eks-cluster
-
 kubectl apply -f ./namespace.yaml
 
 cd ./configs
@@ -17,6 +15,8 @@ sh deploy.sh
 cd ../WarehouseService
 sh deploy.sh
 cd ../TransformerService
+sh deploy.sh
+cd ../Debezium
 sh deploy.sh
 cd ../
 

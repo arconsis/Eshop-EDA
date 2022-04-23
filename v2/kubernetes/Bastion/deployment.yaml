@@ -18,7 +18,7 @@ spec:
       containers:
         - name: bastion-eda
           imagePullPolicy: Always
-          image: eldimious/bastion-eda-v2:latest
+          image: eldimious/bastion-eda:latest
           ports:
             - containerPort: 3000
               protocol: TCP
@@ -40,33 +40,15 @@ spec:
                 configMapKeyRef:
                   name: eda-configmap
                   key: DEBEZIUM_HOST
-            - name: USERS_CONNECTOR_JSON
-              valueFrom:
-                configMapKeyRef:
-                  name: eda-configmap
-                  key: USERS_CONNECTOR_JSON
-            - name: ORDERS_CONNECTOR_JSON
-              valueFrom:
-                configMapKeyRef:
-                  name: eda-configmap
-                  key: ORDERS_CONNECTOR_JSON
-            - name: WAREHOUSE_CONNECTOR_JSON
-              valueFrom:
-                configMapKeyRef:
-                  name: eda-configmap
-                  key: WAREHOUSE_CONNECTOR_JSON
-            - name: PAYMENTS_CONNECTOR_JSON
-              valueFrom:
-                configMapKeyRef:
-                  name: eda-configmap
-                  key: PAYMENTS_CONNECTOR_JSON
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: eda-secrets
                   key: DATABASE_URL
-            - name: DATABASE_USERNAME
+            - name: BOOTSTRAP_SERVERS
               valueFrom:
-                secretKeyRef:
-                  name: eda-secrets
-                  key: POSTGRES_USER
+                configMapKeyRef:
+                  name: eda-configmap
+                  key: KAFKA_BROKERS
+            - name: SECURITY_PROTOCOL
+              value: "SSL"
