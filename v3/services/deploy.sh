@@ -1,6 +1,4 @@
-cd ./Bastion
-sh deploy.sh
-cd ../OrderService
+cd ./OrderService
 sh deploy.sh
 cd ../PaymentService
 sh deploy.sh
